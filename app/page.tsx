@@ -5,6 +5,7 @@ import { Navbar } from '@/components/Navbar';
 import { LiveTicker } from '@/components/LiveTicker';
 import { HeroSection } from '@/components/HeroSection';
 import { PlatformFeeds } from '@/components/PlatformFeeds';
+import { HomelessMediaGenerator } from '@/components/HomelessMediaGenerator';
 import { OriginalShows } from '@/components/OriginalShows';
 import { ManifestoSection } from '@/components/ManifestoSection';
 import { MediaKitStats } from '@/components/MediaKitStats';
@@ -86,6 +87,9 @@ export default function HomePage() {
           onFilterPlatform={(p) => setSelectedPlatform(p)}
           onSelectItem={handleSelectItem}
         />
+
+        {/* AI & Viral Content Generator Lab */}
+        <HomelessMediaGenerator />
 
         {/* Flagship Original Shows Bento Grid */}
         <OriginalShows onPlayEpisode={handlePlayEpisode} />

@@ -81,7 +81,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTipLine, onOpenMediaKit })
             <nav className="hidden lg:flex items-center gap-7 text-xs font-mono tracking-wider text-zinc-300">
               <a href="#feeds" className="hover:text-lime-400 transition-colors flex items-center gap-1">
                 <span>01.</span>
-                <span>FEEDS & STREAMS</span>
+                <span>FEEDS</span>
+              </a>
+              <a href="#generator" className="hover:text-lime-400 transition-colors flex items-center gap-1 text-lime-400 font-bold">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>GENERATOR LAB</span>
               </a>
               <a href="#shows" className="hover:text-lime-400 transition-colors flex items-center gap-1">
                 <span>02.</span>
@@ -93,11 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTipLine, onOpenMediaKit })
               </a>
               <a href="#media-kit" className="hover:text-lime-400 transition-colors flex items-center gap-1">
                 <span>04.</span>
-                <span>AUDIENCE & DATA</span>
-              </a>
-              <a href="#studio" className="hover:text-lime-400 transition-colors flex items-center gap-1">
-                <span>05.</span>
-                <span>BRAND LAB</span>
+                <span>RATE CARD</span>
               </a>
             </nav>
 
@@ -152,6 +152,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTipLine, onOpenMediaKit })
                 className="block py-2 text-zinc-300 hover:text-lime-400"
               >
                 [01] Live Feeds & Streams
+              </a>
+              <a
+                href="#generator"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-lime-400 font-bold hover:text-lime-300 flex items-center gap-2"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>[*] Content Generator Lab</span>
               </a>
               <a
                 href="#shows"

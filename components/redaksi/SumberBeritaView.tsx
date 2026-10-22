@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Check, ExternalLink, Globe, Rss } from 'lucide-react';
 import { NEWS_SOURCES, NewsSource } from '@/data/redaksiData';
 
-const SOURCES_STORAGE_KEY = 'pansos_redaksi_sources_v1';
+const SOURCES_STORAGE_KEY = 'indonesia_hari_ini_sources_v1';
 
 export const SumberBeritaView: React.FC = () => {
   const [sources, setSources] = useState<NewsSource[]>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const saved = localStorage.getItem(SOURCES_STORAGE_KEY);
+        const saved = localStorage.getItem(SOURCES_STORAGE_KEY) || localStorage.getItem('pansos_redaksi_sources_v1');
         if (saved) return JSON.parse(saved);
       } catch (e) {
         console.warn('Sources storage load err', e);

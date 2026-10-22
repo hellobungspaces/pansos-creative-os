@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'OPEN FOLK // Open-Source Homeless Media Carousel Generator',
-  description: 'Generator konten carousel 4:5 ala Folkative & homeless media. Bikin, kustomisasi teks, dan download PNG secara instan & gratis.',
-  keywords: ['Homeless Media', 'Folkative', 'Content Generator', 'Instagram Carousel Generator', 'Open Source'],
+  title: 'INDONESIA HARI INI // AI Redaksi Operating System',
+  description: 'Operating System Redaksi Mandiri Indonesia Hari Ini: pemantau tren otomatis, penyusunan naskah viral, render kartu carousel 4:5 royal blue, dan meja editor review.',
+  keywords: ['Indonesia Hari Ini', 'Homeless Media', 'Redaksi OS', 'Instagram Carousel Generator', 'Open Source Media'],
 };
 
 export const viewport: Viewport = {

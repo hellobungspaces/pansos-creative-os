@@ -104,7 +104,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         sourceText: 'Sumber: The Verge'
       }
     ],
-    caption: 'Alexa Plus mendadak bernyanyi sendiri di tengah malam tanpa ada perintah suara sama sekali. Kejadian aneh ini memicu kekhawatiran soal keamanan privasi perangkat pintar rumah.\n\nSimak slide 1 sampai 5 untuk fakta lengkap dan tanggapan resmi Amazon.\n\n📌 Sumber Informasi: The Verge (theverge.com)\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\nKalau smart speaker lo mendadak nyanyi tengah malam, lo bakal ngapain? Tulis di bawah 👇\n\n#AlexaBug #SmartHome #ArtificialIntelligence #KeamananDigital #PansosCreative #HomelessMedia'
+    caption: 'Alexa Plus mendadak bernyanyi sendiri di tengah malam tanpa ada perintah suara sama sekali. Kejadian aneh ini memicu kekhawatiran soal keamanan privasi perangkat pintar rumah.\n\nSimak slide 1 sampai 5 untuk fakta lengkap dan tanggapan resmi Amazon.\n\n📌 Sumber Informasi: The Verge (theverge.com)\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\nKalau smart speaker lo mendadak nyanyi tengah malam, lo bakal ngapain? Tulis di bawah 👇\n\n#AlexaBug #SmartHome #ArtificialIntelligence #KeamananDigital #IndonesiaHariIni #HomelessMedia'
   },
   {
     id: 'post-2',
@@ -172,7 +172,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         sourceText: 'Sumber: detikInet'
       }
     ],
-    caption: 'Kasus pertama pengguna AI dilaporkan langsung oleh pengembangnya ke polisi. Pengguna Claude ditangkap setelah terdeteksi menuliskan ancaman penembakan.\n\nPelajaran penting: chatbot AI bukan buku harian tanpa pengawasan pihak ketiga. Gimana tanggapan kamu?\n\n📌 Sumber Berita: detikInet (inet.detik.com)\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\n#ClaudeAI #Anthropic #CyberLaw #KeamananDigital #PansosCreative #BeritaTerkini'
+    caption: 'Kasus pertama pengguna AI dilaporkan langsung oleh pengembangnya ke polisi. Pengguna Claude ditangkap setelah terdeteksi menuliskan ancaman penembakan.\n\nPelajaran penting: chatbot AI bukan buku harian tanpa pengawasan pihak ketiga. Gimana tanggapan kamu?\n\n📌 Sumber Berita: detikInet (inet.detik.com)\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\n#ClaudeAI #Anthropic #CyberLaw #KeamananDigital #IndonesiaHariIni #BeritaTerkini'
   },
   {
     id: 'post-3',
@@ -220,7 +220,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         sourceText: 'Sumber: Selular.id'
       }
     ],
-    caption: 'Pasar kripto di Indonesia kembali bergairah. Transaksi naik 12,87% didominasi investor ritel generasi muda.\n\nPortofolio kripto kamu masih hijau atau nyangkut? Ceritakan di kolom komentar!\n\n📌 Sumber Informasi: Selular.id\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\n#Bitcoin #KriptoIndonesia #Bappebti #InvestasiMuda #PansosCreative'
+    caption: 'Pasar kripto di Indonesia kembali bergairah. Transaksi naik 12,87% didominasi investor ritel generasi muda.\n\nPortofolio kripto kamu masih hijau atau nyangkut? Ceritakan di kolom komentar!\n\n📌 Sumber Informasi: Selular.id\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\n#Bitcoin #KriptoIndonesia #Bappebti #InvestasiMuda #IndonesiaHariIni'
   },
   {
     id: 'post-4',
@@ -268,7 +268,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         sourceText: 'Sumber: Social Media Today'
       }
     ],
-    caption: 'Kabar gembira buat para silent reader dan stalker handal! Instagram akhirnya menguji mode Read-Only yang mematikan tombol like ganda secara otomatis saat mengunjungi profil orang lain.\n\nTag temen lo yang paling butuh fitur ini secepatnya! 👇\n\n📌 Sumber: Social Media Today (socialmediatoday.com)\n📷 Lisensi: Unsplash (Free Commercial Use)\n\n#InstagramFeature #StalkerFriendly #SosmedNews #KulturDigital #PansosCreative'
+    caption: 'Kabar gembira buat para silent reader dan stalker handal! Instagram akhirnya menguji mode Read-Only yang mematikan tombol like ganda secara otomatis saat mengunjungi profil orang lain.\n\nTag temen lo yang paling butuh fitur ini secepatnya! 👇\n\n📌 Sumber: Social Media Today (socialmediatoday.com)\n📷 Lisensi: Unsplash (Free Commercial Use)\n\n#InstagramFeature #StalkerFriendly #SosmedNews #KulturDigital #IndonesiaHariIni'
   },
   {
     id: 'post-5',
@@ -316,7 +316,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         sourceText: 'Sumber: CNN Indonesia'
       }
     ],
-    caption: 'Cek HP kamu dan orang tua di rumah sekarang! WhatsApp resmi mengumumkan batas akhir dukungan untuk sistem operasi lawas demi standar keamanan enkripsi baru.\n\nSimak syarat minimum OS di slide di atas.\n\n📌 Sumber Informasi: CNN Indonesia (cnnindonesia.com)\n📷 Lisensi Gambar: Unsplash (Free Commercial Use)\n\n#WhatsAppUpdate #GadgetNews #Teknologi #PansosCreative'
+    caption: 'Cek HP kamu dan orang tua di rumah sekarang! WhatsApp resmi mengumumkan batas akhir dukungan untuk sistem operasi lawas demi standar keamanan enkripsi baru.\n\nSimak syarat minimum OS di slide di atas.\n\n📌 Sumber Informasi: CNN Indonesia (cnnindonesia.com)\n📷 Lisensi Gambar: Unsplash (Free Commercial Use)\n\n#WhatsAppUpdate #GadgetNews #Teknologi #IndonesiaHariIni'
   },
   {
     id: 'post-6',
@@ -364,7 +364,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         sourceText: 'Sumber: Selular.id'
       }
     ],
-    caption: 'Babak baru monetisasi AI: OpenAI dikabarkan mulai menguji penempatan iklan visual saat pengguna menghasilkan gambar di ChatGPT.\n\nApakah ini langkah wajar bisnis atau tanda penurunan kualitas pengalaman pengguna?\n\n📌 Sumber: Selular.id\n📷 Lisensi: Unsplash (Free Commercial Use)\n\n#OpenAI #ChatGPT #DigitalMarketing #AIAds #PansosCreative'
+    caption: 'Babak baru monetisasi AI: OpenAI dikabarkan mulai menguji penempatan iklan visual saat pengguna menghasilkan gambar di ChatGPT.\n\nApakah ini langkah wajar bisnis atau tanda penurunan kualitas pengalaman pengguna?\n\n📌 Sumber: Selular.id\n📷 Lisensi: Unsplash (Free Commercial Use)\n\n#OpenAI #ChatGPT #DigitalMarketing #AIAds #IndonesiaHariIni'
   }
 ];
 

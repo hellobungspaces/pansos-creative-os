@@ -23,13 +23,13 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white text-black font-black font-headline text-base flex items-center justify-center">
-            P
+          <div className="w-8 h-8 rounded-lg bg-white text-black font-black font-headline text-base flex items-center justify-center tracking-tighter">
+            IHI
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#e2ff3b]" />
             <span className="font-extrabold text-sm sm:text-base tracking-wider text-white font-headline">
-              PANSOS CREATIVE
+              INDONESIA HARI INI
             </span>
             <span className="hidden md:inline px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400 border border-zinc-800">
               AI Redaksi OS

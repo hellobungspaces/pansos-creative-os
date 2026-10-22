@@ -117,7 +117,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                 <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white drop-shadow">
                   <div className="flex items-center gap-1.5 text-[10px] font-mono font-black">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#e2ff3b]" />
-                    <span>PANSOS CREATIVE</span>
+                    <span>INDONESIA HARI INI</span>
                   </div>
                   <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/60 backdrop-blur font-bold">
                     1/{post.slides.length}

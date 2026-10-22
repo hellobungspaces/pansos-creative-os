@@ -245,7 +245,7 @@ export async function GET(req: Request) {
             hostDomain = src.name.toLowerCase().replace(/\s+/g, '');
           }
 
-          const caption = `${item.title}.\n\nLaporan terverifikasi dari ${src.name} merangkum poin krusial yang perlu kamu ketahui hari ini.\n\nSimak rangkuman lengkap 5 slide di atas.\n\n📌 Sumber Berita: ${src.name} (${hostDomain})\n🔗 Tautan Asli: ${item.link}\n📷 Lisensi Foto: Unsplash (Free Commercial Use - CC0 / Unsplash License)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#${category} #BeritaTerkini #PansosCreative #Teknologi #MediaDigital #${src.name.replace(/[^a-zA-Z]/g, '')}`;
+          const caption = `${item.title}.\n\nLaporan terverifikasi dari ${src.name} merangkum poin krusial yang perlu kamu ketahui hari ini.\n\nSimak rangkuman lengkap 5 slide di atas.\n\n📌 Sumber Berita: ${src.name} (${hostDomain})\n🔗 Tautan Asli: ${item.link}\n📷 Lisensi Foto: Unsplash (Free Commercial Use - CC0 / Unsplash License)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#${category} #BeritaTerkini #IndonesiaHariIni #Teknologi #MediaDigital #${src.name.replace(/[^a-zA-Z]/g, '')}`;
 
           collectedPosts.push({
             id: `rss-${Date.now()}-${sourceIdx}-${itemIdx}`,
@@ -332,7 +332,7 @@ export async function GET(req: Request) {
             sourceText: 'Sumber: ANTARA News'
           }
         ],
-        caption: 'Pernah ngalamin chat WhatsApp baru masuk pas aplikasinya dibuka? Kamu nggak sendirian!\n\nLaporan teknis ANTARA News merangkum cara mengatasi bug delay notifikasi WhatsApp di HP Android tanpa perlu install aplikasi aneh-aneh.\n\n📌 Sumber Informasi: ANTARA News (antaranews.com)\n🔗 Tautan: https://www.antaranews.com/berita/5803673/cara-mengatasi-notifikasi-whatsapp-yang-terlambat-masuk\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#WhatsApp #TipsAndroid #Teknologi #PansosCreative #GadgetTips'
+        caption: 'Pernah ngalamin chat WhatsApp baru masuk pas aplikasinya dibuka? Kamu nggak sendirian!\n\nLaporan teknis ANTARA News merangkum cara mengatasi bug delay notifikasi WhatsApp di HP Android tanpa perlu install aplikasi aneh-aneh.\n\n📌 Sumber Informasi: ANTARA News (antaranews.com)\n🔗 Tautan: https://www.antaranews.com/berita/5803673/cara-mengatasi-notifikasi-whatsapp-yang-terlambat-masuk\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#WhatsApp #TipsAndroid #Teknologi #IndonesiaHariIni #GadgetTips'
       },
       {
         id: `rss-fallback-2-${Date.now()}`,
@@ -388,7 +388,7 @@ export async function GET(req: Request) {
             sourceText: 'Sumber: CNN Indonesia'
           }
         ],
-        caption: 'Bukan di film sci-fi lagi, robot humanoid pendamping keluarga sudah resmi meluncur ke pasar konsumen!\n\nSimak fitur dan ulasan keamanannya di slide carousel atas.\n\n📌 Sumber Informasi: CNN Indonesia (cnnindonesia.com)\n🔗 Tautan: https://www.cnnindonesia.com/teknologi/20261022125738-185-1418379/aimoga-rilis-robot-humanoid-pendamping-keluarga-mobo-bisa-apa-saja\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan edukasi UU Hak Cipta No. 28/2014 Pasal 42.\n\n#Robotika #ArtificialIntelligence #CNNIndonesia #PansosCreative #TeknologiMasaDepan'
+        caption: 'Bukan di film sci-fi lagi, robot humanoid pendamping keluarga sudah resmi meluncur ke pasar konsumen!\n\nSimak fitur dan ulasan keamanannya di slide carousel atas.\n\n📌 Sumber Informasi: CNN Indonesia (cnnindonesia.com)\n🔗 Tautan: https://www.cnnindonesia.com/teknologi/20261022125738-185-1418379/aimoga-rilis-robot-humanoid-pendamping-keluarga-mobo-bisa-apa-saja\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan edukasi UU Hak Cipta No. 28/2014 Pasal 42.\n\n#Robotika #ArtificialIntelligence #CNNIndonesia #IndonesiaHariIni #TeknologiMasaDepan'
       },
       {
         id: `rss-fallback-3-${Date.now()}`,
@@ -444,7 +444,7 @@ export async function GET(req: Request) {
             sourceText: 'Sumber: CNBC Indonesia'
           }
         ],
-        caption: 'Alarm keras untuk keamanan digital nasional! Pakar siber membongkar risiko infiltrasi masif pada sistem situs instansi pemerintah.\n\nSimak poin-poin audit penting di carousel ini.\n\n📌 Sumber Informasi: CNBC Indonesia (cnbcindonesia.com)\n🔗 Tautan: https://www.cnbcindonesia.com/tech/20261022135221-37-778603/ahli-siber-ri-warning-bahaya-besar-ancam-website-pemerintah\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#CyberSecurity #KeamananSiber #CNBCIndonesia #PansosCreative #InfoPenting'
+        caption: 'Alarm keras untuk keamanan digital nasional! Pakar siber membongkar risiko infiltrasi masif pada sistem situs instansi pemerintah.\n\nSimak poin-poin audit penting di carousel ini.\n\n📌 Sumber Informasi: CNBC Indonesia (cnbcindonesia.com)\n🔗 Tautan: https://www.cnbcindonesia.com/tech/20261022135221-37-778603/ahli-siber-ri-warning-bahaya-besar-ancam-website-pemerintah\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#CyberSecurity #KeamananSiber #CNBCIndonesia #IndonesiaHariIni #InfoPenting'
       }
     ];
     collectedPosts.push(...fallbackPosts);

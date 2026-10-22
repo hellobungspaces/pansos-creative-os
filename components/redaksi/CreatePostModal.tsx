@@ -101,7 +101,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
       }
     ];
 
-    const generatedCaption = `${cleanHeadline}\n\nFakta krusial seputar perkembangan terkini yang sedang hangat diperbincangkan. Simak slide 1 sampai 5 untuk ringkasan lengkapnya.\n\n📌 Sumber Informasi: ${sourceName.trim()} (${sourceUrl.trim()})\n📷 Lisensi Gambar: ${finalAttribution}\n\nMenurut kamu, gimana tanggapan soal berita ini? Tulis di bawah 👇\n\n#${category} #BeritaTerkini #${sourceName.replace(/\s+/g, '')} #PansosCreative #KulturDigital`;
+    const generatedCaption = `${cleanHeadline}\n\nFakta krusial seputar perkembangan terkini yang sedang hangat diperbincangkan. Simak slide 1 sampai 5 untuk ringkasan lengkapnya.\n\n📌 Sumber Informasi: ${sourceName.trim()} (${sourceUrl.trim()})\n📷 Lisensi Gambar: ${finalAttribution}\n\nMenurut kamu, gimana tanggapan soal berita ini? Tulis di bawah 👇\n\n#${category} #BeritaTerkini #${sourceName.replace(/\s+/g, '')} #IndonesiaHariIni #KulturDigital`;
 
     const newPost: RedaksiPost = {
       id: `post-${Date.now()}`,

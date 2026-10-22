@@ -94,7 +94,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
         // Top Overlay Bar
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 28px -apple-system, Oswald, sans-serif';
-        ctx.fillText('• PANSOS CREATIVE', 50, 65);
+        ctx.fillText('• INDONESIA HARI INI', 50, 65);
 
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 24px monospace';
@@ -204,7 +204,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
     setDownloadProgress(`Merender Slide ${activeSlideIndex + 1}...`);
     const dataUrl = await renderSlideToCanvas(activeSlideIndex);
     const link = document.createElement('a');
-    link.download = `pansos-${editedPost.id}-slide-${activeSlideIndex + 1}.png`;
+    link.download = `indonesia-hari-ini-${editedPost.id}-slide-${activeSlideIndex + 1}.png`;
     link.href = dataUrl;
     link.click();
     setIsDownloading(false);
@@ -217,7 +217,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
       setDownloadProgress(`Mendownload Slide ${i + 1} dari ${editedPost.slides.length}...`);
       const dataUrl = await renderSlideToCanvas(i);
       const link = document.createElement('a');
-      link.download = `pansos-${editedPost.id}-slide-${i + 1}.png`;
+      link.download = `indonesia-hari-ini-${editedPost.id}-slide-${i + 1}.png`;
       link.href = dataUrl;
       link.click();
       await new Promise((r) => setTimeout(r, 400)); // slight pause between downloads

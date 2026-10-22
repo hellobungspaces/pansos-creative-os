@@ -100,11 +100,31 @@ function makeHighlightedTitle(title: string): string {
   );
 }
 
+function formatTimeAgo(pubDateStr: string): { timeAgo: string; ageHours: number } {
+  if (!pubDateStr) return { timeAgo: 'Baru saja', ageHours: 0 };
+  const parsed = new Date(pubDateStr);
+  if (isNaN(parsed.getTime())) return { timeAgo: 'Baru saja', ageHours: 0 };
+
+  const diffMs = Math.max(0, Date.now() - parsed.getTime());
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const ageHours = diffMs / (1000 * 60 * 60);
+
+  if (diffMins < 60) {
+    return { timeAgo: `${Math.max(1, diffMins)} mnt lalu`, ageHours };
+  }
+  const hours = Math.floor(diffMins / 60);
+  if (hours < 24) {
+    return { timeAgo: `${hours} jam lalu`, ageHours };
+  }
+  const days = Math.floor(hours / 24);
+  return { timeAgo: `${days} hari lalu`, ageHours };
+}
+
 function parseFeedItems(xmlText: string, sourceName: string): Array<{ title: string; link: string; desc: string; pubDate: string }> {
   const items: Array<{ title: string; link: string; desc: string; pubDate: string }> = [];
   const itemMatches = xmlText.match(/<item[\s\S]*?<\/item>/gi) || [];
 
-  for (const itemXml of itemMatches.slice(0, 4)) {
+  for (const itemXml of itemMatches.slice(0, 8)) {
     const titleMatch = itemXml.match(/<title[\s\S]*?>([\s\S]*?)<\/title>/i);
     const linkMatch = itemXml.match(/<link[\s\S]*?>([\s\S]*?)<\/link>/i);
     const descMatch = itemXml.match(/<description[\s\S]*?>([\s\S]*?)<\/description>/i);
@@ -134,6 +154,7 @@ function parseFeedItems(xmlText: string, sourceName: string): Array<{ title: str
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const requestedLimit = parseInt(searchParams.get('limit') || '8', 10);
+  const maxAgeHours = parseFloat(searchParams.get('maxAgeHours') || '24'); // default strictly 24 hours (anti-basi)
 
   const collectedPosts: RedaksiPost[] = [];
 
@@ -160,6 +181,13 @@ export async function GET(req: Request) {
         const parsed = parseFeedItems(xml, src.name);
 
         parsed.forEach((item, itemIdx) => {
+          const { timeAgo, ageHours } = formatTimeAgo(item.pubDate);
+
+          // FILTER: Discard news older than maxAgeHours (anti-basi: maks 24 jam)
+          if (item.pubDate && ageHours > maxAgeHours) {
+            return;
+          }
+
           const category = detectCategory(item.title, item.desc, src.categoryHint || 'TEKNOLOGI');
           const coverImg = pickRandomImage(category, sourceIdx * 3 + itemIdx);
           const upperTitle = item.title.toUpperCase();
@@ -227,7 +255,7 @@ export async function GET(req: Request) {
             source: src.name,
             sourceUrl: item.link,
             licenseInfo: 'Unsplash Free Commercial License · Curation Only',
-            timeAgo: 'Baru saja',
+            timeAgo: timeAgo,
             viralScore,
             coverImage: coverImg,
             coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',

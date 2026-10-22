@@ -1,33 +1,23 @@
-# REDAKSI OTOMATIS // Autonomous Homeless Media Operating System
+# OPEN FOLK // Open-Source Homeless Media Carousel Generator
 
-> **Landing page & demo sistem redaksi otonom untuk Homeless Media (White-Label, Self-Hosted, Beli Putus).**  
-> Didesain dengan gaya minimalis clean light-mode (tanpa AI slop / gimmick).  
-> Dibangun dengan Next.js 14 App Router, TypeScript, dan Tailwind CSS.
-
----
-
-## 🎯 Penawaran Utama
-
-> **Buat kamu yang punya (atau mau bikin) homeless media..**  
-> Aku bisa bikinin sistem yang kerjanya kayak satu tim redaksi:  
-> → pantau tren & berita 24 jam  
-> → pilih yang berpotensi viral  
-> → tulis & desain carousel otomatis  
-> → posting langsung ke IG  
-> **Bisa sampai 100 konten per hari. Tim kamu tinggal review & approve.**  
-> Custom sesuai niche & brand kamu, jalan di server sendiri.  
->  
-> **INI FULLY CUSTOM YA. WHITE-LABEL. GAK ADA SUBSCRIBE KE AKUUU. JADIIII GABISA BULANAN.**
+> **The open-source content engine for distributed media creators.**  
+> Generate, customize, inline-edit, and export Folkative-style 4:5 carousels in seconds. Free forever & self-hostable.
 
 ---
 
-## 🧭 Struktur Halaman (Zero Redundancy)
+## ✨ Fitur Utama (Live Studio)
 
-1. **Clean Minimalist Hero**: Kalimat penawaran asli yang lugas tanpa basa-basi buzzword.
-2. **The Live Redaksi Cockpit**: 3 kolom interaktif (Tren Masuk 24 Jam → Render Desain Carousel 4:5 Folkative Style → Review Naskah & 1-Click Approve ke IG).
-3. **Hitungan Biaya Realistis**: Gaji tim 6 orang (~Rp 33 Jt/bln) vs Biaya VPS cloud sendiri (~$10/bln) dengan sistem beli putus.
-4. **Scope of Work**: Daftar apa saja yang diserahkan ke klien (Docker VPS, Template Custom, Scraper, Prompt Naskah, Web Dashboard, Meta API).
-5. **Direct WhatsApp Contact**: Tombol chat langsung tanpa formulir rumit.
+1. **Split-Screen Studio Canvas**:
+   - Panel Kiri: Input topik bebas, pilih preset viral (*Thrifting vs Fast Fashion, Bubble Kafe Jaksel, Algoritma DM 2026*), ganti watermark brand & handle Instagram, dan pilih background editorial.
+   - Panel Kanan: **Live 4:5 Instagram Carousel Canvas**.
+2. **Inline Editing Langsung di Kartu**:
+   - Pengguna bisa langsung mengklik teks judul dan subteks di atas kartu untuk mengganti kata-kata sebelum di-download!
+3. **Export PNG Resolusi Tinggi (1080x1350px)**:
+   - Menggunakan native HTML5 Canvas rendering client-side. Gambar langsung ter-download ke komputer tanpa perlu login / daftar akun.
+4. **1-Click Caption & Hashtags Copy**:
+   - Draf caption lengkap dengan hashtag strategis siap di-paste ke Instagram.
+5. **Developer & Self-Host Ready**:
+   - Panduan menjalankan secara otonom di VPS sendiri menggunakan Docker dan Meta Content Publishing API.
 
 ---
 
@@ -38,3 +28,15 @@ cd "/Users/gilangsegoro/Downloads/ Bung Coding"
 npm run dev
 # Buka http://localhost:3000
 ```
+
+---
+
+## 🐙 Push ke GitHub & Deploy ke Vercel
+
+```bash
+git add .
+git commit -m "feat: launch Open Folk - open-source homeless media carousel generator"
+git remote add origin https://github.com/USERNAME/REPO_NAME.git
+git push -u origin main
+```
+Tinggal impor repository di [vercel.com/new](https://vercel.com/new) untuk deploy gratis ke seluruh dunia.

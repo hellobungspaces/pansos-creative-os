@@ -1,39 +1,27 @@
 'use client';
 
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-import { HeroSection } from '@/components/HeroSection';
-import { RedaksiCockpit } from '@/components/RedaksiCockpit';
-import { CostBreakdown } from '@/components/CostBreakdown';
-import { Deliverables } from '@/components/Deliverables';
-import { ContactWhatsApp } from '@/components/ContactWhatsApp';
-import { Footer } from '@/components/Footer';
+import { OpenSourceHeader } from '@/components/OpenSourceHeader';
+import { StudioEditor } from '@/components/StudioEditor';
+import { OpenSourceSelfHost } from '@/components/OpenSourceSelfHost';
+import { StudioFooter } from '@/components/StudioFooter';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafafa] text-[#09090b]">
-      {/* Minimalist Top Nav */}
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-zinc-950 text-white selection:bg-emerald-400 selection:text-black">
+      {/* GitHub & Fork Header */}
+      <OpenSourceHeader />
 
       <main className="flex-1">
-        {/* Clean Hero with Authentic Pitch */}
-        <HeroSection />
+        {/* Core Interactive 4:5 Carousel Generator Studio Canvas */}
+        <StudioEditor />
 
-        {/* Live Interactive Cockpit: Ingestion + 4:5 Carousel Canvas + Instagram Queue */}
-        <RedaksiCockpit />
-
-        {/* Realistic Cost Comparison: 6 Orang Tim vs VPS Sendiri */}
-        <CostBreakdown />
-
-        {/* Scope of Work: Exactly What You Deliver */}
-        <Deliverables />
-
-        {/* Direct WhatsApp Call to Action */}
-        <ContactWhatsApp />
+        {/* Developer Self-Host & VPS Architecture Guide */}
+        <OpenSourceSelfHost />
       </main>
 
-      {/* Grounded Footer */}
-      <Footer />
+      {/* Developer Footer */}
+      <StudioFooter />
     </div>
   );
 }

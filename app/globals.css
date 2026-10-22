@@ -3,10 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #fafafa;
-  --foreground: #09090b;
-  --card-bg: #ffffff;
-  --border-color: #e4e4e7;
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
 body {
@@ -18,35 +16,27 @@ body {
 }
 
 ::selection {
-  background: #09090b;
-  color: #ffffff;
+  background: #10b981;
+  color: #000000;
 }
 
-/* Minimalist Clean Scrollbars */
+/* Custom Minimalist Studio Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #fafafa;
+  background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
-  border-radius: 2px;
+  background: #27272a;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
-}
-
-/* Crisp technical grid */
-.bg-light-grid {
-  background-size: 24px 24px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background: #3f3f46;
 }
 
 .no-scrollbar::-webkit-scrollbar {

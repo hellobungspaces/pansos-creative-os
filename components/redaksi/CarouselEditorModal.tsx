@@ -45,17 +45,17 @@ const THEME_COLORS = [
 ];
 
 const POPULAR_HASHTAGS = [
-  '#IndonesiaHariIni',
+  '#KonohaInsight',
+  '#WargaKonoha',
+  '#KabarKonoha',
   '#BeritaTerkini',
-  '#Teknologi',
   '#KulturDigital',
   '#ViralHariIni',
   '#TrendingNow',
-  '#InfoTerkini',
+  '#Teknologi',
   '#MediaDigital',
-  '#KabarHariIni',
   '#GenZ',
-  '#Inovasi'
+  '#AbsurditasKonoha'
 ];
 
 function generateDefaultCaption(post: RedaksiPost): string {
@@ -69,7 +69,7 @@ function generateDefaultCaption(post: RedaksiPost): string {
   const cleanSource = post.source.replace(/[^a-zA-Z0-9]/g, '');
   const cleanCategory = post.category.replace(/[^a-zA-Z0-9]/g, '');
 
-  return `${post.title}.\n\nLaporan terverifikasi dari ${post.source} menggarisbawahi poin krusial yang perlu kamu ketahui hari ini. Geser ${post.slides.length} slide di atas untuk menyimak rangkuman faktanya.\n\nKalo menurut kamu gimana nih? Tulis pendapat kamu di kolom komentar! 👇\n\n📌 Sumber Informasi: ${post.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan Asli: ${post.sourceUrl || '-'}\n📷 Visual: Unsplash (Curated License - Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#IndonesiaHariIni #BeritaTerkini #${cleanCategory} #Teknologi #KulturDigital #${cleanSource} #TrendingNow #MediaDigital`;
+  return `${post.title}.\n\nLaporan terverifikasi dari ${post.source} mengabarkan realitas terkini yang sedang jadi sorotan warga Konoha. Geser ${post.slides.length} slide di atas untuk menyimak rangkuman faktanya.\n\nKira-kira warga Konoha ada yang relate atau punya tanggapan lain? Tulis komentar kamu di bawah! 👇\n\n📌 Sumber Informasi: ${post.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan Asli: ${post.sourceUrl || '-'}\n📷 Visual: Unsplash (Curated License - Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#KonohaInsight #WargaKonoha #BeritaTerkini #${cleanCategory} #KulturDigital #${cleanSource} #TrendingNow #MediaDigital`;
 }
 
 const CURATED_UNSPLASH_LIBRARY = [
@@ -193,11 +193,11 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
 
     let newCaption = '';
     if (preset === 'homeless') {
-      newCaption = `${editedPost.title}.\n\nLaporan terverifikasi dari ${editedPost.source} menggarisbawahi poin penting yang perlu kamu ketahui hari ini. Geser ${editedPost.slides.length} slide di atas untuk menyimak rangkuman faktanya.\n\nKalo menurut kamu gimana nih? Tulis pendapat kamu di kolom komentar! 👇\n\n📌 Sumber Informasi: ${editedPost.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan Asli: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash Curated (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#IndonesiaHariIni #BeritaTerkini #${cleanCategory} #Teknologi #KulturDigital #${cleanSource} #TrendingNow`;
+      newCaption = `${editedPost.title}.\n\nLaporan terverifikasi dari ${editedPost.source} kembali memperlihatkan fenomena menarik di tengah kehidupan warga Konoha. Simak ${editedPost.slides.length} slide fakta ringkas di atas.\n\nKira-kira tanggapan para warga Konoha gimana nih? Boleh curhat atau lempar sarkas santai di kolom komentar! 👇\n\n📌 Sumber Informasi: ${editedPost.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan Asli: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash Curated (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#KonohaInsight #WargaKonoha #BeritaTerkini #${cleanCategory} #KulturDigital #${cleanSource} #TrendingNow`;
     } else if (preset === 'ringkas') {
-      newCaption = `${editedPost.title}.\n\nSimak ringkasan ${editedPost.slides.length} slide pada carousel di atas 👆\n\nBagikan postingan ini ke teman atau tim kamu biar tetap update!\n\n📌 Sumber: ${editedPost.source}${domain ? ` (${domain})` : ''}\n📷 Visual: Unsplash License\n\n#IndonesiaHariIni #${cleanCategory} #BeritaTerkini #${cleanSource}`;
+      newCaption = `${editedPost.title}.\n\nSimak ringkasan ${editedPost.slides.length} poin fakta pada carousel di atas 👆\n\nBagikan postingan ini ke sesama warga Konoha biar tetap melek isu!\n\n📌 Sumber: ${editedPost.source}${domain ? ` (${domain})` : ''}\n📷 Visual: Unsplash License\n\n#KonohaInsight #${cleanCategory} #WargaKonoha #${cleanSource}`;
     } else if (preset === 'breaking') {
-      newCaption = `🚨 BREAKING ALERT: ${editedPost.title}.\n\nKabar terbaru dilaporkan oleh ${editedPost.source}. Berikut rangkuman lengkap konteks dan poin penting yang sedang berkembang.\n\nGeser terus sampai slide terakhir ➔\n\n📌 Sumber Berita: ${editedPost.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash Free License\n⚖️ Sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#BreakingNews #IndonesiaHariIni #WartaTerkini #${cleanCategory} #${cleanSource}`;
+      newCaption = `🚨 BREAKING KONOHA: ${editedPost.title}.\n\nKabar terbaru dilaporkan oleh ${editedPost.source}. Berikut rangkuman lengkap peristiwa dan konteks penting yang sedang berlangsung.\n\nGeser terus sampai slide terakhir ➔\n\n📌 Sumber Berita: ${editedPost.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash Free License\n⚖️ Sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#BreakingNews #KonohaInsight #WartaKonoha #${cleanCategory} #${cleanSource}`;
     }
 
     setEditedPost({ ...editedPost, caption: newCaption });
@@ -279,13 +279,13 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
 
           ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
           ctx.font = '900 64px Oswald, Anton, sans-serif';
-          ctx.fillText('INDONESIA HARI INI', 60, 360);
+          ctx.fillText('KONOHA INSIGHT', 60, 360);
         }
 
         // Top Overlay Bar: Only Clean Brand & Slide Index (No messy watermarks)
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 28px -apple-system, Oswald, sans-serif';
-        ctx.fillText('• INDONESIA HARI INI', 50, 65);
+        ctx.fillText('• KONOHA INSIGHT', 50, 65);
 
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 24px monospace';
@@ -470,7 +470,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                       {editedPost.category} · SLIDE {activeSlideIndex + 1}
                     </span>
                     <span className="text-sm font-headline text-zinc-300 font-black tracking-wider">
-                      INDONESIA HARI INI
+                      KONOHA INSIGHT
                     </span>
                   </div>
                 )}
@@ -912,7 +912,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                     <span>Pilihan Template Format Caption</span>
                   </h4>
                   <p className="text-xs text-zinc-400">
-                    Pilih template narasi siap posting untuk akun @indonesia.hariini
+                    Pilih template narasi siap posting untuk akun @konoha.insight
                   </p>
                 </div>
 
@@ -1053,15 +1053,15 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                 {/* IG Header */}
                 <div className="p-3 flex items-center justify-between border-b border-zinc-900">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-[#e2ff3b] text-black font-black text-xs flex items-center justify-center font-headline ring-2 ring-[#e2ff3b]/30">
-                      IHI
+                    <div className="w-8 h-8 rounded-full bg-[#e2ff3b] text-black font-black text-xs flex items-center justify-center font-headline ring-2 ring-[#e2ff3b]/40 shadow-sm">
+                      KI
                     </div>
                     <div>
                       <div className="text-xs font-bold text-white flex items-center gap-1">
-                        <span>indonesia.hariini</span>
+                        <span>konoha.insight</span>
                         <span className="w-3 h-3 rounded-full bg-blue-500 text-white text-[8px] flex items-center justify-center font-bold">✓</span>
                       </div>
-                      <div className="text-[10px] text-zinc-400">Audio Asli · indonesia.hariini</div>
+                      <div className="text-[10px] text-zinc-400">Audio Asli · konoha.insight</div>
                     </div>
                   </div>
                   <span className="text-zinc-500 text-xs">•••</span>
@@ -1091,12 +1091,12 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                   </div>
 
                   <div className="text-xs font-bold text-white">
-                    1.482 suka
+                    2.841 suka
                   </div>
 
                   {/* IG Caption Text Rendered */}
                   <div className="text-xs text-zinc-200 font-sans leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto pr-1">
-                    <span className="font-bold text-white mr-1.5">indonesia.hariini</span>
+                    <span className="font-bold text-white mr-1.5">konoha.insight</span>
                     {editedPost.caption || 'Belum ada caption.'}
                   </div>
 

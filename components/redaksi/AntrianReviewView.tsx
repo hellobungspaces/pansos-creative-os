@@ -34,7 +34,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
     const cleanSource = post.source.replace(/[^a-zA-Z0-9]/g, '');
     const cleanCategory = post.category.replace(/[^a-zA-Z0-9]/g, '');
 
-    const text = post.caption || `${post.title}.\n\nLaporan terverifikasi dari ${post.source} merangkum fakta penting yang perlu kamu ketahui hari ini.\n\nSimak slide 1 sampai ${post.slides.length} di atas 👆\n\nKalo menurut kamu gimana nih? Tulis pendapat kamu di kolom komentar! 👇\n\n📌 Sumber Informasi: ${post.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan: ${post.sourceUrl || '-'}\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#IndonesiaHariIni #BeritaTerkini #${cleanCategory} #Teknologi #${cleanSource} #TrendingNow`;
+    const text = post.caption || `${post.title}.\n\nLaporan terverifikasi dari ${post.source} merangkum fakta penting yang perlu kamu ketahui hari ini.\n\nSimak slide 1 sampai ${post.slides.length} di atas 👆\n\nKalo menurut kamu gimana nih? Warga Konoha setuju atau punya pandangan lain? Tulis di kolom komentar! 👇\n\n📌 Sumber Informasi: ${post.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan: ${post.sourceUrl || '-'}\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#KonohaInsight #WargaKonoha #BeritaTerkini #${cleanCategory} #KulturDigital #${cleanSource} #TrendingNow`;
 
     navigator.clipboard?.writeText(text);
     setCopiedPostId(post.id);
@@ -137,7 +137,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                 <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white drop-shadow">
                   <div className="flex items-center gap-1.5 text-[10px] font-mono font-black">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#e2ff3b]" />
-                    <span>INDONESIA HARI INI</span>
+                    <span>KONOHA INSIGHT</span>
                   </div>
                   <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/60 backdrop-blur font-bold">
                     1/{post.slides.length}

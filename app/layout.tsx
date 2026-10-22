@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'INDONESIA HARI INI // AI Redaksi Operating System',
-  description: 'Operating System Redaksi Mandiri Indonesia Hari Ini: pemantau tren otomatis, penyusunan naskah viral, render kartu carousel 4:5 royal blue, dan meja editor review.',
-  keywords: ['Indonesia Hari Ini', 'Homeless Media', 'Redaksi OS', 'Instagram Carousel Generator', 'Open Source Media'],
+  title: 'KONOHA INSIGHT // Satirical Homeless Media OS',
+  description: 'Operating System Redaksi Mandiri Konoha Insight (@konoha.insight): kurasi fakta media terverifikasi, sentuhan sarkas cerdas, render carousel 4:5, dan meja editor otomatis.',
+  keywords: ['Konoha Insight', 'konoha.insight', 'Warga Konoha', 'Homeless Media', 'Redaksi OS', 'Instagram Carousel Generator', 'Satire News Media'],
 };
 
 export const viewport: Viewport = {

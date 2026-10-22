@@ -37,8 +37,8 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
       {/* View Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-6">
         <div>
-          <div className="text-xs font-mono tracking-widest text-zinc-500 uppercase font-semibold mb-1">
-            SELAMAT MALAM, INDONESIA HARI INI
+          <div className="text-xs font-mono tracking-widest text-[#e2ff3b] uppercase font-semibold mb-1">
+            SELAMAT MALAM, KONOHA INSIGHT (@KONOHA.INSIGHT)
           </div>
           <h1 className="text-4xl sm:text-6xl font-black font-headline tracking-tight text-white leading-none">
             RUANG REDAKSI

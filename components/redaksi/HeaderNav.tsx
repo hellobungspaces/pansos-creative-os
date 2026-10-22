@@ -23,16 +23,16 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white text-black font-black font-headline text-base flex items-center justify-center tracking-tighter">
-            IHI
+          <div className="w-8 h-8 rounded-lg bg-[#e2ff3b] text-black font-black font-headline text-base flex items-center justify-center tracking-tighter shadow-md">
+            KI
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#e2ff3b]" />
+            <span className="w-2 h-2 rounded-full bg-[#e2ff3b] animate-pulse" />
             <span className="font-extrabold text-sm sm:text-base tracking-wider text-white font-headline">
-              INDONESIA HARI INI
+              KONOHA INSIGHT
             </span>
-            <span className="hidden md:inline px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400 border border-zinc-800">
-              AI Redaksi OS
+            <span className="hidden md:inline px-1.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-[#e2ff3b] border border-zinc-800">
+              @konoha.insight
             </span>
           </div>
         </div>

@@ -18,30 +18,30 @@ export const InstagramGridView: React.FC<InstagramGridViewProps> = ({
       {/* Instagram Profile Header Simulation */}
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 border-b border-zinc-800/80 pb-8">
         <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full p-1 bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 shrink-0">
-          <div className="w-full h-full bg-black rounded-full p-1 flex items-center justify-center font-black font-headline text-lg sm:text-xl text-white tracking-tighter">
-            IHI
+          <div className="w-full h-full bg-black rounded-full p-1 flex items-center justify-center font-black font-headline text-lg sm:text-xl text-[#e2ff3b] tracking-tighter ring-2 ring-[#e2ff3b]/40">
+            KI
           </div>
         </div>
 
         <div className="space-y-3 text-center sm:text-left flex-1">
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <h2 className="text-xl font-bold font-mono text-white flex items-center gap-1.5">
-              <span>indonesia.hariini</span>
+              <span>konoha.insight</span>
               <CheckCircle2 className="w-4 h-4 text-cyan-400 fill-cyan-400/20" />
             </h2>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-zinc-900 border border-zinc-800 text-zinc-400">
-              Homeless Media Network
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-zinc-900 border border-zinc-800 text-[#e2ff3b]">
+              Satirical Homeless Media
             </span>
           </div>
 
           <div className="flex items-center justify-center sm:justify-start gap-6 text-xs font-mono text-zinc-300">
             <div><strong className="text-white font-bold">1,420</strong> posts</div>
-            <div><strong className="text-white font-bold">2.4M</strong> followers</div>
-            <div><strong className="text-white font-bold">18</strong> following</div>
+            <div><strong className="text-white font-bold">3.1M</strong> warga konoha</div>
+            <div><strong className="text-white font-bold">7</strong> hokage</div>
           </div>
 
           <p className="text-xs text-zinc-400 font-sans max-w-lg leading-relaxed">
-            Kurasi harian seputar teknologi, startup, AI, kultur digital, dan fenomena linimasa nasional. 100% diproduksi secara otonom oleh sistem redaksi AI Indonesia Hari Ini.
+            Warta Aktual & Refleksi Satir Realitas Warga Konoha. Fakta dari media kredibel, dibungkus sarkas cerdas untuk netizen yang butuh hiburan sekaligus pencerahan.
           </p>
         </div>
       </div>
@@ -73,7 +73,7 @@ export const InstagramGridView: React.FC<InstagramGridViewProps> = ({
 
                 <div className="absolute top-2 left-2 flex items-center gap-1.5 text-[9px] font-mono font-black text-white drop-shadow">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#e2ff3b]" />
-                  <span>INDONESIA HARI INI</span>
+                  <span>KONOHA INSIGHT</span>
                 </div>
 
                 <div className="absolute top-2 right-2 text-white/90 drop-shadow">
@@ -100,7 +100,7 @@ export const InstagramGridView: React.FC<InstagramGridViewProps> = ({
 
                 <div className="flex items-center justify-between text-[8px] font-mono text-white/80 border-t border-white/20 pt-1">
                   <span className="truncate max-w-[100px]">Sumber: {post.source}</span>
-                  <span>@indonesia.hariini</span>
+                  <span>@konoha.insight</span>
                 </div>
               </div>
 

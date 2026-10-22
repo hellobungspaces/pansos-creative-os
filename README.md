@@ -1,7 +1,9 @@
-# INDONESIA HARI INI // Autonomous Homeless Media Operating System
+# KONOHA INSIGHT // Satirical Homeless Media Operating System
 
-> **Sistem operasional redaksi otonom untuk Homeless Media Indonesia Hari Ini.**  
-> Menggabungkan pemantau tren otomatis 24 jam, penyusunan naskah viral, render kartu carousel 4:5 royal blue, dan meja editor review tim.
+> **Sistem operasional redaksi otonom untuk Homeless Media Konoha Insight (@konoha.insight).**  
+> Menggabungkan pemantau tren otomatis 24 jam, kurasi media kredibel (Kompas, Detik, CNN, Antara), penyusunan naskah sarkas cerdas, studio caption Instagram, dan render kartu carousel 4:5 native canvas.
+
+Live Production: [https://konoha-insight.vercel.app](https://konoha-insight.vercel.app) (juga aktif di [https://konohainsight.vercel.app](https://konohainsight.vercel.app))
 
 ---
 
@@ -32,7 +34,7 @@
    - Daftar 10 media kredibel dengan toggle switch ON/OFF: ANTARA, Adweek, Ars Technica, CNN Indonesia, DailySocial, Engadget, Google, Google Trends Indonesia, Liputan6, Marketing Dive.
 
 5. **Feed Grid Instagram (3x3 Preview)**:
-   - Tampilan profil Instagram `@indonesia.hariini` dengan feed grid 3x3 yang memperlihatkan bagaimana konten tersaji di timeline Instagram.
+   - Tampilan profil Instagram `@konoha.insight` dengan feed grid 3x3 yang memperlihatkan bagaimana konten tersaji di timeline Instagram.
 
 ---
 

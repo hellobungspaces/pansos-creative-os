@@ -1,11 +1,12 @@
-# AUTOPRESS™ // Autonomous Homeless Media Operating System
+# REDAKSI OTOMATIS // Autonomous Homeless Media Operating System
 
-> **Landing page & showcase sistem otomasi redaksi untuk Homeless Media (White-Label, Self-Hosted, Beli Putus).**  
-> Didesain dengan Next.js 14 App Router, TypeScript, dan Tailwind CSS. Siap deploy 1-klik ke Vercel.
+> **Landing page & demo sistem redaksi otonom untuk Homeless Media (White-Label, Self-Hosted, Beli Putus).**  
+> Didesain dengan gaya minimalis clean light-mode (tanpa AI slop / gimmick).  
+> Dibangun dengan Next.js 14 App Router, TypeScript, dan Tailwind CSS.
 
 ---
 
-## 🎯 Penawaran Utama (Core Pitch)
+## 🎯 Penawaran Utama
 
 > **Buat kamu yang punya (atau mau bikin) homeless media..**  
 > Aku bisa bikinin sistem yang kerjanya kayak satu tim redaksi:  
@@ -20,45 +21,20 @@
 
 ---
 
-## 🛠️ Arsitektur Sistem Kerja Otonom
+## 🧭 Struktur Halaman (Zero Redundancy)
 
-1. **Trend Scraper Ingestion (24/7)**:
-   - Worker memantau Twitter/X trending topics, Google Trends SEA, TikTok Creative Center, dan 20+ RSS portal berita kredibel setiap 5 menit.
-2. **AI Viral Scoring & Hook Formulator**:
-   - Model LLM memfilter berita dengan potensi viral tertinggi (skor 90+), membuang basa-basi rilis pers, dan menyusun hook 5 slide provokatif.
-3. **Automated Graphic Engine (1080x1350px 4:5)**:
-   - Desain carousel di-render secara programatik sesuai font, palet warna, dan logo khas brand klien ala Folkative / USS Feed.
-4. **Human Review Dashboard**:
-   - Dashboard web privat yang responsif di HP/Laptop: tim klien cukup membaca draf, melakukan revisi cepat jika perlu, lalu klik satu tombol: **"Approve & Schedule"**.
-5. **Direct Publishing via Meta Graph API**:
-   - Terintegrasi langsung dengan Meta Content Publishing API resmi untuk posting otomatis ke feed Instagram klien.
+1. **Clean Minimalist Hero**: Kalimat penawaran asli yang lugas tanpa basa-basi buzzword.
+2. **The Live Redaksi Cockpit**: 3 kolom interaktif (Tren Masuk 24 Jam → Render Desain Carousel 4:5 Folkative Style → Review Naskah & 1-Click Approve ke IG).
+3. **Hitungan Biaya Realistis**: Gaji tim 6 orang (~Rp 33 Jt/bln) vs Biaya VPS cloud sendiri (~$10/bln) dengan sistem beli putus.
+4. **Scope of Work**: Daftar apa saja yang diserahkan ke klien (Docker VPS, Template Custom, Scraper, Prompt Naskah, Web Dashboard, Meta API).
+5. **Direct WhatsApp Contact**: Tombol chat langsung tanpa formulir rumit.
 
 ---
 
-## 💼 Model Bisnis: Kenapa "Beli Putus" & "Tanpa Bulanan"?
-
-- **Self-Hosted di VPS Klien**: Sistem dideploy di VPS cloud milik klien sendiri (DigitalOcean / Hetzner / AWS) seharga ~$5 - $15/bulan yang dibayar langsung ke provider cloud.
-- **Data & Token Milik Klien**: Database, token akses Meta Graph API, dan source code berada di server pribadi klien, bukan di server developer.
-- **Zero Subscription**: Klien hanya membayar biaya jasa riset, customisasi, dan setup di awal (*one-time setup fee*).
-
----
-
-## 🚀 Menjalankan di Localhost
+## 🚀 Jalankan di Localhost
 
 ```bash
 cd "/Users/gilangsegoro/Downloads/ Bung Coding"
 npm run dev
-# Buka http://localhost:3000 di browser
+# Buka http://localhost:3000
 ```
-
----
-
-## 🐙 Push ke GitHub & Deploy ke Vercel
-
-```bash
-git add .
-git commit -m "feat: pivot to autonomous homeless media agency landing page"
-git remote add origin https://github.com/USERNAME/REPO_NAME.git
-git push -u origin main
-```
-Deploy di [vercel.com/new](https://vercel.com/new) cukup dengan mengimpor repo GitHub tersebut.

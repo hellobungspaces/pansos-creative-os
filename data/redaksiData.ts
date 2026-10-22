@@ -197,7 +197,7 @@ export const INITIAL_POSTS: RedaksiPost[] = [
     licenseInfo: 'Unsplash Free Commercial License',
     timeAgo: '2 jam lalu',
     viralScore: 88,
-    coverImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=85',
+    coverImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85',
     coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
     totalSlides: 4,
     hasRiskWarning: true,

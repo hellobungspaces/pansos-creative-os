@@ -22,6 +22,7 @@ interface RuangRedaksiViewProps {
   scheduledCount?: number;
   publishedCount?: number;
   isScouting?: boolean;
+  isLoading?: boolean;
 }
 
 export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
@@ -30,7 +31,8 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
   reviewCount = 8,
   scheduledCount = 0,
   publishedCount = 14,
-  isScouting = false
+  isScouting = false,
+  isLoading = false
 }) => {
   return (
     <div className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
@@ -77,19 +79,28 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
         </button>
       </div>
 
-      {/* 4 Big Metrics Cards (Matching Screenshot 2) */}
+      {/* 4 Big Metrics Cards (With Skeleton Shimmer State) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1 */}
         <div className="p-5 sm:p-6 rounded-2xl bg-[#0f1117] border border-zinc-800/80 space-y-2">
           <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
             BERITA MASUK 24 JAM
           </div>
-          <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
-            {340 + reviewCount}
-          </div>
-          <div className="text-xs font-mono text-zinc-500">
-            0 menunggu dinilai
-          </div>
+          {isLoading ? (
+            <div className="space-y-2 py-1">
+              <div className="h-10 sm:h-12 w-28 bg-zinc-800/70 animate-pulse rounded-xl" />
+              <div className="h-3 w-32 bg-zinc-800/40 animate-pulse rounded" />
+            </div>
+          ) : (
+            <>
+              <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
+                {340 + reviewCount}
+              </div>
+              <div className="text-xs font-mono text-zinc-500">
+                0 menunggu dinilai
+              </div>
+            </>
+          )}
         </div>
 
         {/* Card 2 */}
@@ -97,12 +108,21 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
           <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
             LOLOS ANALIS 24 JAM
           </div>
-          <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
-            {130 + reviewCount}
-          </div>
-          <div className="text-xs font-mono text-zinc-500">
-            {110 + reviewCount} antre ditulis
-          </div>
+          {isLoading ? (
+            <div className="space-y-2 py-1">
+              <div className="h-10 sm:h-12 w-28 bg-zinc-800/70 animate-pulse rounded-xl" />
+              <div className="h-3 w-32 bg-zinc-800/40 animate-pulse rounded" />
+            </div>
+          ) : (
+            <>
+              <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
+                {130 + reviewCount}
+              </div>
+              <div className="text-xs font-mono text-zinc-500">
+                {110 + reviewCount} antre ditulis
+              </div>
+            </>
+          )}
         </div>
 
         {/* Card 3: SIAP DIREVIEW (Highlighted Green) */}
@@ -116,13 +136,22 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
             </span>
             <span className="w-2 h-2 rounded-full bg-[#e2ff3b] animate-ping" />
           </div>
-          <div className="text-4xl sm:text-5xl font-black font-headline text-[#e2ff3b] tracking-tight group-hover:scale-105 transition-transform">
-            {reviewCount}
-          </div>
-          <div className="text-xs font-mono text-zinc-300 flex items-center justify-between">
-            <span>Butuh approval tim</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#e2ff3b]" />
-          </div>
+          {isLoading ? (
+            <div className="space-y-2 py-1">
+              <div className="h-10 sm:h-12 w-20 bg-zinc-800/70 animate-pulse rounded-xl" />
+              <div className="h-3 w-28 bg-zinc-800/40 animate-pulse rounded" />
+            </div>
+          ) : (
+            <>
+              <div className="text-4xl sm:text-5xl font-black font-headline text-[#e2ff3b] tracking-tight group-hover:scale-105 transition-transform">
+                {reviewCount}
+              </div>
+              <div className="text-xs font-mono text-zinc-300 flex items-center justify-between">
+                <span>Butuh approval tim</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#e2ff3b]" />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Card 4 */}
@@ -130,12 +159,21 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
           <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
             TERJADWAL
           </div>
-          <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
-            {scheduledCount}
-          </div>
-          <div className="text-xs font-mono text-zinc-500">
-            {publishedCount} sudah posting minggu ini
-          </div>
+          {isLoading ? (
+            <div className="space-y-2 py-1">
+              <div className="h-10 sm:h-12 w-20 bg-zinc-800/70 animate-pulse rounded-xl" />
+              <div className="h-3 w-36 bg-zinc-800/40 animate-pulse rounded" />
+            </div>
+          ) : (
+            <>
+              <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
+                {scheduledCount}
+              </div>
+              <div className="text-xs font-mono text-zinc-500">
+                {publishedCount} sudah posting minggu ini
+              </div>
+            </>
+          )}
         </div>
       </div>
 

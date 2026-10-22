@@ -11,6 +11,7 @@ interface AntrianReviewViewProps {
   onOpenCreateModal: () => void;
   onApprovePost: (postId: string) => void;
   onRejectPost: (postId: string) => void;
+  isLoading?: boolean;
 }
 
 export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
@@ -18,7 +19,8 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
   onOpenDetailEditor,
   onOpenCreateModal,
   onApprovePost,
-  onRejectPost
+  onRejectPost,
+  isLoading = false
 }) => {
   const [activeTab, setActiveTab] = useState<'perlu_review' | 'disetujui' | 'terjadwal' | 'sudah_posting' | 'ditolak'>('perlu_review');
   const [copiedPostId, setCopiedPostId] = useState<string | null>(null);
@@ -114,9 +116,58 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
         </div>
       </div>
 
-      {/* Grid of 4:5 Carousel Cards */}
+      {/* Grid of 4:5 Carousel Cards OR Skeleton Loaders */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
-        {filteredPosts.map((post) => (
+        {isLoading ? (
+          Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={`skeleton-card-${i}`}
+              className="flex flex-col justify-between space-y-2.5 animate-pulse"
+            >
+              {/* The 4:5 Card Preview Skeleton */}
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800/80 bg-zinc-950 flex flex-col justify-between shadow-2xl">
+                {/* Top Half: Cover Skeleton */}
+                <div className="relative h-1/2 w-full bg-zinc-900 overflow-hidden flex items-center justify-center">
+                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
+                    <div className="h-3 w-20 bg-zinc-800 rounded" />
+                    <div className="h-3 w-8 bg-zinc-800 rounded" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-zinc-800/60" />
+                </div>
+
+                {/* Bottom Half: Theme Color Skeleton */}
+                <div className="h-1/2 w-full p-3.5 sm:p-4 flex flex-col justify-between bg-zinc-900/90 border-t border-zinc-800/60">
+                  <div className="space-y-2">
+                    <div className="h-4 w-16 bg-zinc-800 rounded" />
+                    <div className="space-y-1.5 pt-1">
+                      <div className="h-3.5 w-full bg-zinc-800 rounded" />
+                      <div className="h-3.5 w-4/5 bg-zinc-800 rounded" />
+                      <div className="h-3 w-2/3 bg-zinc-800/60 rounded" />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-zinc-800/50">
+                    <div className="h-3 w-16 bg-zinc-800/60 rounded" />
+                    <div className="h-6 w-6 rounded-md bg-zinc-800" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Sub-text Skeleton */}
+              <div className="space-y-1.5 px-1">
+                <div className="h-3 w-24 bg-zinc-800/60 rounded" />
+                <div className="h-3.5 w-3/4 bg-zinc-800/50 rounded" />
+              </div>
+
+              {/* Action Buttons Skeleton */}
+              <div className="flex gap-2 pt-1 px-1">
+                <div className="h-7 flex-1 bg-zinc-800/60 rounded-xl" />
+                <div className="h-7 w-16 bg-zinc-800/60 rounded-xl" />
+              </div>
+            </div>
+          ))
+        ) : (
+          filteredPosts.map((post) => (
           <div
             key={post.id}
             className="group flex flex-col justify-between space-y-2.5 transition-all duration-200"
@@ -291,11 +342,12 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
               )}
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Empty State */}
-      {filteredPosts.length === 0 && (
+      {!isLoading && filteredPosts.length === 0 && (
         <div className="text-center py-16 bg-[#0f1117] rounded-3xl border border-dashed border-zinc-800 space-y-3">
           <CheckSquare className="w-10 h-10 text-zinc-600 mx-auto" />
           <h3 className="text-base font-bold text-white">Tidak Ada Konten di Tab Ini</h3>

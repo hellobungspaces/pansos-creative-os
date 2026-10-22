@@ -112,6 +112,25 @@ const CURATED_UNSPLASH_LIBRARY = [
   { id: 'u25', tags: ['indonesia', 'city', 'jakarta', 'street'], name: 'Jakarta Skyline & Traffic', url: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1080&auto=format&fit=crop&q=85' },
   { id: 'u26', tags: ['indonesia', 'community', 'people', 'street'], name: 'Indonesian Street Coffee', url: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1080&auto=format&fit=crop&q=85' },
   { id: 'u27', tags: ['indonesia', 'office', 'people', 'team'], name: 'Indonesian Creative Team', url: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1080&auto=format&fit=crop&q=85' },
+
+  // Fauna & Satwa & Panda
+  { id: 'u28', tags: ['fauna', 'panda', 'hewan', 'satwa', 'zoo'], name: 'Giant Panda Eating Bamboo', url: 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u29', tags: ['fauna', 'panda', 'hewan', 'satwa', 'zoo'], name: 'Panda on Tree Branch', url: 'https://images.unsplash.com/photo-1527118732049-c88155f2107c?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u30', tags: ['fauna', 'panda', 'red panda', 'hewan'], name: 'Red Panda Cute Face', url: 'https://images.unsplash.com/photo-1548247416-ec66f4900b2e?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u31', tags: ['fauna', 'kucing', 'cat', 'hewan', 'satwa'], name: 'Cute Domestic Cat', url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u32', tags: ['fauna', 'harimau', 'tiger', 'satwa liar'], name: 'Sumatran Wild Tiger', url: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=1080&auto=format&fit=crop&q=85' },
+
+  // Lingkungan & Karhutla & Cuaca
+  { id: 'u33', tags: ['lingkungan', 'karhutla', 'kebakaran', 'asap', 'hutan'], name: 'Wildfire Karhutla Smoke', url: 'https://images.unsplash.com/photo-1602980085566-4c40b8fecf06?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u34', tags: ['lingkungan', 'hutan', 'alam', 'forest'], name: 'Tropical Rainforest Canopy', url: 'https://images.unsplash.com/photo-1511497584788-87676104235f?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u35', tags: ['lingkungan', 'polusi', 'kabut', 'udara'], name: 'City Air Smog Pollution', url: 'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u36', tags: ['lingkungan', 'banjir', 'hujan', 'cuaca'], name: 'Flood Water Heavy Rain', url: 'https://images.unsplash.com/photo-1547683905-f686c993aae5?w=1080&auto=format&fit=crop&q=85' },
+
+  // Konoha Politik & Hukum
+  { id: 'u37', tags: ['konoha', 'dpr', 'politik', 'pemerintah', 'parlemen'], name: 'Government Parliament Hall', url: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u38', tags: ['konoha', 'hukum', 'sidang', 'hakim', 'pengadilan'], name: 'Courtroom Gavel Justice', url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u39', tags: ['konoha', 'polisi', 'investigasi', 'kasus', 'hukum'], name: 'Police Investigation Tape', url: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1080&auto=format&fit=crop&q=85' },
+  { id: 'u40', tags: ['konoha', 'indonesia', 'merah putih', 'rakyat'], name: 'Indonesian Flag & Crowd', url: 'https://images.unsplash.com/photo-1596405835955-4532a63c0d61?w=1080&auto=format&fit=crop&q=85' },
 ];
 
 export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
@@ -180,6 +199,27 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
     }
     return list;
   }, [editedPost.category, editedPost.source]);
+
+  // Smart entity keywords extracted from headline for 1-click relevant photo search
+  const smartKeywords = useMemo(() => {
+    if (!editedPost?.title) return [];
+    const stopwords = new Set([
+      'yang', 'dan', 'di', 'dari', 'ke', 'ini', 'itu', 'untuk', 'pada', 'adalah',
+      'dengan', 'oleh', 'bisa', 'akan', 'tak', 'tidak', 'juga', 'ada', 'buat',
+      'dalam', 'atas', 'saat', 'para', 'jadi', 'karena', 'agar', 'bukan', 'atau',
+      'sudah', 'telah', 'sedang', 'lebih', 'sangat', 'masih', 'hanya', 'pun', 'bila',
+      'hingga', 'sampai', 'sejak', 'selama', 'lalu', 'baru', 'hari', 'bulan', 'tahun',
+      'bikin', 'geger', 'viral', 'sorotan', 'terungkap', 'kronologi', 'simak', 'fakta',
+      'cara', 'mengatasi', 'rilis', 'kabar'
+    ]);
+    const words = editedPost.title
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .map(w => w.trim().toLowerCase())
+      .filter(w => w.length > 2 && !stopwords.has(w));
+    
+    return Array.from(new Set(words)).slice(0, 5);
+  }, [editedPost.title]);
 
   const isTagInCaption = (tag: string) => {
     const current = editedPost.caption || '';
@@ -944,6 +984,30 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                       <span>🎲 Acak Foto</span>
                     </button>
                   </div>
+
+                  {/* Smart Entity Keywords from Headline (1-Click Instant Search) */}
+                  {smartKeywords.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-zinc-900/90 border border-zinc-800">
+                      <span className="text-[10px] text-[#e2ff3b] font-mono font-bold uppercase tracking-wider flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-[#e2ff3b]" />
+                        <span>Saran dari Judul:</span>
+                      </span>
+                      {smartKeywords.map((kw) => (
+                        <button
+                          key={kw}
+                          type="button"
+                          onClick={() => setPhotoSearchQuery(kw)}
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono capitalize transition-all ${
+                            photoSearchQuery.toLowerCase() === kw.toLowerCase()
+                              ? 'bg-[#e2ff3b] text-black font-bold shadow'
+                              : 'bg-[#e2ff3b]/10 text-[#e2ff3b] hover:bg-[#e2ff3b] hover:text-black border border-[#e2ff3b]/30'
+                          }`}
+                        >
+                          #{kw}
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
                   {/* Quick Search Topic Pills */}
                   <div className="flex flex-wrap items-center gap-1.5">

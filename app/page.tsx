@@ -16,6 +16,7 @@ const LOCAL_STORAGE_KEY = 'indonesia_hari_ini_posts_v5';
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'ruang_redaksi' | 'antrian_review' | 'editor' | 'sumber_berita' | 'instagram_grid'>('ruang_redaksi');
   const [posts, setPosts] = useState<RedaksiPost[]>(INITIAL_POSTS);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState<RedaksiPost | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isScouting, setIsScouting] = useState(false);
@@ -29,9 +30,14 @@ export default function HomePage() {
       if (saved) {
         currentPosts = JSON.parse(saved);
         setPosts(currentPosts);
+      } else {
+        setPosts(INITIAL_POSTS);
       }
     } catch (e) {
       console.warn('LocalStorage load failed', e);
+      setPosts(INITIAL_POSTS);
+    } finally {
+      setIsLoading(false);
     }
 
     // Auto-sync every day or after 3 hours in the background
@@ -169,6 +175,7 @@ export default function HomePage() {
             scheduledCount={scheduledCount}
             publishedCount={publishedCount}
             isScouting={isScouting}
+            isLoading={isLoading}
           />
         )}
 
@@ -179,6 +186,7 @@ export default function HomePage() {
             onOpenCreateModal={() => setIsCreateModalOpen(true)}
             onApprovePost={handleApprovePost}
             onRejectPost={handleRejectPost}
+            isLoading={isLoading}
           />
         )}
 

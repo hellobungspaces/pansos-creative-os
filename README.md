@@ -1,23 +1,38 @@
-# OPEN FOLK // Open-Source Homeless Media Carousel Generator
+# RUANG REDAKSI // Autonomous Homeless Media Operating System (Pansos Creative Style)
 
-> **The open-source content engine for distributed media creators.**  
-> Generate, customize, inline-edit, and export Folkative-style 4:5 carousels in seconds. Free forever & self-hostable.
+> **Sistem operasional redaksi otonom untuk Homeless Media.**  
+> Menggabungkan pemantau tren otomatis 24 jam, penyusunan naskah viral, render kartu carousel 4:5 royal blue ala Folkative/Pansos, dan meja editor review tim.
 
 ---
 
-## ✨ Fitur Utama (Live Studio)
+## 📸 Fitur Lengkap Sesuai Desain Referensi
 
-1. **Split-Screen Studio Canvas**:
-   - Panel Kiri: Input topik bebas, pilih preset viral (*Thrifting vs Fast Fashion, Bubble Kafe Jaksel, Algoritma DM 2026*), ganti watermark brand & handle Instagram, dan pilih background editorial.
-   - Panel Kanan: **Live 4:5 Instagram Carousel Canvas**.
-2. **Inline Editing Langsung di Kartu**:
-   - Pengguna bisa langsung mengklik teks judul dan subteks di atas kartu untuk mengganti kata-kata sebelum di-download!
-3. **Export PNG Resolusi Tinggi (1080x1350px)**:
-   - Menggunakan native HTML5 Canvas rendering client-side. Gambar langsung ter-download ke komputer tanpa perlu login / daftar akun.
-4. **1-Click Caption & Hashtags Copy**:
-   - Draf caption lengkap dengan hashtag strategis siap di-paste ke Instagram.
-5. **Developer & Self-Host Ready**:
-   - Panduan menjalankan secara otonom di VPS sendiri menggunakan Docker dan Meta Content Publishing API.
+1. **Ruang Redaksi (Dashboard Utama)**:
+   - Metrik 24 Jam: `349 Berita Masuk`, `135 Lolos Analis`, `8 Siap Direview` (highlighted lime), `0 Terjadwal`.
+   - Status 4 Agen Redaksi AI: **Scout** (Pemantau berita), **Analis** (Cek potensi viral), **Copywriter** (Headline & caption), **Designer** (Render gambar).
+   - Log Aktivitas Redaksi live update.
+
+2. **Antrian Review (Meja Editor)**:
+   - Filter tab: `Perlu review (8)`, `Disetujui`, `Terjadwal`, `Gagal`, `Sudah posting (14)`, `Ditolak`.
+   - Grid kartu carousel 4:5 signature:
+     - Foto cover atas + watermark sumber (The Verge, detikcom, CNN Indonesia).
+     - Blok bawah Royal Blue (`#2446f5`) dengan tag kategori kuning (`[AI]`, `[SOSMED]`, `[BISNIS]`, `[TEKNOLOGI]`).
+     - Headline huruf besar tebal dengan highlight kata kunci kuning (`#e2ff3b`).
+     - Badge peringatan risiko (`⚠️ Cek risiko`) & skor viralitas (`92`, `95`, `88`, `86`).
+
+3. **Editor Carousel Detail (Slide-by-Slide Editor)**:
+   - Preview visual 4:5 real-time dengan tombol navigasi slide.
+   - Pilihan slide 1 sampai 6 dengan thumbnail strip.
+   - Panel edit naskah per slide + penghitung karakter (`201/260 karakter`).
+   - Manajemen foto header: `Tanpa foto`, thumbnail preview, `Upload`, atau link gambar Google.
+   - Tombol download PNG 1080x1350px, render ulang, tulis ulang dengan AI, dan copy caption.
+
+4. **Sumber Berita (Admin RSS & Trends Scraper)**:
+   - Formulir tambah RSS/Atom feed baru.
+   - Daftar 10 media kredibel dengan toggle switch ON/OFF: ANTARA, Adweek, Ars Technica, CNN Indonesia, DailySocial, Engadget, Google, Google Trends Indonesia, Liputan6, Marketing Dive.
+
+5. **Feed Grid Instagram (3x3 Preview)**:
+   - Tampilan profil Instagram `@pansos.creative` dengan feed grid 3x3 yang memperlihatkan bagaimana konten tersaji di timeline Instagram.
 
 ---
 
@@ -26,7 +41,7 @@
 ```bash
 cd "/Users/gilangsegoro/Downloads/ Bung Coding"
 npm run dev
-# Buka http://localhost:3000
+# Buka http://localhost:3000 di browser
 ```
 
 ---
@@ -35,8 +50,8 @@ npm run dev
 
 ```bash
 git add .
-git commit -m "feat: launch Open Folk - open-source homeless media carousel generator"
+git commit -m "feat: implement Pansos Creative Ruang Redaksi OS based on reference design"
 git remote add origin https://github.com/USERNAME/REPO_NAME.git
 git push -u origin main
 ```
-Tinggal impor repository di [vercel.com/new](https://vercel.com/new) untuk deploy gratis ke seluruh dunia.
+Tinggal import repo ini di [Vercel Dashboard](https://vercel.com/new) dan klik Deploy.

@@ -1,189 +1,137 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  Play, 
   ArrowRight, 
   Sparkles, 
   Zap, 
-  TrendingUp, 
-  Users, 
-  Eye, 
-  Layers, 
   CheckCircle2, 
-  Smartphone, 
-  Monitor, 
-  ExternalLink 
+  Server, 
+  Radio, 
+  Layers, 
+  ShieldCheck, 
+  MessageSquare,
+  Clock,
+  Instagram
 } from 'lucide-react';
-import { PLATFORM_STATS } from '@/data/mediaData';
 
 interface HeroSectionProps {
-  onOpenMediaKit: () => void;
-  onFilterPlatform: (platform: string) => void;
+  onOpenConsultation?: () => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenMediaKit, onFilterPlatform }) => {
-  const [activePreviewMode, setActivePreviewMode] = useState<'desktop' | 'mobile'>('desktop');
-
+export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenConsultation }) => {
   return (
-    <section className="relative overflow-hidden pt-8 pb-16 md:pt-16 md:pb-24 border-b border-zinc-800/80 bg-grid-pattern">
+    <section className="relative overflow-hidden pt-10 pb-16 md:pt-20 md:pb-28 border-b border-zinc-800/80 bg-grid-pattern">
       {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-lime-400/5 blur-[140px] pointer-events-none rounded-full" />
-      <div className="absolute top-1/2 right-10 w-[300px] h-[300px] bg-cyan-500/5 blur-[120px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-lime-400/10 blur-[150px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/2 right-10 w-[350px] h-[350px] bg-cyan-500/10 blur-[130px] pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Editorial Eyebrow Tag */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 mb-6">
-          <span className="w-2 h-2 rounded-full bg-lime-400 animate-pulse"></span>
-          <span className="text-[11px] font-mono font-medium text-zinc-300 uppercase tracking-wider">
-            THE POST-HOMEPAGE MEDIA ERA
-          </span>
-          <span className="text-zinc-600">/</span>
-          <span className="text-[11px] font-mono text-lime-400">100% NATIVE DISTRIBUTION</span>
+        {/* White-label Beli Putus Badges */}
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-400/10 border border-lime-400/40 text-lime-400 text-xs font-mono font-bold">
+            <span className="w-2 h-2 rounded-full bg-lime-400 animate-ping" />
+            <span>FULLY CUSTOM • 100% WHITE-LABEL</span>
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-300 text-xs font-mono">
+            <Server className="w-3.5 h-3.5 text-cyan-400" />
+            <span>JALAN DI SERVER SENDIRI (VPS ANDA)</span>
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-mono font-bold">
+            <span>SEKALI BAYAR / GAK ADA BULANAN KE SAYA</span>
+          </div>
         </div>
 
-        {/* Hero Main Headline */}
+        {/* Hero Headline */}
         <div className="max-w-4xl">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.08] mb-6">
-            Media Tanpa Kantor Berita.{' '}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.12] mb-6">
+            Buat Kamu yang Punya (atau Mau Bikin){' '}
             <span className="bg-gradient-to-r from-lime-400 via-emerald-300 to-cyan-400 bg-clip-text text-transparent">
-              Menyerang Langsung
-            </span>{' '}
-            di Algoritma Feeds Anda.
+              Homeless Media
+            </span>
+            ...
           </h1>
 
-          <p className="text-base sm:text-lg lg:text-xl text-zinc-300 leading-relaxed mb-8 max-w-3xl">
-            Kami adalah <strong className="text-white font-semibold">Homeless Media Network</strong>. Kami tidak memaksa audiens mengunjungi website usang penuh iklan pop-up. Kami memproduksi jurnalisme visual, investigasi subkultur, dan video essays langsung di dalam{' '}
-            <span className="text-lime-400 font-mono font-medium">TikTok</span>,{' '}
-            <span className="text-rose-400 font-mono font-medium">Instagram</span>,{' '}
-            <span className="text-red-400 font-mono font-medium">YouTube</span>, &{' '}
-            <span className="text-emerald-400 font-mono font-medium">Spotify</span> tempat 90% waktu generasi baru dihabiskan.
+          <p className="text-base sm:text-xl text-zinc-300 leading-relaxed mb-6 font-medium">
+            Saya bisa bangunkan <strong>sistem otonom</strong> yang kerjanya persis seperti satu tim redaksi lengkap:
           </p>
 
-          {/* Quick CTAs */}
+          {/* 4 Core Value Bullets */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 font-mono text-xs sm:text-sm">
+            <div className="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+              <span className="text-lime-400 font-bold text-base">→</span>
+              <span className="text-zinc-200">Pantau tren & berita 24 jam non-stop</span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+              <span className="text-lime-400 font-bold text-base">→</span>
+              <span className="text-zinc-200">Pilih berita yang berpotensi viral (AI filter)</span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+              <span className="text-lime-400 font-bold text-base">→</span>
+              <span className="text-zinc-200">Tulis naskah & desain carousel otomatis</span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center gap-3">
+              <span className="text-lime-400 font-bold text-base">→</span>
+              <span className="text-zinc-200">Posting langsung ke Instagram via Meta API</span>
+            </div>
+          </div>
+
+          {/* Punchline Statement */}
+          <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800 text-xs sm:text-sm text-zinc-300 mb-8 flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-lime-400 text-black font-bold shrink-0">
+              ⚡ 100/HARI
+            </div>
+            <div>
+              <strong>Kapasitas hingga 100 konten per hari.</strong> Tim Anda cukup duduk santai, buka dashboard di HP, lalu review & 1-click approve. Custom sesuai niche & brand Anda.
+            </div>
+          </div>
+
+          {/* CTAs */}
           <div className="flex flex-wrap items-center gap-4 mb-12">
             <a
-              href="#feeds"
-              className="px-6 py-3.5 bg-lime-400 hover:bg-lime-300 text-black font-mono font-bold text-xs sm:text-sm rounded-lg transition-all shadow-lg shadow-lime-400/25 flex items-center gap-2 group active:scale-95"
+              href="#simulator"
+              className="px-6 py-3.5 bg-lime-400 hover:bg-lime-300 text-black font-mono font-bold text-xs sm:text-sm rounded-xl transition-all shadow-lg shadow-lime-400/25 flex items-center gap-2 group active:scale-95"
             >
-              <span>JELAJAHI LIVE BROADCAST FEEDS</span>
+              <span>LIHAT SIMULASI CARA KERJA SISTEM</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
 
-            <button
-              onClick={onOpenMediaKit}
-              className="px-6 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-100 hover:text-white border border-zinc-700/80 font-mono font-medium text-xs sm:text-sm rounded-lg transition-all flex items-center gap-2 group"
+            <a
+              href="#contact"
+              className="px-6 py-3.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-mono font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center gap-2 group"
             >
-              <Sparkles className="w-4 h-4 text-lime-400" />
-              <span>MEDIA KIT & ADVERTISER PORTAL</span>
-            </button>
+              <MessageSquare className="w-4 h-4" />
+              <span>KONSULTASI VIA WHATSAPP</span>
+            </a>
           </div>
         </div>
 
-        {/* Live Network Metrics Dashboard (VP of Engineering Performance Metric) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-12">
-          <div className="bg-[#101217] border border-zinc-800/90 rounded-xl p-4 sm:p-5 hover:border-zinc-700 transition-all">
-            <div className="flex items-center justify-between text-zinc-500 mb-2">
-              <span className="text-xs font-mono tracking-wider">MONTHLY REACH</span>
-              <Eye className="w-4 h-4 text-cyan-400" />
-            </div>
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-tight">
-              48.5M+
-            </div>
-            <div className="text-[11px] font-mono text-emerald-400 mt-1 flex items-center gap-1">
-              <TrendingUp className="w-3 h-3" />
-              <span>+24.8% QoQ Growth</span>
-            </div>
+        {/* Live Simulator Preview Dock */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-4 rounded-2xl bg-[#111319] border border-zinc-800">
+            <div className="text-[10px] font-mono text-zinc-500 uppercase mb-1">PRODUKSI KONTEN</div>
+            <div className="text-2xl font-mono font-black text-white">100 / Hari</div>
+            <div className="text-[11px] font-mono text-lime-400 mt-0.5">Skalabilitas Maksimal</div>
           </div>
 
-          <div className="bg-[#101217] border border-zinc-800/90 rounded-xl p-4 sm:p-5 hover:border-zinc-700 transition-all">
-            <div className="flex items-center justify-between text-zinc-500 mb-2">
-              <span className="text-xs font-mono tracking-wider">AUDIENCE DEMO</span>
-              <Users className="w-4 h-4 text-lime-400" />
-            </div>
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-tight">
-              89.4%
-            </div>
-            <div className="text-[11px] font-mono text-zinc-400 mt-1">
-              Gen-Z & Young Millennials (18-34)
-            </div>
+          <div className="p-4 rounded-2xl bg-[#111319] border border-zinc-800">
+            <div className="text-[10px] font-mono text-zinc-500 uppercase mb-1">JAM OPERASIONAL</div>
+            <div className="text-2xl font-mono font-black text-white">24 Jam / 7 Hari</div>
+            <div className="text-[11px] font-mono text-cyan-400 mt-0.5">Scraping Real-Time</div>
           </div>
 
-          <div className="bg-[#101217] border border-zinc-800/90 rounded-xl p-4 sm:p-5 hover:border-zinc-700 transition-all">
-            <div className="flex items-center justify-between text-zinc-500 mb-2">
-              <span className="text-xs font-mono tracking-wider">ORGANIC ENGAGEMENT</span>
-              <Zap className="w-4 h-4 text-amber-400" />
-            </div>
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-tight">
-              11.2%
-            </div>
-            <div className="text-[11px] font-mono text-amber-400 mt-1">
-              3.8x rata-rata portal berita konvensional
-            </div>
+          <div className="p-4 rounded-2xl bg-[#111319] border border-zinc-800">
+            <div className="text-[10px] font-mono text-zinc-500 uppercase mb-1">MODEL KONTRAK</div>
+            <div className="text-2xl font-mono font-black text-white">Beli Putus</div>
+            <div className="text-[11px] font-mono text-amber-400 mt-0.5">No Monthly Subscription</div>
           </div>
 
-          <div className="bg-[#101217] border border-zinc-800/90 rounded-xl p-4 sm:p-5 hover:border-zinc-700 transition-all">
-            <div className="flex items-center justify-between text-zinc-500 mb-2">
-              <span className="text-xs font-mono tracking-wider">DISTRIBUTION NODES</span>
-              <Layers className="w-4 h-4 text-purple-400" />
-            </div>
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-tight">
-              6 Channels
-            </div>
-            <div className="text-[11px] font-mono text-purple-400 mt-1">
-              TikTok, IG, YouTube, Spotify, X, Substack
-            </div>
-          </div>
-        </div>
-
-        {/* Live Channel Hub - Interactive Platform Filter Pills */}
-        <div className="bg-zinc-950/80 border border-zinc-800 rounded-2xl p-4 sm:p-6 backdrop-blur">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 border-b border-zinc-800/80 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <h2 className="text-xs sm:text-sm font-mono font-bold tracking-wider text-zinc-200 uppercase">
-                DISTRIBUTED CHANNELS STATUS MATRIX
-              </h2>
-            </div>
-            <span className="text-[11px] font-mono text-zinc-400">
-              Pilih platform untuk filter feed langsung:
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {PLATFORM_STATS.map((plat) => (
-              <button
-                key={plat.name}
-                onClick={() => {
-                  onFilterPlatform(plat.icon);
-                  const el = document.getElementById('feeds');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className={`p-3 rounded-xl bg-zinc-900/90 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-600 transition-all text-left group flex flex-col justify-between`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono font-bold text-white group-hover:text-lime-400 transition-colors">
-                      {plat.name}
-                    </span>
-                    <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-zinc-800 text-zinc-400">
-                      {plat.growth}
-                    </span>
-                  </div>
-                  <div className="text-lg font-mono font-extrabold text-white">
-                    {plat.followers}
-                  </div>
-                  <div className="text-[10px] font-mono text-zinc-400 truncate mt-0.5">
-                    {plat.handle}
-                  </div>
-                </div>
-
-                <div className="mt-3 pt-2 border-t border-zinc-800/80 flex items-center justify-between text-[10px] font-mono text-zinc-400">
-                  <span>{plat.engagement}</span>
-                  <ExternalLink className="w-3 h-3 text-zinc-600 group-hover:text-lime-400 transition-colors" />
-                </div>
-              </button>
-            ))}
+          <div className="p-4 rounded-2xl bg-[#111319] border border-zinc-800">
+            <div className="text-[10px] font-mono text-zinc-500 uppercase mb-1">INFRASTRUKTUR</div>
+            <div className="text-2xl font-mono font-black text-white">Self-Hosted</div>
+            <div className="text-[11px] font-mono text-purple-400 mt-0.5">Di VPS Milik Anda</div>
           </div>
         </div>
       </div>

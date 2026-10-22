@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { Radio, Zap, Flame, Sparkles } from 'lucide-react';
+import { Radio, Zap, Flame, Sparkles, Server } from 'lucide-react';
 
 export const LiveTicker: React.FC = () => {
   const tickerItems = [
-    { tag: 'TRENDING #1', text: 'TikTok FYP Algoritma Update: Bobot "Sends to DM" naik 4x lipat dibanding likes.', icon: Flame },
-    { tag: 'DISPATCH', text: 'Peta Bubble Properti Kafe Jaksel: 320 coffeeshop buka dalam 2 tahun terakhir.', icon: Radio },
-    { tag: 'BREAKING', text: 'Regulasi AI regional Asia Tenggara resmi diterbitkan: agensi wajib watermark metadata.', icon: Zap },
-    { tag: 'AUDIENCE MILESTONE', text: 'UNBOUND Media tembus 48.5M monthly cross-platform impressions di Q3.', icon: Sparkles },
-    { tag: 'EPISODE DROP', text: 'Raw Take #42: "Gua Bangkrut Setelah Viral di TikTok" kini streaming di Spotify.', icon: Radio },
+    { tag: 'SISTEM OTONOM', text: 'Pantau tren Twitter/X, TikTok, & Google 24 jam non-stop.', icon: Radio },
+    { tag: 'WHITE-LABEL', text: '100% custom sesuai brand & warna media Anda. Jalan di VPS sendiri.', icon: Server },
+    { tag: 'BELI PUTUS', text: 'Zero monthly subscription. Tidak ada biaya bulanan ke developer.', icon: Zap },
+    { tag: 'KAPASITAS TINGGI', text: 'Mampu memproduksi hingga 100 konten carousel & naskah per hari.', icon: Flame },
+    { tag: 'META GRAPH API', text: 'Tim tinggal review & 1-click approve langsung terjadwal ke Instagram.', icon: Sparkles },
   ];
 
   return (
@@ -18,7 +18,7 @@ export const LiveTicker: React.FC = () => {
         {/* Fixed label badge on desktop */}
         <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-lime-400 text-black font-mono text-xs font-bold tracking-wider rounded shrink-0 ml-4 shadow-sm shadow-lime-400/20">
           <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
-          <span>LIVE RADAR</span>
+          <span>SISTEM REDAKSI AI</span>
         </div>
 
         {/* Marquee ticker */}

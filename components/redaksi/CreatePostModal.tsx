@@ -75,28 +75,36 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         number: 2,
         title: 'FAKTA & LATAR BELAKANG',
         body: `Laporan resmi dari ${sourceName.trim()} mengindikasikan adanya pergeseran signifikan yang berdampak langsung pada para pengguna dan pelaku industri.`,
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 1) % FREE_COMMERCIAL_IMAGES.length].url,
+        photoAttribution: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 1) % FREE_COMMERCIAL_IMAGES.length].attribution,
         sourceText: `Sumber: ${sourceName.trim()}`
       },
       {
         number: 3,
-        title: 'DATA & IMPLIKASI',
+        title: 'DATA & IMPLIKASI TEKNIS',
         body: `Pihak terkait menyatakan bahwa kebijakan atau fenomena ini dirancang untuk menjawab tantangan keamanan, efisiensi, dan dinamika pasar digital saat ini.`,
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 2) % FREE_COMMERCIAL_IMAGES.length].url,
+        photoAttribution: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 2) % FREE_COMMERCIAL_IMAGES.length].attribution,
         sourceText: `Sumber: ${sourceName.trim()}`
       },
       {
         number: 4,
         title: 'POIN PENTING UNTUK KAMU',
         body: `Bagi kamu yang aktif di ekosistem digital, penting untuk selalu memverifikasi informasi dan memperbarui wawasan agar tidak tertinggal perubahan regulasi.`,
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 3) % FREE_COMMERCIAL_IMAGES.length].url,
+        photoAttribution: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 3) % FREE_COMMERCIAL_IMAGES.length].attribution,
         sourceText: `Sumber: ${sourceName.trim()}`
       },
       {
         number: 5,
         title: 'BAGAIMANA PENDAPAT KAMU?',
-        body: `Apakah kamu sepakat dengan langkah ini, atau justru ada risiko yang perlu diwaspadai? Bagikan pandangan kamu di kolom komentar!`,
-        hasPhoto: false,
+        body: `Apakah kamu sepakat dengan langkah ini, atau justru ada risiko yang perlu diwaspadai? Bagikan pandangan kamu di kolom komentar! 👇`,
+        hasPhoto: true,
+        photoUrl: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 4) % FREE_COMMERCIAL_IMAGES.length].url,
+        photoAttribution: FREE_COMMERCIAL_IMAGES[(selectedImageIndex + 4) % FREE_COMMERCIAL_IMAGES.length].attribution,
         sourceText: `Sumber: ${sourceName.trim()}`
       }
     ];

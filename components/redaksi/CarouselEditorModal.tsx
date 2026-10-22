@@ -29,6 +29,15 @@ interface CarouselEditorModalProps {
   onMarkPublished?: (postId: string) => void;
 }
 
+const FREE_PHOTO_PRESETS = [
+  { name: 'AI & Data Tech', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1080&auto=format&fit=crop&q=85' },
+  { name: 'Smartphone Social', url: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080&auto=format&fit=crop&q=85' },
+  { name: 'Financial Chart', url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85' },
+  { name: 'Tech Hardware', url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=85' },
+  { name: 'User & Community', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85' },
+  { name: 'Creative Studio', url: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1080&auto=format&fit=crop&q=85' },
+];
+
 export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   post,
   onClose,
@@ -87,8 +96,16 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
         if (img) {
           ctx.drawImage(img, 0, 0, 1080, 675);
         } else {
-          ctx.fillStyle = '#0f1118';
+          // Elegant dark editorial fallback
+          const grad = ctx.createLinearGradient(0, 0, 1080, 675);
+          grad.addColorStop(0, '#090a0f');
+          grad.addColorStop(1, '#181b26');
+          ctx.fillStyle = grad;
           ctx.fillRect(0, 0, 1080, 675);
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.font = '900 64px Oswald, Anton, sans-serif';
+          ctx.fillText('INDONESIA HARI INI', 60, 360);
         }
 
         // Top Overlay Bar
@@ -186,7 +203,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
         resolve(canvas.toDataURL('image/png'));
       };
 
-      const photoUrl = slide.photoUrl || (slideIdx === 0 ? editedPost.coverImage : undefined);
+      const photoUrl = slide.photoUrl || (slide.hasPhoto ? editedPost.coverImage : undefined);
       if (photoUrl) {
         const img = new Image();
         img.crossOrigin = 'anonymous';
@@ -283,15 +300,20 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
             <div className="relative w-full max-w-[360px] aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 bg-black flex flex-col justify-between shadow-2xl">
               {/* Top Half: Photo with watermark */}
               <div className="relative h-1/2 w-full bg-zinc-950 overflow-hidden">
-                {currentSlide.photoUrl ? (
+                {currentSlide.photoUrl || (currentSlide.hasPhoto && editedPost.coverImage) ? (
                   <img
-                    src={currentSlide.photoUrl}
+                    src={currentSlide.photoUrl || editedPost.coverImage}
                     alt=""
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-[#101218] flex items-center justify-center text-xs font-mono text-zinc-600">
-                    Tanpa Foto Header
+                  <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-[#121520] flex flex-col items-center justify-center p-4 text-center">
+                    <span className="text-[10px] font-mono uppercase text-[#e2ff3b] font-bold tracking-widest mb-1">
+                      {editedPost.category} · SLIDE {activeSlideIndex + 1}
+                    </span>
+                    <span className="text-sm font-headline text-zinc-300 font-black tracking-wider">
+                      INDONESIA HARI INI
+                    </span>
                   </div>
                 )}
 
@@ -560,6 +582,26 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                       <Plus className="w-3 h-3" />
                       <span>Pakai Foto</span>
                     </button>
+                  </div>
+
+                  {/* Preset photo quick select */}
+                  <div className="space-y-1.5 pt-1">
+                    <div className="text-[10px] text-zinc-500 font-mono">Pilih cepat foto berlisensi komersil gratis:</div>
+                    <div className="grid grid-cols-6 gap-1.5">
+                      {FREE_PHOTO_PRESETS.map((preset, pIdx) => (
+                        <button
+                          key={pIdx}
+                          type="button"
+                          onClick={() => handleSetSlidePhoto(idx, preset.url)}
+                          className={`aspect-video rounded-md overflow-hidden border transition-all ${
+                            slide.photoUrl === preset.url ? 'border-[#e2ff3b] scale-105 shadow-md' : 'border-zinc-800 hover:border-zinc-600 opacity-70 hover:opacity-100'
+                          }`}
+                          title={preset.name}
+                        >
+                          <img src={preset.url} alt="" className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

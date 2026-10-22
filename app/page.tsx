@@ -11,7 +11,7 @@ import { InstagramGridView } from '@/components/redaksi/InstagramGridView';
 import { CreatePostModal } from '@/components/redaksi/CreatePostModal';
 import { INITIAL_POSTS, RedaksiPost } from '@/data/redaksiData';
 
-const LOCAL_STORAGE_KEY = 'indonesia_hari_ini_posts_v1';
+const LOCAL_STORAGE_KEY = 'indonesia_hari_ini_posts_v5';
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'ruang_redaksi' | 'antrian_review' | 'editor' | 'sumber_berita' | 'instagram_grid'>('ruang_redaksi');
@@ -24,7 +24,7 @@ export default function HomePage() {
   // Load from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem('pansos_redaksi_posts_v2');
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
         setPosts(JSON.parse(saved));
       }

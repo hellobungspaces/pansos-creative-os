@@ -85,22 +85,28 @@ export const INITIAL_POSTS: RedaksiPost[] = [
       {
         number: 3,
         title: 'TANGGAPAN RESMI AMAZON',
-        body: 'Amazon menyatakan bahwa hal ini terjadi akibat bug sinkronisasi cache model bahasa generatif audio terbaru.',
-        hasPhoto: false,
+        body: 'Amazon menyatakan bahwa hal ini terjadi akibat bug sinkronisasi cache model bahasa generatif audio terbaru pada firmware perangkat.',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: The Verge'
       },
       {
         number: 4,
         title: 'POTENSI RISIKO PRIVASI SMART HOME',
         body: 'Pakar keamanan siber memperingatkan pentingnya mematikan mikrofon fisik saat tidak digunakan untuk mencegah kebocoran audio latar.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: The Verge'
       },
       {
         number: 5,
-        title: 'MENURUT KAMU?',
-        body: 'Kalau smart speaker di kamar lo tiba-tiba nyanyi sendiri jam 2 pagi, apa yang bakal lo lakuin pertama kali? Tulis di komentar.',
-        hasPhoto: false,
+        title: 'MENURUT KAMU GIMANA?',
+        body: 'Kalau smart speaker di kamar lo tiba-tiba nyanyi sendiri jam 2 pagi, apa yang bakal lo lakuin pertama kali? Tulis di komentar! 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: The Verge'
       }
     ],
@@ -154,21 +160,27 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         number: 4,
         title: 'ANTHROPIC HUBUNGI APARAT',
         body: 'Setelah ancaman dinilai nyata dan kredibel, Anthropic melaporkannya kepada penegak hukum. Perusahaan menegaskan komitmen nol toleransi terhadap kekerasan.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: detikInet'
       },
       {
         number: 5,
         title: 'BATASAN PRIVASI CHATBOT AI',
         body: 'Kasus ini membuka mata publik bahwa percakapan dengan AI tidak sepenuhnya privat dan dapat diakses ketika terindikasi tindak kriminal.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: detikInet'
       },
       {
         number: 6,
-        title: 'MENURUT KAMU?',
-        body: 'Apakah langkah Anthropic melaporkan pengguna sudah tepat, atau ini melanggar privasi percakapan? Tulis pendapat kamu di bawah.',
-        hasPhoto: false,
+        title: 'MENURUT KAMU GIMANA?',
+        body: 'Apakah langkah Anthropic melaporkan pengguna sudah tepat, atau ini melanggar privasi percakapan? Tulis pendapat kamu di bawah! 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: detikInet'
       }
     ],
@@ -202,21 +214,27 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         number: 2,
         title: 'DOMINASI INVESTOR RITEL MUDA',
         body: 'Data demografi menunjukkan 62% transaksi dilakukan oleh investor berusia di bawah 30 tahun dengan rata-rata modal awal Rp 500.000.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Bappebti / Selular.id'
       },
       {
         number: 3,
         title: 'TANTANGAN REGULASI PAJAK',
         body: 'Pemerintah terus mematangkan integrasi pelaporan pajak PPh dan PPN transaksi kripto agar ekosistem tetap transparan.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Selular.id'
       },
       {
         number: 4,
         title: 'PORTOFOLIO KAMU BAGAIMANA?',
-        body: 'Apakah kamu aktif trading kripto atau lebih memilih instrumen investasi konvensional? Tulis strategi kamu di bawah.',
-        hasPhoto: false,
+        body: 'Apakah kamu aktif trading kripto atau lebih memilih instrumen investasi konvensional? Tulis strategi kamu di bawah! 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Selular.id'
       }
     ],
@@ -250,21 +268,27 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         number: 2,
         title: 'BAGAIMANA CARA KERJANYA?',
         body: 'Saat mode "Read-Only Visit" diaktifkan, semua tombol like, follow, dan reply story dinonaktifkan sementara untuk profil tersebut.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Social Media Today'
       },
       {
         number: 3,
         title: 'MENGAPA DIKEMBANGKAN SEKARANG?',
         body: 'Instagram merespons tingginya angka pembuatan second account ("fake account") yang khusus dibuat hanya untuk memantau tanpa interaksi.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Social Media Today'
       },
       {
         number: 4,
-        title: 'TAG TEMEN KAMU!',
-        body: 'Kirim postingan ini ke teman kamu yang hobi stalking akun mantan atau kompetitor bisnis!',
-        hasPhoto: false,
+        title: 'TAG TEMEN KAMU YANG BUTUH!',
+        body: 'Kirim postingan ini ke teman kamu yang hobi stalking akun mantan atau kompetitor bisnis! Tulis komentarmu di bawah 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Social Media Today'
       }
     ],
@@ -298,21 +322,27 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         number: 2,
         title: 'DAFTAR VERSI YANG TERDAMPAK',
         body: 'WhatsApp mewajibkan minimal Android 5.0 (Lollipop) dan iOS 12 untuk memenuhi standar enkripsi end-to-end yang ditingkatkan.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1567581935884-3349723552ca?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: WhatsApp FAQ / CNN Indonesia'
       },
       {
         number: 3,
         title: 'CARA MENGAMANKAN DATA CHAT',
         body: 'Pengguna disarankan segera melakukan backup chat ke Google Drive atau iCloud sebelum tanggal efektif penghentian.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: CNN Indonesia'
       },
       {
         number: 4,
-        title: 'CEK HP ORANG TUA KAMU',
-        body: 'Pastikan HP anggota keluarga di rumah sudah diperbarui ke versi OS yang didukung agar komunikasi tidak terputus.',
-        hasPhoto: false,
+        title: 'CEK HP ORANG TUA KAMU SEKARANG!',
+        body: 'Pastikan HP anggota keluarga di rumah sudah diperbarui ke versi OS yang didukung agar komunikasi tidak terputus. Gimana dengan HP kamu? 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: CNN Indonesia'
       }
     ],
@@ -346,21 +376,27 @@ export const INITIAL_POSTS: RedaksiPost[] = [
         number: 2,
         title: 'MONETISASI BARU ERA AI',
         body: 'Setelah biaya komputasi server GPU membengkak, OpenAI mulai membuka inventaris penempatan produk secara kontekstual.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Selular.id'
       },
       {
         number: 3,
         title: 'REAKSI KOMUNITAS PENGGUNA',
         body: 'Sebagian pelanggan ChatGPT Plus memprotes potensi masuknya iklan di layanan berbayar yang seharusnya bebas distraksi.',
-        hasPhoto: false,
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Selular.id'
       },
       {
         number: 4,
-        title: 'MENURUT KAMU?',
-        body: 'Apakah kamu rela ada iklan di chatbot AI demi harga langganan yang lebih terjangkau? Tulis di komentar.',
-        hasPhoto: false,
+        title: 'MENURUT KAMU GIMANA?',
+        body: 'Apakah kamu rela ada iklan di chatbot AI demi harga langganan yang lebih terjangkau? Tulis pendapat kamu di komentar! 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
         sourceText: 'Sumber: Selular.id'
       }
     ],

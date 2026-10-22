@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
 
-// Free commercial images from Unsplash curated by category
+// Free commercial images from Unsplash curated by category (at least 6 per category)
 const FREE_IMAGES: Record<string, string[]> = {
   AI: [
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1080&auto=format&fit=crop&q=85',
@@ -9,28 +9,39 @@ const FREE_IMAGES: Record<string, string[]> = {
     'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=1080&auto=format&fit=crop&q=85',
   ],
   SOSMED: [
     'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85',
   ],
   BISNIS: [
     'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85',
   ],
   MARKETING: [
     'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1080&auto=format&fit=crop&q=85',
   ],
   TEKNOLOGI: [
     'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
+    'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1080&auto=format&fit=crop&q=85',
   ]
 };
 
@@ -77,11 +88,6 @@ function detectCategory(title: string, desc: string, defaultCat: 'AI' | 'SOSMED'
     return 'MARKETING';
   }
   return defaultCat;
-}
-
-function pickRandomImage(category: string, index: number): string {
-  const list = FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI;
-  return list[index % list.length];
 }
 
 function makeHighlightedTitle(title: string): string {
@@ -151,6 +157,110 @@ function parseFeedItems(xmlText: string, sourceName: string): Array<{ title: str
   return items;
 }
 
+// Builds 5 COMPLETE, ready-to-produce slides with dedicated photos & tailored copy for every slide
+function buildFullEditorialSlides(item: { title: string; link: string; desc: string }, srcName: string, category: string, seed: number): SlideItem[] {
+  const images = FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI;
+  const upperTitle = item.title.toUpperCase();
+  const cleanSnippet = item.desc
+    ? item.desc.slice(0, 160).replace(/\s+[^\s]*$/, '...')
+    : `Informasi terkini mengenai ${item.title.toLowerCase()} dari liputan redaksi ${srcName}.`;
+
+  let slide2Title = 'KRONOLOGI & POKOK PERSOALAN';
+  let slide2Body = `Laporan resmi dari ${srcName} mengungkap pokok persoalan di balik peristiwa ini. Fakta di lapangan menunjukkan perhatian besar dari kalangan profesional dan pengguna harian di Indonesia.`;
+
+  let slide3Title = 'FAKTA TEKNIS & TEMUAN UTAMA';
+  let slide3Body = `Pihak pengembang dan regulator menyoroti aspek efisiensi, keamanan sistem, serta kepatuhan standar industri yang berdampak langsung pada kelangsungan ekosistem digital terkait.`;
+
+  let slide4Title = 'DAMPAK BAGI PENGGUNA';
+  let slide4Body = `Bagi kamu yang aktif memanfaatkan layanan ini, langkah terbaik adalah memeriksa konfigurasi akun, memperbarui versi software, dan mengamankan kredensial data pribadi.`;
+
+  let slide5Title = 'BAGAIMANA MENURUT KAMU?';
+  let slide5Body = `Apakah kamu sudah merasakan dampak dari perubahan ini, atau punya pandangan berbeda? Tulis analisa dan pendapat kamu di kolom komentar! 👇`;
+
+  if (category === 'AI') {
+    slide2Title = 'TREN AI & REALITA DI LAPANGAN';
+    slide2Body = `Akselerasi adopsi kecerdasan buatan mulai merambah kebutuhan harian masyarakat. Tren ini membuka peluang efisiensi sekaligus menuntut literasi etika teknologi yang lebih matang.`;
+    slide3Title = 'CELAH & REGULASI KESELAMATAN';
+    slide3Body = `Pakar teknologi mengingatkan pentingnya tata kelola model AI yang transparan agar tidak memicu kebocoran data sensitif, pelanggaran hak cipta, atau maraknya konten misinformasi.`;
+    slide4Title = 'YANG PERLU KAMU ANTISIPASI';
+    slide4Body = `Gunakan perangkat AI secara bijak. Hindari mengunggah data rahasia pribadi ke server publik dan selalu verifikasi ulang hasil output sebelum dijadikan acuan kerja.`;
+    slide5Title = 'KAMU TIM ADOPSI ATAU SKEPTIS?';
+    slide5Body = `Bagaimana pemanfaatan AI dalam keseharian kamu saat ini—membantu pekerjaan atau justru menimbulkan kekhawatiran baru? Share di kolom komentar! 👇`;
+  } else if (category === 'SOSMED') {
+    slide2Title = 'FITUR BARU & POLA PENGGUNA';
+    slide2Body = `Platform media sosial terus memperbarui algoritma dan fitur antarmuka untuk mempertahankan kenyamanan interaksi pengguna serta menekan perilaku toxic di linimasa.`;
+    slide3Title = 'PERUBAHAN KEBIJAKAN PRIVASI';
+    slide3Body = `Pengguna diimbau meninjau ulang izin akses aplikasi dan pengaturan visibilitas profil guna menjaga keamanan jejak digital dari pelacakan pihak ketiga yang tidak bertanggung jawab.`;
+    slide4Title = 'TIPS AMAN BERSELANCAR';
+    slide4Body = `Pastikan fitur autentikasi dua faktor (2FA) selalu aktif, perbarui kata sandi secara berkala, dan waspadai tautan phising yang mengatasnamakan verifikasi resmi akun.`;
+    slide5Title = 'TAG TEMEN KAMU YANG BUTUH TAHU!';
+    slide5Body = `Bagikan info ini ke teman-teman kamu agar tetap update dan terhindar dari masalah privasi di linimasa! Tulis pendapatmu di bawah 👇`;
+  } else if (category === 'BISNIS') {
+    slide2Title = 'ANGKA & SENTIMEN PASAR';
+    slide2Body = `Sentimen pasar dan pergerakan likuiditas menjadi katalis utama perubahan nilai di sektor ini. Data menunjukkan partisipasi aktif investor generasi muda kian mendominasi.`;
+    slide3Title = 'KEBIJAKAN REGULASI & KEPATUHAN';
+    slide3Body = `Otoritas berwenang memperketat pengawasan perizinan dan standar audit demi melindungi dana masyarakat serta menjaga stabilitas ekosistem industri jangka panjang.`;
+    slide4Title = 'IMPLIKASI PADA INVESTOR RITEL';
+    slide4Body = `Investor diimbau selalu melakukan riset mandiri (DYOR), menerapkan manajemen modal yang disiplin, dan tidak mudah tergiur iming-iming keuntungan instan tanpa kalkulasi risiko.`;
+    slide5Title = 'BAGAIMANA STRATEGI KAMU?';
+    slide5Body = `Apakah momentum ini waktu yang tepat untuk eksekusi, atau kamu lebih memilih wait and see? Diskusikan pandangan portofolio kamu di kolom komentar! 👇`;
+  }
+
+  const p1 = images[(seed + 0) % images.length];
+  const p2 = images[(seed + 1) % images.length];
+  const p3 = images[(seed + 2) % images.length];
+  const p4 = images[(seed + 3) % images.length];
+  const p5 = images[(seed + 4) % images.length];
+
+  return [
+    {
+      number: 1,
+      title: upperTitle,
+      body: cleanSnippet,
+      hasPhoto: true,
+      photoUrl: p1,
+      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+      sourceText: `Sumber: ${srcName}`
+    },
+    {
+      number: 2,
+      title: slide2Title,
+      body: slide2Body,
+      hasPhoto: true,
+      photoUrl: p2,
+      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+      sourceText: `Sumber: ${srcName}`
+    },
+    {
+      number: 3,
+      title: slide3Title,
+      body: slide3Body,
+      hasPhoto: true,
+      photoUrl: p3,
+      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+      sourceText: `Sumber: ${srcName}`
+    },
+    {
+      number: 4,
+      title: slide4Title,
+      body: slide4Body,
+      hasPhoto: true,
+      photoUrl: p4,
+      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+      sourceText: `Sumber: ${srcName}`
+    },
+    {
+      number: 5,
+      title: slide5Title,
+      body: slide5Body,
+      hasPhoto: true,
+      photoUrl: p5,
+      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+      sourceText: `Sumber: ${srcName}`
+    }
+  ];
+}
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const requestedLimit = parseInt(searchParams.get('limit') || '8', 10);
@@ -189,53 +299,12 @@ export async function GET(req: Request) {
           }
 
           const category = detectCategory(item.title, item.desc, src.categoryHint || 'TEKNOLOGI');
-          const coverImg = pickRandomImage(category, sourceIdx * 3 + itemIdx);
           const upperTitle = item.title.toUpperCase();
+          const seed = sourceIdx * 5 + itemIdx;
 
-          const shortDesc = item.desc
-            ? item.desc.slice(0, 160) + (item.desc.length > 160 ? '...' : '')
-            : `Informasi terkini mengenai ${item.title.toLowerCase()} dari liputan redaksi ${src.name}.`;
-
-          const slides: SlideItem[] = [
-            {
-              number: 1,
-              title: upperTitle,
-              body: shortDesc,
-              hasPhoto: true,
-              photoUrl: coverImg,
-              photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-              sourceText: `Sumber: ${src.name}`
-            },
-            {
-              number: 2,
-              title: 'POKOK MASALAH & FAKTA AWAL',
-              body: `Laporan resmi mencatat perkembangan signifikan. Redaksi memverifikasi pokok informasi dan latar belakang kejadian ini dari dokumen publik.`,
-              hasPhoto: false,
-              sourceText: `Sumber: ${src.name}`
-            },
-            {
-              number: 3,
-              title: 'DETAIL & DAMPAK TEKNIS',
-              body: `Dampaknya diperkirakan mempengaruhi kebiasaan pengguna harian, stabilitas ekosistem digital, serta kebijakan keamanan privasi data konsumen.`,
-              hasPhoto: false,
-              sourceText: `Sumber: ${src.name}`
-            },
-            {
-              number: 4,
-              title: 'LANGKAH ANTISIPASI',
-              body: `Pengguna disarankan tetap waspada, memperbarui aplikasi ke versi mutakhir, dan memeriksa pengaturan akun demi perlindungan maksimal.`,
-              hasPhoto: false,
-              sourceText: `Sumber: ${src.name}`
-            },
-            {
-              number: 5,
-              title: 'MENURUT KAMU GIMANA?',
-              body: `Apakah fenomena ini bakal berdampak langsung ke kehidupan harian kamu? Tulis pendapat kamu di kolom komentar! 👇`,
-              hasPhoto: false,
-              sourceText: `Sumber: ${src.name}`
-            }
-          ];
-
+          // Build 5 complete slides with rich visuals on EVERY slide
+          const slides = buildFullEditorialSlides(item, src.name, category, seed);
+          const coverImg = slides[0].photoUrl || (FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI)[0];
           const viralScore = 85 + Math.floor(Math.random() * 12); // 85 - 96
 
           let hostDomain = '';
@@ -268,14 +337,13 @@ export async function GET(req: Request) {
           });
         });
       } catch (err) {
-        // Individual feed timeout or parse error handled gracefully
         console.warn(`Feed error on ${src.name}:`, err);
       }
     })
   );
 
   // If feeds returned nothing (e.g. offline sandbox or server network block),
-  // return curated Indonesian real news to guarantee zero-fail UX
+  // return curated Indonesian real news with ALL 5 SLIDES READY TO PRODUCE
   if (collectedPosts.length === 0) {
     const fallbackPosts: RedaksiPost[] = [
       {
@@ -307,28 +375,36 @@ export async function GET(req: Request) {
             number: 2,
             title: 'PENYEBAB UTAMA: OPTIMALISASI BATERAI',
             body: 'Sistem operasi Android versi terbaru secara agresif membekukan background process aplikasi perpesanan guna menghemat daya tahan baterai.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.TEKNOLOGI[1],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: ANTARA News'
           },
           {
             number: 3,
             title: 'SOLUSI PENGATURAN CEPAT',
             body: 'Buka Settings > Apps > WhatsApp > Battery > Ubah dari "Optimized" menjadi "Unrestricted", lalu pastikan "Background data usage" aktif.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.TEKNOLOGI[2],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: ANTARA News'
           },
           {
             number: 4,
             title: 'NONAKTIFKAN MODE PENGHEMAT DAYA EKSTREM',
             body: 'Fitur Ultra Power Saving sering memutus koneksi socket push-notification Google Play Services yang memicu keterlambatan notif.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.SOSMED[3],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: ANTARA News'
           },
           {
             number: 5,
             title: 'PERNAH MENGALAMI INI?',
             body: 'Bagikan postingan ini ke teman atau grup keluarga yang sering telat balas chat WhatsApp gara-gara notif ngadat!',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.SOSMED[4],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: ANTARA News'
           }
         ],
@@ -363,28 +439,36 @@ export async function GET(req: Request) {
             number: 2,
             title: 'KEMAMPUAN INTERAKSI EMOSIONAL',
             body: 'Robot Mobo dilengkapi sensor pengenalan wajah multi-sudut dan modul percakapan suara alami untuk mendampingi anak dan lansia.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.AI[2],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNN Indonesia'
           },
           {
             number: 3,
             title: 'NAVIGASI MANDIRI & PATROLI RUMAH',
             body: 'Dengan LiDAR terintegrasi, robot ini mampu memetakan denah ruangan dan mengirimkan peringatan darurat jika mendeteksi kebocoran gas atau gerakan asing.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.AI[3],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNN Indonesia'
           },
           {
             number: 4,
             title: 'ISU PRIVASI & HARGA PASAR',
             body: 'Pengamat teknologi mengingatkan pentingnya enkripsi lokal pada kamera robot agar rekaman aktivitas rumah tangga tidak tersimpan di cloud sembarangan.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.AI[4],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNN Indonesia'
           },
           {
             number: 5,
             title: 'TERTARIK PUNYA ROBOT DI RUMAH?',
             body: 'Berapa harga wajar yang rela kamu bayar untuk satu unit asisten robot seperti ini? Tulis pendapat kamu di kolom komentar!',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.AI[5],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNN Indonesia'
           }
         ],
@@ -419,28 +503,36 @@ export async function GET(req: Request) {
             number: 2,
             title: 'POLA SERANGAN TERORGANISIR',
             body: 'Sindikat peretas terpantau memanfaatkan software CMS lawas yang belum di-patch untuk menyusupkan skrip judi online dan malware pencuri kredensial.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.TEKNOLOGI[2],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNBC Indonesia'
           },
           {
             number: 3,
             title: 'POTENSI KEBOCORAN DATA WARGA',
             body: 'Jika tidak segera diaudit forensik, data NIK dan kontak masyarakat yang terhubung di basis data portal berisiko disalahgunakan.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.TEKNOLOGI[3],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNBC Indonesia'
           },
           {
             number: 4,
             title: 'REKOMENDASI BSSN & PAKAR',
             body: 'Kementerian dan Pemda didesak mengaktifkan Multi-Factor Authentication (MFA) wajib dan menggandeng auditor siber independen berlisensi.',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.TEKNOLOGI[4],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNBC Indonesia'
           },
           {
             number: 5,
             title: 'BAGAIMANA PENGALAMAN KAMU?',
             body: 'Pernah menemukan website instansi publik yang disusupi link aneh? Yuk diskusikan solusinya di komentar!',
-            hasPhoto: false,
+            hasPhoto: true,
+            photoUrl: FREE_IMAGES.TEKNOLOGI[5],
+            photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
             sourceText: 'Sumber: CNBC Indonesia'
           }
         ],

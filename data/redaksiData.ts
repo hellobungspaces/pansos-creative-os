@@ -27,6 +27,7 @@ export interface RedaksiPost {
   caption: string;
   status: 'perlu_review' | 'disetujui' | 'terjadwal' | 'sudah_posting' | 'ditolak';
   scheduledTime?: string;
+  themeColor?: string;
 }
 
 export interface ActivityLog {

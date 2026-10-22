@@ -124,16 +124,15 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                   </span>
                 </div>
 
-                {/* Source badge watermark */}
-                {post.sourceBadge && (
-                  <div className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded bg-white text-black text-[9px] font-mono font-black">
-                    {post.sourceBadge}
-                  </div>
-                )}
+                {/* Subtle soft gradient at bottom of photo */}
+                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               </div>
 
-              {/* Bottom Half: Signature Royal Blue Block */}
-              <div className="h-1/2 w-full bg-[#2446f5] p-3.5 sm:p-4 flex flex-col justify-between relative">
+              {/* Bottom Half: Theme Color Block (Default Royal Blue) */}
+              <div 
+                className="h-1/2 w-full p-3.5 sm:p-4 flex flex-col justify-between relative text-white"
+                style={{ backgroundColor: post.themeColor || '#2446f5' }}
+              >
                 {/* Yellow Category Tag */}
                 <div className="flex items-center justify-between">
                   <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-[#e2ff3b] text-black tracking-wider">

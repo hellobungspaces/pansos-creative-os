@@ -21,15 +21,42 @@ export default function HomePage() {
   const [isScouting, setIsScouting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount & auto-sync daily news in background
   useEffect(() => {
+    let currentPosts = INITIAL_POSTS;
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
-        setPosts(JSON.parse(saved));
+        currentPosts = JSON.parse(saved);
+        setPosts(currentPosts);
       }
     } catch (e) {
       console.warn('LocalStorage load failed', e);
+    }
+
+    // Auto-sync every day or after 3 hours in the background
+    const lastSync = localStorage.getItem('indonesia_hari_ini_last_sync');
+    const now = Date.now();
+    if (!lastSync || now - parseInt(lastSync, 10) > 3 * 60 * 60 * 1000) {
+      fetch('/api/rss?limit=6')
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.success && data.posts && data.posts.length > 0) {
+            const existingTitles = new Set(currentPosts.map((p) => p.title.toLowerCase().trim()));
+            const newItems = data.posts.filter((p: RedaksiPost) => !existingTitles.has(p.title.toLowerCase().trim()));
+            if (newItems.length > 0) {
+              const merged = [...newItems, ...currentPosts];
+              setPosts(merged);
+              try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
+              } catch (err) {
+                console.warn(err);
+              }
+            }
+            localStorage.setItem('indonesia_hari_ini_last_sync', String(now));
+          }
+        })
+        .catch((err) => console.warn('Auto-sync error:', err));
     }
   }, []);
 

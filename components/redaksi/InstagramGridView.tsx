@@ -79,10 +79,14 @@ export const InstagramGridView: React.FC<InstagramGridViewProps> = ({
                 <div className="absolute top-2 right-2 text-white/90 drop-shadow">
                   <Layers className="w-3.5 h-3.5" />
                 </div>
+                <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
               </div>
 
-              {/* Bottom Half: Royal Blue #2446f5 Block */}
-              <div className="h-1/2 w-full bg-[#2446f5] p-3 flex flex-col justify-between text-white relative">
+              {/* Bottom Half: Theme Color Block (Default Royal Blue) */}
+              <div 
+                className="h-1/2 w-full p-3 flex flex-col justify-between text-white relative"
+                style={{ backgroundColor: post.themeColor || '#2446f5' }}
+              >
                 <div>
                   <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-[#e2ff3b] text-black">
                     {post.category}

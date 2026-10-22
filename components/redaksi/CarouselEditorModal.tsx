@@ -109,6 +109,13 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
           ctx.fillText(editedPost.sourceBadge.toUpperCase(), 65, 638);
         }
 
+        // Photo attribution watermark if photo exists
+        if (slide.hasPhoto) {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+          ctx.font = '18px monospace';
+          ctx.fillText(slide.photoAttribution || editedPost.licenseInfo || 'Foto: Unsplash (Free Commercial Use)', 60, 655);
+        }
+
         // Bottom Half: Signature Royal Blue #2446f5
         ctx.fillStyle = '#2446f5';
         ctx.fillRect(0, 675, 1080, 675);

@@ -8,13 +8,15 @@ interface HeaderNavProps {
   onSelectTab: (tab: 'ruang_redaksi' | 'antrian_review' | 'editor' | 'sumber_berita' | 'instagram_grid') => void;
   reviewCount: number;
   onSearchClick: () => void;
+  isScouting?: boolean;
 }
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
   activeTab,
   onSelectTab,
   reviewCount,
-  onSearchClick
+  onSearchClick,
+  isScouting = false
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-[#090a0f]/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-8 py-3">
@@ -104,10 +106,24 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         {/* Right CTA */}
         <button
           onClick={onSearchClick}
-          className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 text-xs font-mono flex items-center gap-2 transition-all shrink-0 active:scale-95"
+          disabled={isScouting}
+          className={`px-3.5 py-2 rounded-xl text-xs font-mono flex items-center gap-2 transition-all shrink-0 active:scale-95 ${
+            isScouting
+              ? 'bg-amber-950/40 border border-amber-500/50 text-amber-300 cursor-wait'
+              : 'bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 hover:text-white'
+          }`}
         >
-          <Search className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Cari berita sekarang</span>
+          {isScouting ? (
+            <>
+              <Radio className="w-3.5 h-3.5 animate-spin text-[#e2ff3b]" />
+              <span className="hidden sm:inline">Scouting Berita...</span>
+            </>
+          ) : (
+            <>
+              <Search className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Cari berita sekarang</span>
+            </>
+          )}
         </button>
       </div>
     </header>

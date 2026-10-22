@@ -18,11 +18,19 @@ import { ACTIVITY_LOGS } from '@/data/redaksiData';
 interface RuangRedaksiViewProps {
   onGoToReview: () => void;
   onSearchClick: () => void;
+  reviewCount?: number;
+  scheduledCount?: number;
+  publishedCount?: number;
+  isScouting?: boolean;
 }
 
 export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
   onGoToReview,
-  onSearchClick
+  onSearchClick,
+  reviewCount = 8,
+  scheduledCount = 0,
+  publishedCount = 14,
+  isScouting = false
 }) => {
   return (
     <div className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
@@ -41,17 +49,31 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
             </span>
             <span className="px-2.5 py-1 rounded-md text-xs font-mono bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>AI aktif · jam kerja 07.00–22.00 WIB</span>
+              <span>AI aktif · jam kerja 07.00–20.00 WIB</span>
             </span>
           </div>
         </div>
 
         <button
           onClick={onSearchClick}
-          className="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 text-xs font-mono flex items-center gap-2 transition-all self-start sm:self-auto active:scale-95 shadow-sm"
+          disabled={isScouting}
+          className={`px-4 py-2.5 rounded-xl border text-xs font-mono flex items-center gap-2 transition-all self-start sm:self-auto active:scale-95 shadow-sm ${
+            isScouting
+              ? 'bg-amber-950/40 border-amber-500/50 text-amber-300 cursor-wait'
+              : 'bg-zinc-900 hover:bg-zinc-800 border-zinc-700/80 text-zinc-200 hover:text-white'
+          }`}
         >
-          <Search className="w-3.5 h-3.5" />
-          <span>Cari berita sekarang</span>
+          {isScouting ? (
+            <>
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#e2ff3b]" />
+              <span>Scouting Berita Terkini...</span>
+            </>
+          ) : (
+            <>
+              <Search className="w-3.5 h-3.5" />
+              <span>Cari berita sekarang</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -63,7 +85,7 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
             BERITA MASUK 24 JAM
           </div>
           <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
-            349
+            {340 + reviewCount}
           </div>
           <div className="text-xs font-mono text-zinc-500">
             0 menunggu dinilai
@@ -76,10 +98,10 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
             LOLOS ANALIS 24 JAM
           </div>
           <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
-            135
+            {130 + reviewCount}
           </div>
           <div className="text-xs font-mono text-zinc-500">
-            113 antre ditulis
+            {110 + reviewCount} antre ditulis
           </div>
         </div>
 
@@ -95,7 +117,7 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
             <span className="w-2 h-2 rounded-full bg-[#e2ff3b] animate-ping" />
           </div>
           <div className="text-4xl sm:text-5xl font-black font-headline text-[#e2ff3b] tracking-tight group-hover:scale-105 transition-transform">
-            8
+            {reviewCount}
           </div>
           <div className="text-xs font-mono text-zinc-300 flex items-center justify-between">
             <span>Butuh approval tim</span>
@@ -109,10 +131,10 @@ export const RuangRedaksiView: React.FC<RuangRedaksiViewProps> = ({
             TERJADWAL
           </div>
           <div className="text-4xl sm:text-5xl font-black font-headline text-white tracking-tight">
-            0
+            {scheduledCount}
           </div>
           <div className="text-xs font-mono text-zinc-500">
-            14 sudah posting minggu ini
+            {publishedCount} sudah posting minggu ini
           </div>
         </div>
       </div>

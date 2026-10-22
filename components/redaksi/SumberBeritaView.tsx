@@ -4,16 +4,36 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Check, ExternalLink, Globe, Rss } from 'lucide-react';
 import { NEWS_SOURCES, NewsSource } from '@/data/redaksiData';
 
+const SOURCES_STORAGE_KEY = 'pansos_redaksi_sources_v1';
+
 export const SumberBeritaView: React.FC = () => {
-  const [sources, setSources] = useState<NewsSource[]>(NEWS_SOURCES);
+  const [sources, setSources] = useState<NewsSource[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(SOURCES_STORAGE_KEY);
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.warn('Sources storage load err', e);
+      }
+    }
+    return NEWS_SOURCES;
+  });
   const [newSourceName, setNewSourceName] = useState('');
   const [newSourceUrl, setNewSourceUrl] = useState('');
   const [newSourceLang, setNewSourceLang] = useState<'ID' | 'EN'>('ID');
 
+  const updateSources = (updated: NewsSource[]) => {
+    setSources(updated);
+    try {
+      localStorage.setItem(SOURCES_STORAGE_KEY, JSON.stringify(updated));
+    } catch (e) {
+      console.warn('Sources storage save err', e);
+    }
+  };
+
   const toggleSource = (id: string) => {
-    setSources(
-      sources.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s))
-    );
+    const updated = sources.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s));
+    updateSources(updated);
   };
 
   const handleAddSource = (e: React.FormEvent) => {
@@ -30,13 +50,13 @@ export const SumberBeritaView: React.FC = () => {
       enabled: true
     };
 
-    setSources([newEntry, ...sources]);
+    updateSources([newEntry, ...sources]);
     setNewSourceName('');
     setNewSourceUrl('');
   };
 
   const deleteSource = (id: string) => {
-    setSources(sources.filter((s) => s.id !== id));
+    updateSources(sources.filter((s) => s.id !== id));
   };
 
   return (

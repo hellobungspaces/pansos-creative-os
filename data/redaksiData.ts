@@ -380,14 +380,14 @@ export const ACTIVITY_LOGS: ActivityLog[] = [
 ];
 
 export const NEWS_SOURCES: NewsSource[] = [
-  { id: 'src-1', name: 'ANTARA', lang: 'ID', url: 'https://www.antaranews.com/rss/tekno.xml', statusText: '7 berita / 2 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-2', name: 'Adweek', lang: 'EN', url: 'https://www.adweek.com/feed/', statusText: '22 berita / 12 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-3', name: 'Ars Technica', lang: 'EN', url: 'https://feeds.arstechnica.com/arstechnica/technology-lab', statusText: '2 berita / 2 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-4', name: 'CNN Indonesia', lang: 'ID', url: 'https://www.cnnindonesia.com/teknologi/rss', statusText: '31 berita / 14 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-5', name: 'DailySocial', lang: 'ID', url: 'https://dailysocial.id/feed', statusText: '1 berita / 1 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-6', name: 'Engadget', lang: 'EN', url: 'https://www.engadget.com/rss.xml', statusText: '37 berita / 10 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-7', name: 'Google', lang: 'EN', url: 'https://blog.google/technology/ai/rss/', statusText: '0 berita / 0 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-8', name: 'Google Trends Indonesia', lang: 'ID', isTrends: true, url: 'https://trends.google.com/trending/rss?geo=ID', statusText: '84 berita / 1 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-9', name: 'Liputan6', lang: 'ID', url: 'https://www.liputan6.com/feed/rss/tekno', statusText: '30 berita / 18 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
-  { id: 'src-10', name: 'Marketing Dive', lang: 'EN', url: 'https://www.marketingdive.com/feeds/news/', statusText: '6 berita / 3 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
+  { id: 'src-1', name: 'ANTARA News', lang: 'ID', url: 'https://www.antaranews.com/rss/tekno.xml', statusText: '42 berita / 18 lolos (7 hari)', lastChecked: 'dicek 5 mnt lalu', enabled: true },
+  { id: 'src-2', name: 'CNN Indonesia', lang: 'ID', url: 'https://www.cnnindonesia.com/teknologi/rss', statusText: '38 berita / 16 lolos (7 hari)', lastChecked: 'dicek 5 mnt lalu', enabled: true },
+  { id: 'src-3', name: 'CNBC Indonesia', lang: 'ID', url: 'https://www.cnbcindonesia.com/tech/rss', statusText: '29 berita / 12 lolos (7 hari)', lastChecked: 'dicek 8 mnt lalu', enabled: true },
+  { id: 'src-4', name: 'Detikcom (detikInet)', lang: 'ID', url: 'https://news.google.com/rss/search?q=site:detik.com/inet&hl=id&gl=ID&ceid=ID:id', statusText: '51 berita / 24 lolos (7 hari)', lastChecked: 'dicek 10 mnt lalu', enabled: true },
+  { id: 'src-5', name: 'Kompas.com Tekno', lang: 'ID', url: 'https://news.google.com/rss/search?q=site:kompas.com+teknologi&hl=id&gl=ID&ceid=ID:id', statusText: '47 berita / 21 lolos (7 hari)', lastChecked: 'dicek 12 mnt lalu', enabled: true },
+  { id: 'src-6', name: 'Tribunnews Tech', lang: 'ID', url: 'https://news.google.com/rss/search?q=site:tribunnews.com/techno&hl=id&gl=ID&ceid=ID:id', statusText: '33 berita / 11 lolos (7 hari)', lastChecked: 'dicek 15 mnt lalu', enabled: true },
+  { id: 'src-7', name: 'Kumparan Tech', lang: 'ID', url: 'https://news.google.com/rss/search?q=site:kumparan.com+teknologi&hl=id&gl=ID&ceid=ID:id', statusText: '19 berita / 8 lolos (7 hari)', lastChecked: 'dicek 20 mnt lalu', enabled: true },
+  { id: 'src-8', name: 'Google Trends Indonesia', lang: 'ID', isTrends: true, url: 'https://trends.google.com/trending/rss?geo=ID', statusText: '84 tren / 9 lolos (7 hari)', lastChecked: 'dicek 2 mnt lalu', enabled: true },
+  { id: 'src-9', name: 'The Verge', lang: 'EN', url: 'https://www.theverge.com/tech/rss/index.xml', statusText: '35 berita / 15 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
+  { id: 'src-10', name: 'Ars Technica', lang: 'EN', url: 'https://feeds.arstechnica.com/arstechnica/technology-lab', statusText: '14 berita / 6 lolos (7 hari)', lastChecked: 'dicek 30 mnt lalu', enabled: true },
 ];

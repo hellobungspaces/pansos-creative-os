@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { Sparkles, CheckCircle2 } from 'lucide-react';
 import { HeaderNav } from '@/components/redaksi/HeaderNav';
 import { RuangRedaksiView } from '@/components/redaksi/RuangRedaksiView';
 import { AntrianReviewView } from '@/components/redaksi/AntrianReviewView';
@@ -17,6 +18,8 @@ export default function HomePage() {
   const [posts, setPosts] = useState<RedaksiPost[]>(INITIAL_POSTS);
   const [selectedPost, setSelectedPost] = useState<RedaksiPost | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isScouting, setIsScouting] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -72,14 +75,48 @@ export default function HomePage() {
     setActiveTab('antrian_review');
   };
 
-  const handleSearchClick = () => {
-    setIsCreateModalOpen(true);
+  // Live RSS scout from Indonesian trusted media
+  const handleLiveScout = async () => {
+    setIsScouting(true);
+    try {
+      const res = await fetch('/api/rss?limit=6');
+      const data = await res.json();
+      if (data.success && data.posts && data.posts.length > 0) {
+        const existingTitles = new Set(posts.map((p) => p.title.toLowerCase().trim()));
+        const newItems = data.posts.filter((p: RedaksiPost) => !existingTitles.has(p.title.toLowerCase().trim()));
+
+        if (newItems.length > 0) {
+          const merged = [...newItems, ...posts];
+          savePosts(merged);
+          setToastMessage(`✨ Berhasil menarik ${newItems.length} berita baru dari ANTARA, CNN & CNBC!`);
+        } else {
+          setToastMessage('Semua berita terkini dari RSS sudah ada di Antrian Review.');
+        }
+        setActiveTab('antrian_review');
+      }
+    } catch (err) {
+      console.error('Scouting error:', err);
+      setToastMessage('Gagal mengambil RSS feed live.');
+    } finally {
+      setIsScouting(false);
+      setTimeout(() => setToastMessage(null), 4500);
+    }
   };
 
   const reviewCount = posts.filter((p) => p.status === 'perlu_review').length;
+  const scheduledCount = posts.filter((p) => p.status === 'terjadwal').length;
+  const publishedCount = posts.filter((p) => p.status === 'sudah_posting').length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090a0f] text-zinc-100 bg-redaksi-grid">
+    <div className="min-h-screen flex flex-col bg-[#090a0f] text-zinc-100 bg-redaksi-grid relative">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-900 border border-[#e2ff3b]/60 text-white shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <Sparkles className="w-4 h-4 text-[#e2ff3b] shrink-0" />
+          <span className="text-xs font-mono">{toastMessage}</span>
+        </div>
+      )}
+
       {/* Top Header Navigation matching reference */}
       <HeaderNav
         activeTab={activeTab}
@@ -91,7 +128,8 @@ export default function HomePage() {
           }
         }}
         reviewCount={reviewCount}
-        onSearchClick={handleSearchClick}
+        onSearchClick={handleLiveScout}
+        isScouting={isScouting}
       />
 
       {/* Main Active View */}
@@ -99,7 +137,11 @@ export default function HomePage() {
         {activeTab === 'ruang_redaksi' && (
           <RuangRedaksiView
             onGoToReview={() => setActiveTab('antrian_review')}
-            onSearchClick={handleSearchClick}
+            onSearchClick={handleLiveScout}
+            reviewCount={reviewCount}
+            scheduledCount={scheduledCount}
+            publishedCount={publishedCount}
+            isScouting={isScouting}
           />
         )}
 

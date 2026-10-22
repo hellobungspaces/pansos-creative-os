@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckSquare, AlertTriangle, ArrowRight, Check, Plus, ExternalLink, Globe, Sparkles, XCircle } from 'lucide-react';
+import { CheckSquare, AlertTriangle, ArrowRight, Check, Plus, ExternalLink, Globe, Sparkles, XCircle, Copy, Instagram } from 'lucide-react';
 import { RedaksiPost } from '@/data/redaksiData';
 
 interface AntrianReviewViewProps {
@@ -20,6 +20,26 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
   onRejectPost
 }) => {
   const [activeTab, setActiveTab] = useState<'perlu_review' | 'disetujui' | 'terjadwal' | 'sudah_posting' | 'ditolak'>('perlu_review');
+  const [copiedPostId, setCopiedPostId] = useState<string | null>(null);
+
+  const handleCopyCaption = (e: React.MouseEvent, post: RedaksiPost) => {
+    e.stopPropagation();
+    let domain = '';
+    try {
+      domain = post.sourceUrl ? new URL(post.sourceUrl).hostname.replace('www.', '') : '';
+    } catch {
+      domain = post.source.toLowerCase().replace(/\s+/g, '');
+    }
+
+    const cleanSource = post.source.replace(/[^a-zA-Z0-9]/g, '');
+    const cleanCategory = post.category.replace(/[^a-zA-Z0-9]/g, '');
+
+    const text = post.caption || `${post.title}.\n\nLaporan terverifikasi dari ${post.source} merangkum fakta penting yang perlu kamu ketahui hari ini.\n\nSimak slide 1 sampai ${post.slides.length} di atas 👆\n\nKalo menurut kamu gimana nih? Tulis pendapat kamu di kolom komentar! 👇\n\n📌 Sumber Informasi: ${post.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan: ${post.sourceUrl || '-'}\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#IndonesiaHariIni #BeritaTerkini #${cleanCategory} #Teknologi #${cleanSource} #TrendingNow`;
+
+    navigator.clipboard?.writeText(text);
+    setCopiedPostId(post.id);
+    setTimeout(() => setCopiedPostId(null), 2000);
+  };
 
   const perluReviewCount = posts.filter((p) => p.status === 'perlu_review').length;
   const disetujuiCount = posts.filter((p) => p.status === 'disetujui').length;
@@ -192,9 +212,9 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                 <span>{post.timeAgo}</span>
               </div>
 
-              {/* Quick Actions (Approve / Reject) */}
-              {activeTab === 'perlu_review' && (
-                <div className="flex items-center gap-2 pt-1">
+              {/* Quick Actions (Approve / Copy Caption / Reject) */}
+              {activeTab === 'perlu_review' ? (
+                <div className="flex items-center gap-1.5 pt-1">
                   <button
                     onClick={() => onApprovePost(post.id)}
                     className="flex-1 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 rounded-lg text-[11px] font-mono font-bold flex items-center justify-center gap-1 transition-all"
@@ -203,11 +223,62 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                     <span>Setujui</span>
                   </button>
                   <button
+                    onClick={(e) => handleCopyCaption(e, post)}
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-mono flex items-center gap-1 transition-all border ${
+                      copiedPostId === post.id
+                        ? 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
+                        : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#e2ff3b] border-zinc-800'
+                    }`}
+                    title="Salin Caption Instagram"
+                  >
+                    {copiedPostId === post.id ? (
+                      <>
+                        <Check className="w-3 h-3 text-emerald-400" />
+                        <span className="text-[10px] text-emerald-300">Tersalin</span>
+                      </>
+                    ) : (
+                      <>
+                        <Instagram className="w-3 h-3 text-[#e1306c]" />
+                        <span className="text-[10px]">Caption</span>
+                      </>
+                    )}
+                  </button>
+                  <button
                     onClick={() => onRejectPost(post.id)}
                     className="py-1.5 px-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-rose-400 border border-zinc-800 rounded-lg text-[11px] font-mono transition-all"
                     title="Tolak / Arsipkan"
                   >
                     <XCircle className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 pt-1">
+                  <button
+                    onClick={(e) => handleCopyCaption(e, post)}
+                    className={`flex-1 py-1.5 rounded-lg text-[11px] font-mono font-bold flex items-center justify-center gap-1 transition-all border ${
+                      copiedPostId === post.id
+                        ? 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
+                        : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#e2ff3b] border-zinc-800'
+                    }`}
+                  >
+                    {copiedPostId === post.id ? (
+                      <>
+                        <Check className="w-3 h-3 text-emerald-400" />
+                        <span>Caption Tersalin!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Instagram className="w-3 h-3 text-[#e1306c]" />
+                        <span>Salin Caption IG</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => onOpenDetailEditor(post)}
+                    className="py-1.5 px-2.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 rounded-lg text-[11px] font-mono transition-all"
+                    title="Buka Editor Carousel"
+                  >
+                    <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
               )}

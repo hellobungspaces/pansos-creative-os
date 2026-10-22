@@ -17,7 +17,15 @@ import {
   Search,
   Dices,
   ShieldCheck,
-  Palette
+  Palette,
+  Instagram,
+  Layers,
+  SlidersHorizontal,
+  Hash,
+  Heart,
+  MessageCircle,
+  Bookmark,
+  Share2
 } from 'lucide-react';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
 
@@ -35,6 +43,34 @@ const THEME_COLORS = [
   { name: 'Emerald Cuan (Bisnis)', hex: '#065f46' },
   { name: 'Cyber Violet (Sosmed)', hex: '#581c87' },
 ];
+
+const POPULAR_HASHTAGS = [
+  '#IndonesiaHariIni',
+  '#BeritaTerkini',
+  '#Teknologi',
+  '#KulturDigital',
+  '#ViralHariIni',
+  '#TrendingNow',
+  '#InfoTerkini',
+  '#MediaDigital',
+  '#KabarHariIni',
+  '#GenZ',
+  '#Inovasi'
+];
+
+function generateDefaultCaption(post: RedaksiPost): string {
+  let domain = '';
+  try {
+    domain = post.sourceUrl ? new URL(post.sourceUrl).hostname.replace('www.', '') : '';
+  } catch {
+    domain = post.source.toLowerCase().replace(/\s+/g, '');
+  }
+
+  const cleanSource = post.source.replace(/[^a-zA-Z0-9]/g, '');
+  const cleanCategory = post.category.replace(/[^a-zA-Z0-9]/g, '');
+
+  return `${post.title}.\n\nLaporan terverifikasi dari ${post.source} menggarisbawahi poin krusial yang perlu kamu ketahui hari ini. Geser ${post.slides.length} slide di atas untuk menyimak rangkuman faktanya.\n\nKalo menurut kamu gimana nih? Tulis pendapat kamu di kolom komentar! 👇\n\n📌 Sumber Informasi: ${post.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan Asli: ${post.sourceUrl || '-'}\n📷 Visual: Unsplash (Curated License - Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#IndonesiaHariIni #BeritaTerkini #${cleanCategory} #Teknologi #KulturDigital #${cleanSource} #TrendingNow #MediaDigital`;
+}
 
 const CURATED_UNSPLASH_LIBRARY = [
   // AI & Technology
@@ -84,16 +120,88 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   if (!post) return null;
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const [editedPost, setEditedPost] = useState<RedaksiPost>(post);
+  const [editedPost, setEditedPost] = useState<RedaksiPost>(() => {
+    if (post.caption && post.caption.trim()) {
+      return post;
+    }
+    return {
+      ...post,
+      caption: generateDefaultCaption(post)
+    };
+  });
+  const [viewTab, setViewTab] = useState<'slides' | 'caption'>('slides');
+  const [captionPreset, setCaptionPreset] = useState<'homeless' | 'ringkas' | 'breaking'>('homeless');
   const [copiedCaption, setCopiedCaption] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState('');
-  const [topTab, setTopTab] = useState<'render' | 'posisi'>('render');
   const [customPhotoInput, setCustomPhotoInput] = useState('');
   const [photoSearchQuery, setPhotoSearchQuery] = useState('');
   const [shuffleSeed, setShuffleSeed] = useState(0);
 
   const currentSlide = editedPost.slides[activeSlideIndex] || editedPost.slides[0];
+
+  const allHashtags = useMemo(() => {
+    const list = [...POPULAR_HASHTAGS];
+    if (editedPost.category) {
+      const catTag = `#${editedPost.category.replace(/[^a-zA-Z0-9]/g, '')}`;
+      if (!list.includes(catTag)) list.push(catTag);
+    }
+    if (editedPost.source) {
+      const srcTag = `#${editedPost.source.replace(/[^a-zA-Z0-9]/g, '')}`;
+      if (!list.includes(srcTag)) list.push(srcTag);
+    }
+    return list;
+  }, [editedPost.category, editedPost.source]);
+
+  const isTagInCaption = (tag: string) => {
+    const current = editedPost.caption || '';
+    const cleanTag = tag.trim().replace(/#/g, '\\#');
+    const regex = new RegExp(`(^|\\s)${cleanTag}(\\b|$)`, 'i');
+    return regex.test(current);
+  };
+
+  const handleToggleHashtag = (tag: string) => {
+    const current = editedPost.caption || '';
+    const cleanTag = tag.trim();
+    const escaped = cleanTag.replace(/#/g, '\\#');
+    const regex = new RegExp(`(^|\\s)${escaped}(\\b|$)`, 'i');
+
+    let nextCaption = '';
+    if (regex.test(current)) {
+      nextCaption = current.replace(regex, '$1').replace(/[ \t]{2,}/g, ' ').trim();
+    } else {
+      if (current.includes('#')) {
+        nextCaption = `${current} ${cleanTag}`;
+      } else {
+        nextCaption = `${current}\n\n${cleanTag}`;
+      }
+    }
+    setEditedPost({ ...editedPost, caption: nextCaption });
+  };
+
+  const handleApplyPreset = (preset: 'homeless' | 'ringkas' | 'breaking') => {
+    setCaptionPreset(preset);
+    let domain = '';
+    try {
+      domain = editedPost.sourceUrl ? new URL(editedPost.sourceUrl).hostname.replace('www.', '') : '';
+    } catch {
+      domain = editedPost.source.toLowerCase().replace(/\s+/g, '');
+    }
+
+    const cleanSource = editedPost.source.replace(/[^a-zA-Z0-9]/g, '');
+    const cleanCategory = editedPost.category.replace(/[^a-zA-Z0-9]/g, '');
+
+    let newCaption = '';
+    if (preset === 'homeless') {
+      newCaption = `${editedPost.title}.\n\nLaporan terverifikasi dari ${editedPost.source} menggarisbawahi poin penting yang perlu kamu ketahui hari ini. Geser ${editedPost.slides.length} slide di atas untuk menyimak rangkuman faktanya.\n\nKalo menurut kamu gimana nih? Tulis pendapat kamu di kolom komentar! 👇\n\n📌 Sumber Informasi: ${editedPost.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan Asli: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash Curated (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#IndonesiaHariIni #BeritaTerkini #${cleanCategory} #Teknologi #KulturDigital #${cleanSource} #TrendingNow`;
+    } else if (preset === 'ringkas') {
+      newCaption = `${editedPost.title}.\n\nSimak ringkasan ${editedPost.slides.length} slide pada carousel di atas 👆\n\nBagikan postingan ini ke teman atau tim kamu biar tetap update!\n\n📌 Sumber: ${editedPost.source}${domain ? ` (${domain})` : ''}\n📷 Visual: Unsplash License\n\n#IndonesiaHariIni #${cleanCategory} #BeritaTerkini #${cleanSource}`;
+    } else if (preset === 'breaking') {
+      newCaption = `🚨 BREAKING ALERT: ${editedPost.title}.\n\nKabar terbaru dilaporkan oleh ${editedPost.source}. Berikut rangkuman lengkap konteks dan poin penting yang sedang berkembang.\n\nGeser terus sampai slide terakhir ➔\n\n📌 Sumber Berita: ${editedPost.source}${domain ? ` (${domain})` : ''}\n🔗 Tautan: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash Free License\n⚖️ Sesuai UU Hak Cipta No. 28/2014 Pasal 42.\n\n#BreakingNews #IndonesiaHariIni #WartaTerkini #${cleanCategory} #${cleanSource}`;
+    }
+
+    setEditedPost({ ...editedPost, caption: newCaption });
+  };
 
   // Curated photo search & randomizer
   const displayPhotos = useMemo(() => {
@@ -132,16 +240,11 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   };
 
   const handleCopyCaption = () => {
-    let domain = '';
-    try {
-      domain = editedPost.sourceUrl ? new URL(editedPost.sourceUrl).hostname.replace('www.', '') : '';
-    } catch {
-      domain = editedPost.source.toLowerCase().replace(/\s+/g, '');
-    }
+    const textToCopy = (editedPost.caption && editedPost.caption.trim())
+      ? editedPost.caption
+      : generateDefaultCaption(editedPost);
 
-    const cleanCaption = `${editedPost.title}.\n\nLaporan terverifikasi dari ${editedPost.source} merangkum poin krusial yang perlu kamu ketahui hari ini.\n\nSimak rangkuman lengkap ${editedPost.totalSlides} slide di atas.\n\n📌 Sumber Informasi: ${editedPost.source} (${domain})\n🔗 Tautan: ${editedPost.sourceUrl || '-'}\n📷 Visual: Unsplash (Curated License)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#${editedPost.category} #BeritaTerkini #IndonesiaHariIni #Teknologi #MediaDigital #${editedPost.source.replace(/[^a-zA-Z]/g, '')}`;
-
-    navigator.clipboard?.writeText(cleanCaption);
+    navigator.clipboard?.writeText(textToCopy);
     setCopiedCaption(true);
     setTimeout(() => setCopiedCaption(false), 2000);
   };
@@ -496,13 +599,52 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                 </button>
               </div>
 
-              <button
-                onClick={handleCopyCaption}
-                className="w-full py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 rounded-xl flex items-center justify-center gap-1.5 transition-all text-[11px]"
-              >
-                <Copy className="w-3.5 h-3.5 text-[#e2ff3b]" />
-                <span>{copiedCaption ? 'Caption & Atribusi Tersalin!' : 'Copy caption + atribusi bersih'}</span>
-              </button>
+              {/* Caption Instagram Quick Box on Left Pane */}
+              <div className="p-3 bg-zinc-900/70 border border-zinc-800 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="flex items-center gap-1.5 font-bold text-white">
+                    <Instagram className="w-3.5 h-3.5 text-[#e1306c]" />
+                    <span>Caption Instagram</span>
+                  </span>
+                  <span className={`text-[10px] font-mono ${
+                    (editedPost.caption?.length || 0) > 2200 ? 'text-rose-400 font-bold' : 'text-zinc-400'
+                  }`}>
+                    {editedPost.caption?.length || 0}/2,200
+                  </span>
+                </div>
+
+                <div 
+                  onClick={() => setViewTab('caption')}
+                  className="p-2.5 bg-black/50 border border-zinc-800/80 rounded-xl text-[11px] text-zinc-300 font-sans line-clamp-3 cursor-pointer hover:border-zinc-700 transition-all leading-relaxed"
+                  title="Klik untuk membuka editor caption Instagram"
+                >
+                  {editedPost.caption || 'Caption Instagram belum diisi...'}
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-0.5">
+                  <button
+                    type="button"
+                    onClick={handleCopyCaption}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all shadow ${
+                      copiedCaption
+                        ? 'bg-emerald-500 text-black'
+                        : 'bg-[#e2ff3b] hover:bg-[#d4f52f] text-black active:scale-95'
+                    }`}
+                  >
+                    {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedCaption ? 'Tersalin!' : 'Salin Caption'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setViewTab('caption')}
+                    className="py-2 px-2.5 rounded-xl text-xs font-mono font-bold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-[#e2ff3b]" />
+                    <span>Edit Caption</span>
+                  </button>
+                </div>
+              </div>
 
               <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-[10px] text-zinc-400 space-y-1">
                 <div className="flex items-center gap-1 text-emerald-400 font-bold">
@@ -515,8 +657,60 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
             </div>
           </div>
 
-          {/* RIGHT PANE: Slide-by-Slide Content & Unsplash Photo Search (7 Cols) */}
-          <div className="lg:col-span-7 space-y-6">
+          {/* RIGHT PANE: Slide Editor OR Instagram Caption Studio (7 Cols) */}
+          <div className="lg:col-span-7 space-y-5">
+            {/* View Tab Selector: Slides vs Caption */}
+            <div className="flex flex-wrap items-center justify-between border-b border-zinc-800 pb-3 gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setViewTab('slides')}
+                  className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all ${
+                    viewTab === 'slides'
+                      ? 'bg-[#e2ff3b] text-black shadow-md'
+                      : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  }`}
+                >
+                  <Layers className="w-4 h-4" />
+                  <span>Editor Slide ({editedPost.slides.length})</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setViewTab('caption')}
+                  className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all ${
+                    viewTab === 'caption'
+                      ? 'bg-[#e2ff3b] text-black shadow-md'
+                      : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  }`}
+                >
+                  <Instagram className="w-4 h-4 text-[#e1306c]" />
+                  <span>Caption Instagram</span>
+                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                    (editedPost.caption?.length || 0) > 2200 
+                      ? 'bg-rose-500 text-white font-bold' 
+                      : 'bg-zinc-800 text-zinc-300'
+                  }`}>
+                    {editedPost.caption?.length || 0}/2200
+                  </span>
+                </button>
+              </div>
+
+              {viewTab === 'caption' && (
+                <button
+                  type="button"
+                  onClick={handleCopyCaption}
+                  className="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-bold text-xs rounded-xl flex items-center gap-1.5 transition-all shadow active:scale-95 ml-auto"
+                >
+                  {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedCaption ? 'Tersalin ke Clipboard!' : 'Salin Caption Lengkap'}</span>
+                </button>
+              )}
+            </div>
+
+            {/* TAB CONTENT 1: SLIDE EDITOR */}
+            {viewTab === 'slides' && (
+              <div className="space-y-6">
             {editedPost.slides.map((slide, idx) => (
               <div
                 key={idx}
@@ -703,6 +897,233 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* TAB CONTENT 2: INSTAGRAM CAPTION STUDIO */}
+        {viewTab === 'caption' && (
+          <div className="space-y-5 animate-in fade-in duration-200">
+            {/* Header & Preset Selector */}
+            <div className="p-4 rounded-2xl bg-[#11131a] border border-zinc-800 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-sm font-bold font-headline text-white flex items-center gap-2">
+                    <Instagram className="w-4 h-4 text-[#e1306c]" />
+                    <span>Pilihan Template Format Caption</span>
+                  </h4>
+                  <p className="text-xs text-zinc-400">
+                    Pilih template narasi siap posting untuk akun @indonesia.hariini
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleApplyPreset('homeless')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                      captionPreset === 'homeless'
+                        ? 'bg-[#e2ff3b] text-black font-bold shadow'
+                        : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                    }`}
+                  >
+                    Homeless Media
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleApplyPreset('ringkas')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                      captionPreset === 'ringkas'
+                        ? 'bg-[#e2ff3b] text-black font-bold shadow'
+                        : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                    }`}
+                  >
+                    Ringkas
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleApplyPreset('breaking')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                      captionPreset === 'breaking'
+                        ? 'bg-[#e2ff3b] text-black font-bold shadow'
+                        : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                    }`}
+                  >
+                    Breaking Alert
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Caption Editor Box */}
+            <div className="p-5 rounded-2xl bg-[#11131a] border border-zinc-800 space-y-3.5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-mono text-zinc-300 font-bold uppercase flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#e2ff3b]" />
+                  <span>Teks Caption Feed Instagram</span>
+                </label>
+
+                <div className="flex items-center gap-2 text-xs font-mono">
+                  <span className={`${
+                    (editedPost.caption?.length || 0) > 2200 
+                      ? 'text-rose-400 font-bold' 
+                      : 'text-zinc-400'
+                  }`}>
+                    {editedPost.caption?.length || 0} / 2.200 karakter
+                  </span>
+                  {(editedPost.caption?.length || 0) > 2200 && (
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold">
+                      Batas terlampaui!
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <textarea
+                rows={12}
+                value={editedPost.caption || ''}
+                onChange={(e) => setEditedPost({ ...editedPost, caption: e.target.value })}
+                placeholder="Tulis caption Instagram lengkap di sini..."
+                className="w-full p-4 bg-zinc-900/90 border border-zinc-800 rounded-xl text-xs font-sans text-zinc-100 leading-relaxed focus:outline-none focus:border-[#e2ff3b] transition-all resize-y"
+              />
+
+              {/* Character count bar */}
+              <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-300 ${
+                    (editedPost.caption?.length || 0) > 2200 
+                      ? 'bg-rose-500' 
+                      : (editedPost.caption?.length || 0) > 1800 
+                        ? 'bg-amber-400' 
+                        : 'bg-[#e2ff3b]'
+                  }`}
+                  style={{ width: `${Math.min(100, ((editedPost.caption?.length || 0) / 2200) * 100)}%` }}
+                />
+              </div>
+
+              {/* Quick Hashtag Cloud Chips */}
+              <div className="pt-2 border-t border-zinc-800/80 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="text-[11px] font-mono text-zinc-400 uppercase flex items-center gap-1.5 font-bold">
+                    <Hash className="w-3.5 h-3.5 text-[#e2ff3b]" />
+                    <span>Koleksi Hashtag (Klik untuk Tambah/Hapus):</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-zinc-500">
+                    {allHashtags.filter(h => isTagInCaption(h)).length} aktif dalam caption
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {allHashtags.map((tag) => {
+                    const active = isTagInCaption(tag);
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => handleToggleHashtag(tag)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all flex items-center gap-1 ${
+                          active
+                            ? 'bg-[#e2ff3b] text-black font-bold shadow-sm'
+                            : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                        }`}
+                      >
+                        <span>{tag}</span>
+                        {active && <span className="text-[10px] font-bold">✓</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Instagram Live Post Preview Mockup */}
+            <div className="p-4 rounded-2xl bg-[#11131a] border border-zinc-800 space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
+                <span className="text-xs font-mono text-zinc-400 uppercase font-bold flex items-center gap-1.5">
+                  <Instagram className="w-3.5 h-3.5 text-[#e1306c]" />
+                  <span>Simulasi Tampilan Feed Instagram</span>
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span>LIVE FEED SIMULATION</span>
+                </span>
+              </div>
+
+              {/* Phone Mockup Frame */}
+              <div className="max-w-md mx-auto bg-black rounded-2xl border border-zinc-800 overflow-hidden shadow-2xl">
+                {/* IG Header */}
+                <div className="p-3 flex items-center justify-between border-b border-zinc-900">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-[#e2ff3b] text-black font-black text-xs flex items-center justify-center font-headline ring-2 ring-[#e2ff3b]/30">
+                      IHI
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-white flex items-center gap-1">
+                        <span>indonesia.hariini</span>
+                        <span className="w-3 h-3 rounded-full bg-blue-500 text-white text-[8px] flex items-center justify-center font-bold">✓</span>
+                      </div>
+                      <div className="text-[10px] text-zinc-400">Audio Asli · indonesia.hariini</div>
+                    </div>
+                  </div>
+                  <span className="text-zinc-500 text-xs">•••</span>
+                </div>
+
+                {/* IG Image Thumbnail */}
+                <div className="relative aspect-[4/5] bg-zinc-950 overflow-hidden">
+                  <img 
+                    src={editedPost.slides[0]?.photoUrl || editedPost.coverImage} 
+                    alt="" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur text-white text-[10px] font-mono">
+                    1/{editedPost.slides.length}
+                  </div>
+                </div>
+
+                {/* IG Action Icons */}
+                <div className="p-3.5 space-y-2">
+                  <div className="flex items-center justify-between text-white">
+                    <div className="flex items-center gap-3">
+                      <Heart className="w-5 h-5 hover:text-rose-500 cursor-pointer transition-colors" />
+                      <MessageCircle className="w-5 h-5 hover:text-zinc-300 cursor-pointer transition-colors" />
+                      <Share2 className="w-5 h-5 hover:text-zinc-300 cursor-pointer transition-colors" />
+                    </div>
+                    <Bookmark className="w-5 h-5 hover:text-zinc-300 cursor-pointer transition-colors" />
+                  </div>
+
+                  <div className="text-xs font-bold text-white">
+                    1.482 suka
+                  </div>
+
+                  {/* IG Caption Text Rendered */}
+                  <div className="text-xs text-zinc-200 font-sans leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto pr-1">
+                    <span className="font-bold text-white mr-1.5">indonesia.hariini</span>
+                    {editedPost.caption || 'Belum ada caption.'}
+                  </div>
+
+                  <div className="text-[11px] text-zinc-500 pt-1">
+                    Lihat semua 38 komentar
+                  </div>
+                  <div className="text-[9px] font-mono text-zinc-600 uppercase">
+                    30 MENIT YANG LALU
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Legal & Compliance Assurance Card */}
+            <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-zinc-800 text-xs font-mono space-y-1.5">
+              <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                <ShieldCheck className="w-4 h-4" />
+                <span>KEPATUHAN ATRIBUSI & HUKUM PUBLIK</span>
+              </div>
+              <div className="text-zinc-300 text-[11px] space-y-1">
+                <div>• <strong>Sumber Informasi:</strong> {editedPost.source} ({editedPost.sourceUrl ? 'Tautan Terverifikasi' : 'Redaksi'})</div>
+                <div>• <strong>Visual & Foto:</strong> Lisensi Unsplash Bebas Komersial (Atribusi dalam caption)</div>
+                <div>• <strong>Payung Hukum:</strong> UU Hak Cipta No. 28/2014 Pasal 42 (Pendidikan, Edukasi & Pelaporan Warta Aktual)</div>
+              </div>
+            </div>
+          </div>
+        )}
 
             {/* Sticky Bottom Action Buttons Bar */}
             <div className="sticky bottom-0 pt-4 pb-2 bg-[#0c0d12]/95 backdrop-blur-md flex flex-wrap items-center gap-3 border-t border-zinc-800">

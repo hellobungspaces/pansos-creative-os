@@ -29,7 +29,8 @@ import {
   Bookmark,
   Share2,
   Loader2,
-  Tag
+  Tag,
+  Type
 } from 'lucide-react';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
 import { getCategoryTheme } from '@/utils/categoryTheme';
@@ -47,6 +48,88 @@ const THEME_COLORS = [
   { name: 'Breaking Alert (Merah)', hex: '#991b1b' },
   { name: 'Emerald Cuan (Bisnis)', hex: '#065f46' },
   { name: 'Cyber Violet (Sosmed)', hex: '#581c87' },
+];
+
+export interface FontPreset {
+  id: string;
+  name: string;
+  badge: string;
+  headlineFont: string;
+  bodyFont: string;
+  canvasTitleFont: string;
+  canvasBodyFont: string;
+  titleClass: string;
+  descClass: string;
+  license: string;
+  description: string;
+}
+
+export const FONT_PRESETS: FontPreset[] = [
+  {
+    id: 'bebas',
+    name: 'Bebas Neue + Inter',
+    badge: 'Viral Media',
+    headlineFont: 'Bebas Neue',
+    bodyFont: 'Inter',
+    canvasTitleFont: '900 60px "Bebas Neue", "Oswald", sans-serif',
+    canvasBodyFont: '400 34px "Inter", -apple-system, sans-serif',
+    titleClass: 'font-pair-bebas-title',
+    descClass: 'font-pair-bebas-desc',
+    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
+    description: 'Punchy & jangkung, standar emas akun media homeless/viral (Narasi, Folkative).'
+  },
+  {
+    id: 'syne',
+    name: 'Syne + Plus Jakarta Sans',
+    badge: 'Modern Satire',
+    headlineFont: 'Syne (800)',
+    bodyFont: 'Plus Jakarta Sans',
+    canvasTitleFont: '800 48px "Syne", -apple-system, sans-serif',
+    canvasBodyFont: '500 33px "Plus Jakarta Sans", sans-serif',
+    titleClass: 'font-pair-syne-title',
+    descClass: 'font-pair-syne-desc',
+    license: 'SIL Open Font License 1.1 (Plus Jakarta Sans karya studio Indonesia)',
+    description: 'Estetika kontemporer, tajam, dan elegan untuk menyindir isu sosial cerdas.'
+  },
+  {
+    id: 'fraunces',
+    name: 'Fraunces + Work Sans',
+    badge: 'Parodi Koran',
+    headlineFont: 'Fraunces (Black)',
+    bodyFont: 'Work Sans',
+    canvasTitleFont: '900 48px "Fraunces", "Playfair Display", serif',
+    canvasBodyFont: '400 33px "Work Sans", sans-serif',
+    titleClass: 'font-pair-fraunces-title',
+    descClass: 'font-pair-fraunces-desc',
+    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
+    description: 'Serif berbobot ala New Yorker / The Onion edisi investigasi Konoha.'
+  },
+  {
+    id: 'space',
+    name: 'Space Grotesk + DM Sans',
+    badge: 'Citizen Leak',
+    headlineFont: 'Space Grotesk',
+    bodyFont: 'DM Sans',
+    canvasTitleFont: '700 50px "Space Grotesk", sans-serif',
+    canvasBodyFont: '400 34px "DM Sans", sans-serif',
+    titleClass: 'font-pair-space-title',
+    descClass: 'font-pair-space-desc',
+    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
+    description: 'Nuansa tech hacker, underground intel, data-driven whistleblowing.'
+  },
+  {
+    id: 'oswald',
+    name: 'Oswald + Inter',
+    badge: 'Tabloid Heavy',
+    headlineFont: 'Oswald (Bold)',
+    bodyFont: 'Inter',
+    canvasTitleFont: '900 52px "Oswald", "Anton", sans-serif',
+    canvasBodyFont: '400 34px "Inter", -apple-system, sans-serif',
+    titleClass: 'font-pair-oswald-title',
+    descClass: 'font-pair-oswald-desc',
+    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
+    description: 'Gaya headline tebal rapat klasik media massa dan breaking alert.'
+  }
 ];
 
 const POPULAR_HASHTAGS = [
@@ -211,6 +294,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   }, [editedPost.slides.length]);
 
   const currentSlide = editedPost.slides[activeSlideIndex] || editedPost.slides[0];
+  const activeFontPreset = FONT_PRESETS.find(f => f.id === (editedPost.fontPairing || 'bebas')) || FONT_PRESETS[0];
 
   const allHashtags = useMemo(() => {
     const list = [...POPULAR_HASHTAGS];
@@ -417,9 +501,10 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
           ctx.fillText(catText, badgeX + padX, badgeY + 32);
         }
 
-        // Slide Title (Yellow Bold Condensed)
+        // Slide Title (Bold with Dynamic Font Pairing)
+        const canvasFontPreset = FONT_PRESETS.find(f => f.id === (editedPost.fontPairing || 'bebas')) || FONT_PRESETS[0];
         ctx.fillStyle = '#e2ff3b';
-        ctx.font = '900 52px -apple-system, BlinkMacSystemFont, "Oswald", "Anton", sans-serif';
+        ctx.font = canvasFontPreset.canvasTitleFont;
         
         // Wrap Title
         const titleWords = slide.title.split(' ');
@@ -438,9 +523,9 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
         }
         ctx.fillText(titleLine, 60, titleY);
 
-        // Body Text (White)
+        // Body Text (White with Dynamic Font Pairing)
         ctx.fillStyle = '#ffffff';
-        ctx.font = '400 34px -apple-system, sans-serif';
+        ctx.font = canvasFontPreset.canvasBodyFont;
         const bodyWords = slide.body.split(' ');
         let bodyLine = '';
         let bodyY = titleY + 65;
@@ -707,10 +792,10 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                       </span>
                     </div>
                   )}
-                  <h4 className="text-sm sm:text-base font-black font-headline text-[#e2ff3b] uppercase leading-tight line-clamp-3">
+                  <h4 className={`text-base sm:text-lg font-black text-[#e2ff3b] uppercase leading-tight line-clamp-3 transition-all ${activeFontPreset.titleClass}`}>
                     {currentSlide.title}
                   </h4>
-                  <p className="text-xs text-white/95 leading-relaxed font-sans line-clamp-5">
+                  <p className={`text-xs text-white/95 leading-relaxed line-clamp-5 transition-all ${activeFontPreset.descClass}`}>
                     {currentSlide.body}
                   </p>
                 </div>
@@ -750,6 +835,52 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                     )}
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Font Typography Pairing Selector (100% Free Commercial / SIL OFL) */}
+            <div className="w-full max-w-[360px] p-3 bg-zinc-900/60 border border-zinc-800 rounded-xl space-y-2">
+              <div className="text-[10px] font-mono text-zinc-400 uppercase flex items-center justify-between">
+                <span className="flex items-center gap-1.5 font-bold">
+                  <Type className="w-3.5 h-3.5 text-[#e2ff3b]" />
+                  <span>Tipografi (Free Komersil):</span>
+                </span>
+                <span className="font-bold text-[#e2ff3b] text-[10px] truncate max-w-[150px]">
+                  {activeFontPreset.badge}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-1.5 max-h-[175px] overflow-y-auto no-scrollbar pr-0.5">
+                {FONT_PRESETS.map((preset) => {
+                  const isSelected = (editedPost.fontPairing || 'bebas') === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setEditedPost({ ...editedPost, fontPairing: preset.id })}
+                      className={`w-full p-2 rounded-xl text-left border transition-all flex items-center justify-between gap-2 ${
+                        isSelected
+                          ? 'bg-zinc-800 border-[#e2ff3b] text-white shadow ring-1 ring-[#e2ff3b]/50'
+                          : 'bg-zinc-950/60 hover:bg-zinc-900/80 border-zinc-800/80 text-zinc-300'
+                      }`}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-xs font-bold leading-tight ${preset.titleClass}`}>
+                            {preset.headlineFont}
+                          </span>
+                          <span className="text-[10px] text-zinc-500 font-mono">+ {preset.bodyFont}</span>
+                        </div>
+                        <p className="text-[9px] text-zinc-400 line-clamp-1 mt-0.5">{preset.description}</p>
+                      </div>
+                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold shrink-0 ${
+                        isSelected ? 'bg-[#e2ff3b] text-black shadow-sm' : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
+                      }`}>
+                        {preset.badge}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

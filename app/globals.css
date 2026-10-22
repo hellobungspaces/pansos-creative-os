@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400..700&family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700;800&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Syne:wght@700;800&family=Work+Sans:wght@400;500;600&display=swap');
 
 :root {
   --background: #090a0f;
@@ -12,16 +12,61 @@
 body {
   background-color: #090a0f;
   color: #f4f4f6;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Big condensed news headline font */
+/* Big condensed news headline font (default fallback) */
 .font-headline {
-  font-family: 'Oswald', 'Anton', -apple-system, sans-serif;
-  letter-spacing: -0.01em;
+  font-family: 'Bebas Neue', 'Oswald', 'Anton', -apple-system, sans-serif;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+
+/* Font Pairing Presets (100% Free for Commercial Use / SIL Open Font License) */
+.font-pair-bebas-title {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  letter-spacing: 0.03em;
+}
+.font-pair-bebas-desc {
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.font-pair-syne-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.font-pair-syne-desc {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-pair-oswald-title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.font-pair-oswald-desc {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-pair-fraunces-title {
+  font-family: 'Fraunces', 'Playfair Display', serif;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+.font-pair-fraunces-desc {
+  font-family: 'Work Sans', sans-serif;
+}
+
+.font-pair-space-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.font-pair-space-desc {
+  font-family: 'DM Sans', sans-serif;
 }
 
 /* Subtle dark grid pattern like reference */

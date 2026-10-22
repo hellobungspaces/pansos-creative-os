@@ -10,7 +10,7 @@ export interface SlideItem {
 
 export interface RedaksiPost {
   id: string;
-  category: 'AI' | 'SOSMED' | 'TEKNOLOGI' | 'BISNIS' | 'MARKETING';
+  category: string; // 'FAUNA' | 'LINGKUNGAN' | 'KONOHA' | 'AI' | 'SOSMED' | 'TEKNOLOGI' | 'BISNIS' | 'VIRAL' etc.
   title: string;
   highlightedTitle: string; // for the bold yellow words
   source: string;

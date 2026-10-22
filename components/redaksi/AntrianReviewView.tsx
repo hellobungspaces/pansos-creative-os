@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { CheckSquare, AlertTriangle, ArrowRight, Check, Plus, ExternalLink, Globe, Sparkles, XCircle, Copy, Instagram } from 'lucide-react';
 import { RedaksiPost } from '@/data/redaksiData';
+import { getCategoryTheme } from '@/utils/categoryTheme';
 
 interface AntrianReviewViewProps {
   posts: RedaksiPost[];
@@ -153,9 +154,15 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                 className="h-1/2 w-full p-3.5 sm:p-4 flex flex-col justify-between relative text-white"
                 style={{ backgroundColor: post.themeColor || '#2446f5' }}
               >
-                {/* Yellow Category Tag */}
+                {/* Dynamic Category Tag */}
                 <div className="flex items-center justify-between">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-[#e2ff3b] text-black tracking-wider">
+                  <span 
+                    className="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-mono font-black uppercase tracking-wider shadow-sm transition-all"
+                    style={{
+                      backgroundColor: getCategoryTheme(post.category).bg,
+                      color: getCategoryTheme(post.category).text
+                    }}
+                  >
                     {post.category}
                   </span>
                 </div>

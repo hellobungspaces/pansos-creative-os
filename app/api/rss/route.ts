@@ -3,6 +3,30 @@ import { RedaksiPost, SlideItem } from '@/data/redaksiData';
 
 // Free commercial images from Unsplash curated by category (at least 6 per category)
 const FREE_IMAGES: Record<string, string[]> = {
+  FAUNA: [
+    'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=1080&auto=format&fit=crop&q=85', // Panda makan bambu
+    'https://images.unsplash.com/photo-1527118732049-c88155f2107c?w=1080&auto=format&fit=crop&q=85', // Bayi panda di pohon
+    'https://images.unsplash.com/photo-1548247416-ec66f4900b2e?w=1080&auto=format&fit=crop&q=85', // Red panda lucu
+    'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=1080&auto=format&fit=crop&q=85', // Harimau
+    'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1080&auto=format&fit=crop&q=85', // Kucing
+    'https://images.unsplash.com/photo-1552053831-71594a27632d?w=1080&auto=format&fit=crop&q=85', // Satwa peliharaan
+  ],
+  LINGKUNGAN: [
+    'https://images.unsplash.com/photo-1602980085566-4c40b8fecf06?w=1080&auto=format&fit=crop&q=85', // Karhutla & asap
+    'https://images.unsplash.com/photo-1511497584788-87676104235f?w=1080&auto=format&fit=crop&q=85', // Hutan tropis
+    'https://images.unsplash.com/photo-1547683905-f686c993aae5?w=1080&auto=format&fit=crop&q=85', // Banjir & cuaca
+    'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=1080&auto=format&fit=crop&q=85', // Polusi kabut kota
+    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1080&auto=format&fit=crop&q=85', // Alam kabut
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1080&auto=format&fit=crop&q=85', // Pegunungan
+  ],
+  KONOHA: [
+    'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85', // Gedung parlemen
+    'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85', // Palu sidang hukum
+    'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1080&auto=format&fit=crop&q=85', // Garis investigasi polisi
+    'https://images.unsplash.com/photo-1596405835955-4532a63c0d61?w=1080&auto=format&fit=crop&q=85', // Bendera merah putih
+    'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1080&auto=format&fit=crop&q=85', // Macet kota Jakarta
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85', // Diskusi pejabat/tim
+  ],
   AI: [
     'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1080&auto=format&fit=crop&q=85',
     'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1080&auto=format&fit=crop&q=85',
@@ -73,21 +97,45 @@ function cleanXmlText(raw: string): string {
     .trim();
 }
 
-function detectCategory(title: string, desc: string, defaultCat: 'AI' | 'SOSMED' | 'TEKNOLOGI' | 'BISNIS' | 'MARKETING'): 'AI' | 'SOSMED' | 'TEKNOLOGI' | 'BISNIS' | 'MARKETING' {
+function detectCategory(title: string, desc: string, defaultCat: string): string {
   const combined = (title + ' ' + desc).toLowerCase();
-  if (combined.match(/\b(ai|artificial intelligence|robot|humanoid|chatgpt|openai|claude|gemini|llm|deepfake|deepseek)\b/)) {
+
+  // 1. Animals / Fauna / Satwa (CHECK FIRST to avoid Panda name like "Ai Lian" matching AI!)
+  if (combined.match(/\b(panda|hewan|satwa|binatang|kucing|anjing|harimau|gajah|burung|fauna|zoo|taman safari|konservasi|satwa liar)\b/i)) {
+    return 'FAUNA';
+  }
+
+  // 2. Lingkungan / Karhutla / Iklim / Cuaca
+  if (combined.match(/\b(karhutla|kebakaran hutan|emisi|polusi|iklim|banjir|gempa|cuaca|bmkg|lingkungan|karbon|cams)\b/i)) {
+    return 'LINGKUNGAN';
+  }
+
+  // 3. Konoha / Politik / Hukum / Pemerintahan / Kasus
+  if (combined.match(/\b(dpr|menteri|kpk|korupsi|polisi|kejaksaan|uu|sidang|hakim|pasal|hukum|pejabat|pilkada|pemilu|tersangka|bawaslu)\b/i)) {
+    return 'KONOHA';
+  }
+
+  // 4. Strict Artificial Intelligence (Never single "ai" in names like Ai Lian or words like sampai)
+  if (combined.match(/\b(artificial intelligence|kecerdasan buatan|chatgpt|openai|claude|gemini|llm|deepfake|deepseek|model ai|teknologi ai|generative ai)\b/i)) {
     return 'AI';
   }
-  if (combined.match(/\b(whatsapp|wa|instagram|ig|tiktok|x |twitter|medsos|sosmed|influencer|youtube|meta|threads)\b/)) {
+
+  // 5. Sosmed / Media Sosial / Aplikasi Komunikasi
+  if (combined.match(/\b(whatsapp|wa|instagram|ig|tiktok|x |twitter|medsos|sosmed|influencer|youtube|meta|threads|netizen|warganet|viral)\b/i)) {
     return 'SOSMED';
   }
-  if (combined.match(/\b(saham|investor|investasi|fintech|cuan|startup|ipo|triliun|miliar|ekonomi|rupiah|dolar|pasar modal)\b/)) {
+
+  // 6. Bisnis / Finansial / Cuan / Pasar
+  if (combined.match(/\b(saham|investor|investasi|fintech|cuan|startup|ipo|triliun|miliar|ekonomi|rupiah|dolar|pasar modal|kripto|bitcoin|bappebti|gaji|umr|phk)\b/i)) {
     return 'BISNIS';
   }
-  if (combined.match(/\b(iklan|marketing|iklan visual|branding|kampanye|penjualan|sales|ads)\b/)) {
+
+  // 7. Marketing / Iklan
+  if (combined.match(/\b(iklan|marketing|iklan visual|branding|kampanye|penjualan|sales|ads)\b/i)) {
     return 'MARKETING';
   }
-  return defaultCat;
+
+  return defaultCat || 'TEKNOLOGI';
 }
 
 function makeHighlightedTitle(title: string): string {
@@ -157,53 +205,81 @@ function parseFeedItems(xmlText: string, sourceName: string): Array<{ title: str
   return items;
 }
 
-// Builds 5 COMPLETE, ready-to-produce slides with dedicated photos & tailored copy for every slide
+// Builds 5 COMPLETE, logically cohesive slides with dedicated photos & news-specific copy
 function buildFullEditorialSlides(item: { title: string; link: string; desc: string }, srcName: string, category: string, seed: number): SlideItem[] {
   const images = FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI;
   const upperTitle = item.title.toUpperCase();
   const cleanSnippet = item.desc
-    ? item.desc.slice(0, 160).replace(/\s+[^\s]*$/, '...')
-    : `Informasi terkini mengenai ${item.title.toLowerCase()} dari liputan redaksi ${srcName}.`;
+    ? item.desc.slice(0, 180).replace(/\s+[^\s]*$/, '...')
+    : `Laporan terkini mengenai ${item.title.toLowerCase()} yang dilansir oleh redaksi ${srcName}.`;
 
-  let slide2Title = 'KRONOLOGI & POKOK PERSOALAN';
-  let slide2Body = `Laporan resmi dari ${srcName} mengungkap pokok persoalan di balik peristiwa ini. Fakta di lapangan menunjukkan perhatian besar dari kalangan profesional dan pengguna harian di Indonesia.`;
+  // Dynamic story narrative by category
+  let slide2Title = 'APA YANG SEBENARNYA TERJADI?';
+  let slide2Body = `Laporan resmi dari ${srcName} merangkum kronologi lengkap peristiwa ini. Fakta di lapangan menunjukkan perhatian besar masyarakat atas dinamika yang sedang berlangsung.`;
 
-  let slide3Title = 'FAKTA TEKNIS & TEMUAN UTAMA';
-  let slide3Body = `Pihak pengembang dan regulator menyoroti aspek efisiensi, keamanan sistem, serta kepatuhan standar industri yang berdampak langsung pada kelangsungan ekosistem digital terkait.`;
+  let slide3Title = 'FAKTA PENTING DARI LAPANGAN';
+  let slide3Body = `Pihak terkait dan para pemerhati menyoroti sejumlah poin krusial yang berdampak langsung pada kelangsungan ekosistem serta kebiasaan publik sehari-hari.`;
 
-  let slide4Title = 'DAMPAK BAGI PENGGUNA';
-  let slide4Body = `Bagi kamu yang aktif memanfaatkan layanan ini, langkah terbaik adalah memeriksa konfigurasi akun, memperbarui versi software, dan mengamankan kredensial data pribadi.`;
+  let slide4Title = 'APA ARTINYA BUAT WARGA KONOHA?';
+  let slide4Body = `Bagi kita para warga Konoha, kabar ini menjadi pengingat penting untuk tetap melek informasi, menyesuaikan langkah antisipasi, dan tidak gampang termakan spekulasi liar.`;
 
-  let slide5Title = 'BAGAIMANA MENURUT KAMU?';
-  let slide5Body = `Apakah kamu sudah merasakan dampak dari perubahan ini, atau punya pandangan berbeda? Tulis analisa dan pendapat kamu di kolom komentar! 👇`;
+  let slide5Title = 'GIMANA TANGGAPAN KAMU?';
+  let slide5Body = `Menurut kacamata para warga Konoha, gimana pandangan kamu soal kabar ini? Sampaikan pendapat atau analisis kamu di kolom komentar! 👇`;
 
-  if (category === 'AI') {
-    slide2Title = 'TREN AI & REALITA DI LAPANGAN';
-    slide2Body = `Akselerasi adopsi kecerdasan buatan mulai merambah kebutuhan harian masyarakat. Tren ini membuka peluang efisiensi sekaligus menuntut literasi etika teknologi yang lebih matang.`;
-    slide3Title = 'CELAH & REGULASI KESELAMATAN';
-    slide3Body = `Pakar teknologi mengingatkan pentingnya tata kelola model AI yang transparan agar tidak memicu kebocoran data sensitif, pelanggaran hak cipta, atau maraknya konten misinformasi.`;
-    slide4Title = 'YANG PERLU KAMU ANTISIPASI';
-    slide4Body = `Gunakan perangkat AI secara bijak. Hindari mengunggah data rahasia pribadi ke server publik dan selalu verifikasi ulang hasil output sebelum dijadikan acuan kerja.`;
-    slide5Title = 'KAMU TIM ADOPSI ATAU SKEPTIS?';
-    slide5Body = `Bagaimana pemanfaatan AI dalam keseharian kamu saat ini—membantu pekerjaan atau justru menimbulkan kekhawatiran baru? Share di kolom komentar! 👇`;
+  if (category === 'FAUNA') {
+    slide2Title = 'KRONOLOGI & PERAWATAN SATWA';
+    slide2Body = `Kabar bahagia dari konservasi satwa yang diliput ${srcName}: perayaan ini menjadi bukti komitmen pelestarian spesies langka yang populasinya terus dijaga ketat di habitat konservasi.`;
+    slide3Title = 'ANTUSIASME PUBLIK & FAKTA UNIK';
+    slide3Body = `Pengelola taman satwa menyiapkan sajian spesial dari es dan bambu segar. Tingkah menggemaskan sang satwa sukses memikat ribuan pengunjung dan viral di berbagai linimasa.`;
+    slide4Title = 'PENYEJUK DI TENGAH HIRUK-PIKUK';
+    slide4Body = `Di tengah ramainya kabar politik dan dinamika Konoha yang bikin pening, kabar satwa menggemaskan ini setidaknya jadi penyejuk mata dan bukti pentingnya kepedulian lingkungan.`;
+    slide5Title = 'KAMU TIM GEMAS JUGA?';
+    slide5Body = `Siapa di sini yang suka banget nonton tingkah lucu panda dan satwa langka? Tulis ucapan selamat dan uneg-uneg kamu di kolom komentar! 👇`;
+  } else if (category === 'LINGKUNGAN') {
+    slide2Title = 'DATA SATELIT & ANCAMAN UDARA';
+    slide2Body = `Data pantauan lembaga riset dan ${srcName} mencatat eskalasi emisi karbon yang signifikan. Titik panas dan asap tebal berpotensi memperburuk indeks kualitas udara lintas wilayah.`;
+    slide3Title = 'DAMPAK NYATA PADA KESEHATAN';
+    slide3Body = `Pakar lingkungan memperingatkan partikel mikro berbahaya (PM2.5) yang terbawa angin dapat memicu infeksi saluran pernapasan, terutama bagi kelompok anak-anak dan lansia.`;
+    slide4Title = 'WAKTU NYA SIAPKAN MASKER';
+    slide4Body = `Warga Konoha diimbau mulai memantau aplikasi kualitas udara harian, membatasi aktivitas luar ruangan berlebih jika kabut asap pekat, dan mendesak langkah tanggap darurat dari pemangku kebijakan.`;
+    slide5Title = 'GIMANA LANGIT DI DAERAHMU?';
+    slide5Body = `Kondisi udara di tempat tinggal kamu hari ini cerah atau mulai berkabut abu-abu? Ceritakan kondisi cuaca di kotamu di kolom komentar! 👇`;
+  } else if (category === 'KONOHA') {
+    slide2Title = 'KRONOLOGI & DUDUK PERKARA';
+    slide2Body = `Laporan investigasi ${srcName} mengungkap duduk perkara yang sedang memanas. Isu ini langsung memicu perdebatan sengit di kalangan pengamat hukum dan netizen linimasa.`;
+    slide3Title = 'SOROTAN REGULASI & TRANSPARANSI';
+    slide3Body = `Publik mendesak konsistensi penegakan aturan agar tidak ada celah tumpul ke atas tajam ke bawah. Akuntabilitas pejabat dan lembaga penegak aturan kembali diuji.`;
+    slide4Title = 'POIN KRITIS BAGI WARGA KONOHA';
+    slide4Body = `Sebagai warga Konoha yang kritis, kita patut membedah apakah langkah yang diambil beneran solusi konkret untuk rakyat, atau sekadar manuver pencitraan musiman.`;
+    slide5Title = 'KAWAL TERUS ATAU PASRAH?';
+    slide5Body = `Menurut kamu, bakal ada tindakan nyata atau kasus ini bakal nguap gitu aja kayak biasanya? Tulis opini tajam kamu di komentar! 👇`;
+  } else if (category === 'AI') {
+    slide2Title = 'LOMPATAN TEKNOLOGI & KAPABILITAS';
+    slide2Body = `Riset terverifikasi yang dilaporkan ${srcName} membuktikan percepatan kemampuan model AI generasi terbaru dalam mengotomatisasi pekerjaan kompleks dengan efisiensi tinggi.`;
+    slide3Title = 'BATASAN ETIKA & PRIVASI DATA';
+    slide3Body = `Pakar teknologi mengingatkan potensi risiko privasi jika data pengguna diolah tanpa persetujuan eksplisit, serta pentingnya regulasi keselamatan yang transparan.`;
+    slide4Title = 'PELUANG ATAU ANCAMAN PEKERJAAN?';
+    slide4Body = `Warga Konoha jangan sampai pasrah: jadikan AI sebagai asisten penambah produktivitas, bukan malah menunggu pasif sampai skill kerja kita tertinggal dari algoritma.`;
+    slide5Title = 'KAMU SUDAH PAKAI AI APA SAJA?';
+    slide5Body = `Seberapa sering kamu memanfaatkan tools AI dalam rutinitas harian? Ceritakan pengalaman dan keresahan kamu di bawah! 👇`;
   } else if (category === 'SOSMED') {
-    slide2Title = 'FITUR BARU & POLA PENGGUNA';
-    slide2Body = `Platform media sosial terus memperbarui algoritma dan fitur antarmuka untuk mempertahankan kenyamanan interaksi pengguna serta menekan perilaku toxic di linimasa.`;
-    slide3Title = 'PERUBAHAN KEBIJAKAN PRIVASI';
-    slide3Body = `Pengguna diimbau meninjau ulang izin akses aplikasi dan pengaturan visibilitas profil guna menjaga keamanan jejak digital dari pelacakan pihak ketiga yang tidak bertanggung jawab.`;
-    slide4Title = 'TIPS AMAN BERSELANCAR';
-    slide4Body = `Pastikan fitur autentikasi dua faktor (2FA) selalu aktif, perbarui kata sandi secara berkala, dan waspadai tautan phising yang mengatasnamakan verifikasi resmi akun.`;
-    slide5Title = 'TAG TEMEN KAMU YANG BUTUH TAHU!';
-    slide5Body = `Bagikan info ini ke teman-teman kamu agar tetap update dan terhindar dari masalah privasi di linimasa! Tulis pendapatmu di bawah 👇`;
+    slide2Title = 'PERUBAHAN ALGORITMA & FITUR';
+    slide2Body = `Platform media sosial memperbarui mekanisme antarmuka dan penanganan privasi untuk merespons keluhan pengguna atas gangguan notifikasi dan kebocoran data.`;
+    slide3Title = 'LANGKAH SOLUSI PRAKTIS';
+    slide3Body = `Berdasarkan rangkuman ${srcName}, pengguna cukup mengecek setelan latar belakang aplikasi, memperbarui ke versi stabil terbaru, dan membersihkan berkas cache yang menumpuk.`;
+    slide4Title = 'JANGAN SAMPAI KETINGGALAN INFO';
+    slide4Body = `Jangan biarkan obrolan penting dengan rekan atau kabar keluarga terhambat cuma gara-gara notifikasi delay. Pastikan pengaturan HP kamu sudah sesuai panduan.`;
+    slide5Title = 'PERNAH NGELUH HAL SERUPA?';
+    slide5Body = `Aplikasi apa yang paling sering bikin kamu kesel karena notifikasinya telat masuk? Bagikan curhatan kamu di kolom komentar! 👇`;
   } else if (category === 'BISNIS') {
-    slide2Title = 'ANGKA & SENTIMEN PASAR';
-    slide2Body = `Sentimen pasar dan pergerakan likuiditas menjadi katalis utama perubahan nilai di sektor ini. Data menunjukkan partisipasi aktif investor generasi muda kian mendominasi.`;
-    slide3Title = 'KEBIJAKAN REGULASI & KEPATUHAN';
-    slide3Body = `Otoritas berwenang memperketat pengawasan perizinan dan standar audit demi melindungi dana masyarakat serta menjaga stabilitas ekosistem industri jangka panjang.`;
-    slide4Title = 'IMPLIKASI PADA INVESTOR RITEL';
-    slide4Body = `Investor diimbau selalu melakukan riset mandiri (DYOR), menerapkan manajemen modal yang disiplin, dan tidak mudah tergiur iming-iming keuntungan instan tanpa kalkulasi risiko.`;
-    slide5Title = 'BAGAIMANA STRATEGI KAMU?';
-    slide5Body = `Apakah momentum ini waktu yang tepat untuk eksekusi, atau kamu lebih memilih wait and see? Diskusikan pandangan portofolio kamu di kolom komentar! 👇`;
+    slide2Title = 'PERGERAKAN ARUS MODAL & DATA';
+    slide2Body = `Laporan analis ekonomi dari ${srcName} mencatat fluktuasi likuiditas dan sentimen transaksi yang dipengaruhi oleh kebijakan moneter serta tren investasi ritel generasi muda.`;
+    slide3Title = 'TANTANGAN REGULASI & RISIKO';
+    slide3Body = `Otoritas pengawas mengimbau masyarakat untuk selalu memeriksa legalitas izin usaha dan menghindari jebakan skema imbal hasil instan tanpa manajemen risiko yang jelas.`;
+    slide4Title = 'STRATEGI AMAN DOMPET WARGA';
+    slide4Body = `Bagi warga Konoha, kunci bertahan menghadapi inflasi adalah memperkuat pos dana darurat dan tidak gampang fomo menaruh seluruh tabungan di instrumen spekulatif.`;
+    slide5Title = 'PORTOFOLIO KAMU AMAN ATAU MERAH?';
+    slide5Body = `Gimana kondisi instrumen investasi kamu di kuartal ini? Masih optimis cuan atau lagi mode wait and see? Diskusi bareng di bawah! 👇`;
   }
 
   const p1 = images[(seed + 0) % images.length];

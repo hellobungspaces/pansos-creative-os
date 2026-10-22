@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   X, 
   ChevronLeft, 
@@ -25,9 +25,12 @@ import {
   Heart,
   MessageCircle,
   Bookmark,
-  Share2
+  Share2,
+  Loader2,
+  Tag
 } from 'lucide-react';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
+import { getCategoryTheme } from '@/utils/categoryTheme';
 
 interface CarouselEditorModalProps {
   post: RedaksiPost | null;
@@ -137,6 +140,31 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   const [customPhotoInput, setCustomPhotoInput] = useState('');
   const [photoSearchQuery, setPhotoSearchQuery] = useState('');
   const [shuffleSeed, setShuffleSeed] = useState(0);
+  const [apiPhotos, setApiPhotos] = useState<any[]>([]);
+  const [isSearchingPhotos, setIsSearchingPhotos] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+    setIsSearchingPhotos(true);
+    const timer = setTimeout(() => {
+      fetch(`/api/search-photos?q=${encodeURIComponent(photoSearchQuery)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!isCancelled && data.photos) {
+            setApiPhotos(data.photos);
+          }
+        })
+        .catch(err => console.warn('Photo search error:', err))
+        .finally(() => {
+          if (!isCancelled) setIsSearchingPhotos(false);
+        });
+    }, 200);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+    };
+  }, [photoSearchQuery, shuffleSeed]);
 
   const currentSlide = editedPost.slides[activeSlideIndex] || editedPost.slides[0];
 
@@ -203,8 +231,11 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
     setEditedPost({ ...editedPost, caption: newCaption });
   };
 
-  // Curated photo search & randomizer
+  // Live photo search results with curated fallback
   const displayPhotos = useMemo(() => {
+    if (apiPhotos.length > 0) {
+      return apiPhotos;
+    }
     const q = photoSearchQuery.toLowerCase().trim();
     if (!q) {
       const start = (shuffleSeed * 6) % CURATED_UNSPLASH_LIBRARY.length;
@@ -218,7 +249,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
       p.name.toLowerCase().includes(q) || p.tags.some(t => t.includes(q))
     );
     return matched.length > 0 ? matched.slice(0, 8) : CURATED_UNSPLASH_LIBRARY.slice(0, 6);
-  }, [photoSearchQuery, shuffleSeed]);
+  }, [apiPhotos, photoSearchQuery, shuffleSeed]);
 
   const handleUpdateSlideTitle = (index: number, newTitle: string) => {
     const updated = { ...editedPost };
@@ -295,13 +326,30 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
         ctx.fillStyle = editedPost.themeColor || '#2446f5';
         ctx.fillRect(0, 675, 1080, 675);
 
-        // Yellow Category Tag on slide 1
+        // Dynamic Category Tag on slide 1 (Dynamic Width, Shape, & Color)
         if (slideIdx === 0) {
-          ctx.fillStyle = '#e2ff3b';
-          ctx.fillRect(60, 715, 180, 44);
-          ctx.fillStyle = '#000000';
-          ctx.font = '900 24px -apple-system, sans-serif';
-          ctx.fillText(editedPost.category, 80, 746);
+          const catText = (editedPost.category || 'BERITA').toUpperCase();
+          const theme = getCategoryTheme(catText);
+          ctx.font = '900 24px -apple-system, BlinkMacSystemFont, "Oswald", sans-serif';
+          const textMetrics = ctx.measureText(catText);
+          const padX = 22;
+          const badgeWidth = textMetrics.width + (padX * 2);
+          const badgeHeight = 46;
+          const badgeX = 60;
+          const badgeY = 712;
+          const badgeRadius = 10;
+
+          ctx.fillStyle = theme.bg;
+          if (typeof (ctx as any).roundRect === 'function') {
+            ctx.beginPath();
+            (ctx as any).roundRect(badgeX, badgeY, badgeWidth, badgeHeight, badgeRadius);
+            ctx.fill();
+          } else {
+            ctx.fillRect(badgeX, badgeY, badgeWidth, badgeHeight);
+          }
+
+          ctx.fillStyle = theme.text;
+          ctx.fillText(catText, badgeX + padX, badgeY + 32);
         }
 
         // Slide Title (Yellow Bold Condensed)
@@ -507,6 +555,19 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                 style={{ backgroundColor: editedPost.themeColor || '#2446f5' }}
               >
                 <div className="space-y-2">
+                  {activeSlideIndex === 0 && (
+                    <div className="mb-1">
+                      <span 
+                        className="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-mono font-black uppercase tracking-wider shadow-sm transition-all"
+                        style={{
+                          backgroundColor: getCategoryTheme(editedPost.category).bg,
+                          color: getCategoryTheme(editedPost.category).text
+                        }}
+                      >
+                        {editedPost.category}
+                      </span>
+                    </div>
+                  )}
                   <h4 className="text-sm sm:text-base font-black font-headline text-[#e2ff3b] uppercase leading-tight line-clamp-3">
                     {currentSlide.title}
                   </h4>
@@ -711,6 +772,69 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
             {/* TAB CONTENT 1: SLIDE EDITOR */}
             {viewTab === 'slides' && (
               <div className="space-y-6">
+                {/* Category & Tag Editor Card */}
+                <div className="p-4 rounded-2xl bg-[#11131a] border border-zinc-800 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-[#e2ff3b]" />
+                      <span className="text-xs font-mono font-bold text-white uppercase">Kategori & Tag Konten:</span>
+                      <span 
+                        className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-black uppercase tracking-wider shadow-sm transition-all"
+                        style={{
+                          backgroundColor: getCategoryTheme(editedPost.category).bg,
+                          color: getCategoryTheme(editedPost.category).text
+                        }}
+                      >
+                        {editedPost.category}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editedPost.category}
+                        onChange={(e) => setEditedPost({ ...editedPost, category: e.target.value.toUpperCase() })}
+                        placeholder="Nama Kategori..."
+                        className="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-mono font-bold text-white uppercase focus:outline-none focus:border-[#e2ff3b] w-36"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Quick Category Presets */}
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-zinc-800/80">
+                    <span className="text-[10px] font-mono text-zinc-500 mr-1">Preset Cepat:</span>
+                    {[
+                      { tag: 'FAUNA', icon: '🐼' },
+                      { tag: 'LINGKUNGAN', icon: '🌿' },
+                      { tag: 'KONOHA', icon: '🏛️' },
+                      { tag: 'AI', icon: '🤖' },
+                      { tag: 'SOSMED', icon: '📱' },
+                      { tag: 'BISNIS', icon: '💼' },
+                      { tag: 'TEKNOLOGI', icon: '⚡' },
+                      { tag: 'VIRAL', icon: '🔥' }
+                    ].map(item => {
+                      const theme = getCategoryTheme(item.tag);
+                      const isSelected = (editedPost.category || '').toUpperCase() === item.tag;
+                      return (
+                        <button
+                          key={item.tag}
+                          type="button"
+                          onClick={() => setEditedPost({ ...editedPost, category: item.tag })}
+                          className={`px-2 py-1 rounded-md text-[10px] font-mono font-bold transition-all flex items-center gap-1 ${
+                            isSelected 
+                              ? 'scale-105 shadow-md ring-1 ring-white/40' 
+                              : 'opacity-70 hover:opacity-100 bg-zinc-900 border border-zinc-800 text-zinc-300'
+                          }`}
+                          style={isSelected ? { backgroundColor: theme.bg, color: theme.text } : {}}
+                        >
+                          <span>{item.icon}</span>
+                          <span>{item.tag}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
             {editedPost.slides.map((slide, idx) => (
               <div
                 key={idx}
@@ -821,13 +945,44 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                     </button>
                   </div>
 
-                  {/* Search Bar for Unsplash */}
+                  {/* Quick Search Topic Pills */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {[
+                      { label: '🐼 Panda / Fauna', q: 'panda' },
+                      { label: '🌿 Karhutla / Hutan', q: 'karhutla' },
+                      { label: '🏛️ DPR / Politik', q: 'dpr' },
+                      { label: '⚖️ Sidang / Hukum', q: 'hukum' },
+                      { label: '🤖 AI & Robot', q: 'ai' },
+                      { label: '📱 Sosmed / HP', q: 'smartphone' },
+                      { label: '💼 Saham & Cuan', q: 'saham' },
+                      { label: '☕ Warkop Konoha', q: 'kopi' }
+                    ].map(pill => (
+                      <button
+                        key={pill.q}
+                        type="button"
+                        onClick={() => setPhotoSearchQuery(pill.q)}
+                        className={`px-2 py-0.5 rounded text-[10px] font-mono transition-all ${
+                          photoSearchQuery.toLowerCase() === pill.q.toLowerCase()
+                            ? 'bg-[#e2ff3b] text-black font-bold'
+                            : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                        }`}
+                      >
+                        {pill.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Search Bar for Unsplash / Wikimedia */}
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1">
-                      <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                      {isSearchingPhotos ? (
+                        <Loader2 className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#e2ff3b] animate-spin" />
+                      ) : (
+                        <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                      )}
                       <input
                         type="text"
-                        placeholder="Cari foto Unsplash (misal: ai, smartphone, crypto, kantor, hacker, indonesia)..."
+                        placeholder="Cari foto Unsplash & Wikimedia (misal: panda, hewan, karhutla, dpr, polisi, ai, crypto)..."
                         value={photoSearchQuery}
                         onChange={(e) => setPhotoSearchQuery(e.target.value)}
                         className="w-full pl-8 pr-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-[11px] text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b]"

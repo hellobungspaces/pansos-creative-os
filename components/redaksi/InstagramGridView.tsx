@@ -3,6 +3,7 @@
 import React from 'react';
 import { Instagram, Heart, MessageCircle, Layers, CheckCircle2 } from 'lucide-react';
 import { RedaksiPost } from '@/data/redaksiData';
+import { getCategoryTheme } from '@/utils/categoryTheme';
 
 interface InstagramGridViewProps {
   posts: RedaksiPost[];
@@ -88,7 +89,13 @@ export const InstagramGridView: React.FC<InstagramGridViewProps> = ({
                 style={{ backgroundColor: post.themeColor || '#2446f5' }}
               >
                 <div>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-[#e2ff3b] text-black">
+                  <span 
+                    className="inline-block px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase tracking-wider shadow-sm transition-all"
+                    style={{
+                      backgroundColor: getCategoryTheme(post.category).bg,
+                      color: getCategoryTheme(post.category).text
+                    }}
+                  >
                     {post.category}
                   </span>
                 </div>

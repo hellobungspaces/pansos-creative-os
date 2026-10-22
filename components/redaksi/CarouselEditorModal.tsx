@@ -5,6 +5,8 @@ import {
   X, 
   ChevronLeft, 
   ChevronRight, 
+  ArrowLeft,
+  ArrowRight,
   Download, 
   Copy, 
   RefreshCw, 
@@ -133,6 +135,15 @@ const CURATED_UNSPLASH_LIBRARY = [
   { id: 'u40', tags: ['konoha', 'indonesia', 'merah putih', 'rakyat'], name: 'Indonesian Flag & Crowd', url: 'https://images.unsplash.com/photo-1596405835955-4532a63c0d61?w=1080&auto=format&fit=crop&q=85' },
 ];
 
+function getSlideRole(idx: number): string {
+  if (idx === 0) return 'Cover & Hook';
+  if (idx === 1) return 'Kronologi Fakta';
+  if (idx === 2) return 'Poin Kunci';
+  if (idx === 3) return 'Sudut Konoha';
+  if (idx === 4) return 'Komentar CTA';
+  return 'Editorial';
+}
+
 export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   post,
   onClose,
@@ -184,6 +195,20 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
       clearTimeout(timer);
     };
   }, [photoSearchQuery, shuffleSeed]);
+
+  // Keyboard Arrow navigation between slides (Power user experience)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+      if (e.key === 'ArrowLeft') {
+        setActiveSlideIndex((prev) => Math.max(0, prev - 1));
+      } else if (e.key === 'ArrowRight') {
+        setActiveSlideIndex((prev) => Math.min(editedPost.slides.length - 1, prev + 1));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [editedPost.slides.length]);
 
   const currentSlide = editedPost.slides[activeSlideIndex] || editedPost.slides[0];
 
@@ -538,6 +563,80 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
           </div>
         </div>
 
+        {/* TOP CAROUSEL TIMELINE / FILMSTRIP RAIL (Zero-Friction 1-Click Navigation) */}
+        <div className="px-6 py-3 bg-[#0d0f16] border-b border-zinc-800/80 flex items-center justify-between gap-3 shrink-0 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+            {editedPost.slides.map((slide, idx) => {
+              const isSelected = activeSlideIndex === idx;
+              const role = getSlideRole(idx);
+
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveSlideIndex(idx)}
+                  className={`px-3 py-1.5 rounded-xl text-left transition-all shrink-0 border flex items-center gap-2.5 ${
+                    isSelected
+                      ? 'bg-zinc-800 border-[#e2ff3b] text-white shadow-lg ring-1 ring-[#e2ff3b]/60 scale-[1.02]'
+                      : 'bg-zinc-950/70 hover:bg-zinc-900 border-zinc-800/90 text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  <span className={`w-5 h-5 rounded-md font-mono font-black text-[11px] flex items-center justify-center shrink-0 ${
+                    isSelected ? 'bg-[#e2ff3b] text-black font-bold' : 'bg-zinc-800 text-zinc-300'
+                  }`}>
+                    {idx + 1}
+                  </span>
+                  <div className="flex flex-col min-w-0 max-w-[130px]">
+                    <span className={`text-[9px] font-mono uppercase font-bold tracking-wider truncate ${
+                      isSelected ? 'text-[#e2ff3b]' : 'text-zinc-500'
+                    }`}>
+                      {role}
+                    </span>
+                    <span className="text-[11px] font-headline font-bold truncate text-white leading-tight">
+                      {slide.title}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+
+            <button
+              type="button"
+              onClick={handleAddSlide}
+              className="px-3 py-2 rounded-xl border border-dashed border-zinc-700 hover:border-[#e2ff3b] bg-zinc-950/50 hover:bg-zinc-900 text-zinc-400 hover:text-[#e2ff3b] text-xs font-mono font-bold flex items-center gap-1.5 shrink-0 transition-all ml-1"
+              title="Tambah Slide Baru"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>+ Slide</span>
+            </button>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-2 shrink-0">
+            <span className="text-[11px] font-mono text-zinc-400">Pindah:</span>
+            <button
+              type="button"
+              disabled={activeSlideIndex === 0}
+              onClick={() => setActiveSlideIndex(prev => Math.max(0, prev - 1))}
+              className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+              title="Slide Sebelumnya (Arrow Left)"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="text-xs font-mono font-bold text-white px-1">
+              {activeSlideIndex + 1}/{editedPost.slides.length}
+            </span>
+            <button
+              type="button"
+              disabled={activeSlideIndex === editedPost.slides.length - 1}
+              onClick={() => setActiveSlideIndex(prev => Math.min(editedPost.slides.length - 1, prev + 1))}
+              className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+              title="Slide Berikutnya (Arrow Right)"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
         {/* 2-Pane Split Body */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 overflow-y-auto flex-1">
           {/* LEFT PANE: 4:5 Card Preview + Color Palette + Action Buttons (5 Cols) */}
@@ -875,247 +974,335 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                   </div>
                 </div>
 
-            {editedPost.slides.map((slide, idx) => (
-              <div
-                key={idx}
-                className={`p-5 rounded-2xl border transition-all ${
-                  activeSlideIndex === idx
-                    ? 'bg-[#11131a] border-zinc-700 shadow-xl'
-                    : 'bg-[#0f1116] border-zinc-800/80'
-                }`}
-              >
-                {/* Slide Card Header */}
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-800 mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-white">
-                      Slide {slide.number} · {slide.hasPhoto ? 'Visual Photo' : 'Editorial'}
-                    </span>
+            {/* ACTIVE SLIDE FOCUSED INSPECTOR (Zero Friction, 100% Synced) */}
+            <div className="p-5 rounded-2xl bg-[#11131a] border border-zinc-700/80 shadow-2xl space-y-5 animate-in fade-in duration-200">
+              {/* Inspector Header: Slide Badge & Role & Reorder Controls */}
+              <div className="flex flex-wrap items-center justify-between pb-3.5 border-b border-zinc-800 gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#e2ff3b] text-black font-mono font-black text-sm flex items-center justify-center shadow-md">
+                    {activeSlideIndex + 1}
                   </div>
-
-                  <div className="flex items-center gap-1 text-zinc-500">
-                    <button
-                      onClick={() => {
-                        if (idx > 0) {
-                          const updated = { ...editedPost };
-                          const temp = updated.slides[idx];
-                          updated.slides[idx] = updated.slides[idx - 1];
-                          updated.slides[idx - 1] = temp;
-                          setEditedPost(updated);
-                          setActiveSlideIndex(idx - 1);
-                        }
-                      }}
-                      className="p-1 hover:text-white transition-colors"
-                      title="Geser Naik"
-                    >
-                      <ArrowUp className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (idx < editedPost.slides.length - 1) {
-                          const updated = { ...editedPost };
-                          const temp = updated.slides[idx];
-                          updated.slides[idx] = updated.slides[idx + 1];
-                          updated.slides[idx + 1] = temp;
-                          setEditedPost(updated);
-                          setActiveSlideIndex(idx + 1);
-                        }
-                      }}
-                      className="p-1 hover:text-white transition-colors"
-                      title="Geser Turun"
-                    >
-                      <ArrowDown className="w-3.5 h-3.5" />
-                    </button>
-                    {editedPost.slides.length > 2 && (
-                      <button
-                        onClick={() => {
-                          const updated = { ...editedPost };
-                          updated.slides = updated.slides.filter((_, i) => i !== idx);
-                          updated.totalSlides = updated.slides.length;
-                          setEditedPost(updated);
-                          setActiveSlideIndex(Math.max(0, idx - 1));
-                        }}
-                        className="p-1 hover:text-rose-400 transition-colors"
-                        title="Hapus Slide"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Title Input */}
-                <div className="space-y-1.5 mb-3">
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase">Judul Slide (Headline):</label>
-                  <input
-                    type="text"
-                    value={slide.title}
-                    onChange={(e) => handleUpdateSlideTitle(idx, e.target.value)}
-                    className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs font-bold font-headline text-white focus:outline-none focus:border-[#e2ff3b]"
-                  />
-                </div>
-
-                {/* Content Textarea */}
-                <div className="space-y-1">
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase">Isi Teks Slide:</label>
-                  <textarea
-                    rows={3}
-                    value={slide.body}
-                    onChange={(e) => handleUpdateSlideBody(idx, e.target.value)}
-                    className="w-full p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-xs font-sans text-zinc-200 leading-relaxed focus:outline-none focus:border-[#e2ff3b]"
-                  />
-                  <div className="text-right text-[10px] font-mono text-zinc-500">
-                    {slide.body.length}/260 karakter
-                  </div>
-                </div>
-
-                {/* Unsplash Photo Search & Gallery Section (Active Slide Only for Focus) */}
-                <div className="pt-3 border-t border-zinc-800/80 space-y-3 text-xs font-mono">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-zinc-300 font-bold uppercase flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#e2ff3b]" />
-                      <span>FOTO VISUAL UNSPLASH (FREE KOMERSIL)</span>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setShuffleSeed(prev => prev + 1)}
-                      className="px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-[10px] flex items-center gap-1 transition-all"
-                    >
-                      <Dices className="w-3 h-3 text-[#e2ff3b]" />
-                      <span>🎲 Acak Foto</span>
-                    </button>
-                  </div>
-
-                  {/* Smart Entity Keywords from Headline (1-Click Instant Search) */}
-                  {smartKeywords.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-zinc-900/90 border border-zinc-800">
-                      <span className="text-[10px] text-[#e2ff3b] font-mono font-bold uppercase tracking-wider flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-[#e2ff3b]" />
-                        <span>Saran dari Judul:</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                        Slide {activeSlideIndex + 1} dari {editedPost.slides.length}
                       </span>
-                      {smartKeywords.map((kw) => (
-                        <button
-                          key={kw}
-                          type="button"
-                          onClick={() => setPhotoSearchQuery(kw)}
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono capitalize transition-all ${
-                            photoSearchQuery.toLowerCase() === kw.toLowerCase()
-                              ? 'bg-[#e2ff3b] text-black font-bold shadow'
-                              : 'bg-[#e2ff3b]/10 text-[#e2ff3b] hover:bg-[#e2ff3b] hover:text-black border border-[#e2ff3b]/30'
-                          }`}
-                        >
-                          #{kw}
-                        </button>
-                      ))}
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#e2ff3b]/10 text-[#e2ff3b] border border-[#e2ff3b]/30">
+                        {getSlideRole(activeSlideIndex)}
+                      </span>
                     </div>
-                  )}
-
-                  {/* Quick Search Topic Pills */}
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {[
-                      { label: '🐼 Panda / Fauna', q: 'panda' },
-                      { label: '🌿 Karhutla / Hutan', q: 'karhutla' },
-                      { label: '🏛️ DPR / Politik', q: 'dpr' },
-                      { label: '⚖️ Sidang / Hukum', q: 'hukum' },
-                      { label: '🤖 AI & Robot', q: 'ai' },
-                      { label: '📱 Sosmed / HP', q: 'smartphone' },
-                      { label: '💼 Saham & Cuan', q: 'saham' },
-                      { label: '☕ Warkop Konoha', q: 'kopi' }
-                    ].map(pill => (
-                      <button
-                        key={pill.q}
-                        type="button"
-                        onClick={() => setPhotoSearchQuery(pill.q)}
-                        className={`px-2 py-0.5 rounded text-[10px] font-mono transition-all ${
-                          photoSearchQuery.toLowerCase() === pill.q.toLowerCase()
-                            ? 'bg-[#e2ff3b] text-black font-bold'
-                            : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
-                        }`}
-                      >
-                        {pill.label}
-                      </button>
-                    ))}
+                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                      {activeSlideIndex === 0
+                        ? 'Cover utama carousel feed — visual & headline paling menentukan impresi & hook pembaca'
+                        : activeSlideIndex === editedPost.slides.length - 1
+                        ? 'Slide penutup — rangkuman narasi & ajakan diskusi / komentar warga Konoha'
+                        : 'Slide narasi editorial — sajikan kronologi fakta ringkas, jelas, dan lugas'}
+                    </p>
                   </div>
+                </div>
 
-                  {/* Search Bar for Unsplash / Wikimedia */}
-                  <div className="flex items-center gap-2">
-                    <div className="relative flex-1">
-                      {isSearchingPhotos ? (
-                        <Loader2 className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#e2ff3b] animate-spin" />
-                      ) : (
-                        <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
-                      )}
-                      <input
-                        type="text"
-                        placeholder="Cari foto Unsplash & Wikimedia (misal: panda, hewan, karhutla, dpr, polisi, ai, crypto)..."
-                        value={photoSearchQuery}
-                        onChange={(e) => setPhotoSearchQuery(e.target.value)}
-                        className="w-full pl-8 pr-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-[11px] text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b]"
-                      />
-                    </div>
-                    {photoSearchQuery && (
-                      <button
-                        type="button"
-                        onClick={() => setPhotoSearchQuery('')}
-                        className="px-2 py-1 rounded bg-zinc-800 text-zinc-400 hover:text-white text-[10px]"
-                      >
-                        Reset
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Thumbnail Gallery (Click to apply to this slide) */}
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                    {displayPhotos.map((photo) => (
-                      <button
-                        key={photo.id}
-                        type="button"
-                        onClick={() => handleSetSlidePhoto(idx, photo.url)}
-                        className={`group relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${
-                          slide.photoUrl === photo.url
-                            ? 'border-[#e2ff3b] scale-105 shadow-lg ring-2 ring-[#e2ff3b]/40'
-                            : 'border-zinc-800 hover:border-zinc-500 opacity-80 hover:opacity-100'
-                        }`}
-                        title={photo.name}
-                      >
-                        <img src={photo.url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
-                        {slide.photoUrl === photo.url && (
-                          <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#e2ff3b] text-black flex items-center justify-center font-bold text-[9px]">
-                            ✓
-                          </div>
-                        )}
-                        <span className="absolute inset-x-0 bottom-0 bg-black/70 text-[8px] text-white truncate px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                          {photo.name}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Custom URL Input Fallback */}
-                  <div className="flex items-center gap-2 pt-1">
-                    <input
-                      type="text"
-                      placeholder="...atau tempel link gambar Unsplash / Google Images khusus"
-                      value={customPhotoInput}
-                      onChange={(e) => setCustomPhotoInput(e.target.value)}
-                      className="flex-1 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-[11px] text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-700"
-                    />
+                <div className="flex items-center gap-1.5 text-zinc-400 bg-zinc-900/80 p-1 rounded-xl border border-zinc-800">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (activeSlideIndex > 0) {
+                        const updated = { ...editedPost };
+                        const temp = updated.slides[activeSlideIndex];
+                        updated.slides[activeSlideIndex] = updated.slides[activeSlideIndex - 1];
+                        updated.slides[activeSlideIndex - 1] = temp;
+                        setEditedPost(updated);
+                        setActiveSlideIndex(activeSlideIndex - 1);
+                      }
+                    }}
+                    disabled={activeSlideIndex === 0}
+                    className="p-1.5 rounded-lg hover:text-white hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+                    title="Geser Urutan ke Kiri / Atas"
+                  >
+                    <ArrowUp className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (activeSlideIndex < editedPost.slides.length - 1) {
+                        const updated = { ...editedPost };
+                        const temp = updated.slides[activeSlideIndex];
+                        updated.slides[activeSlideIndex] = updated.slides[activeSlideIndex + 1];
+                        updated.slides[activeSlideIndex + 1] = temp;
+                        setEditedPost(updated);
+                        setActiveSlideIndex(activeSlideIndex + 1);
+                      }
+                    }}
+                    disabled={activeSlideIndex === editedPost.slides.length - 1}
+                    className="p-1.5 rounded-lg hover:text-white hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+                    title="Geser Urutan ke Kanan / Bawah"
+                  >
+                    <ArrowDown className="w-3.5 h-3.5" />
+                  </button>
+                  {editedPost.slides.length > 2 && (
                     <button
                       type="button"
                       onClick={() => {
-                        if (customPhotoInput.trim()) {
-                          handleSetSlidePhoto(idx, customPhotoInput.trim());
-                          setCustomPhotoInput('');
-                        }
+                        const updated = { ...editedPost };
+                        updated.slides = updated.slides.filter((_, i) => i !== activeSlideIndex);
+                        updated.totalSlides = updated.slides.length;
+                        setEditedPost(updated);
+                        setActiveSlideIndex(Math.max(0, activeSlideIndex - 1));
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-[11px] flex items-center gap-1"
+                      className="p-1.5 rounded-lg hover:text-rose-400 hover:bg-rose-500/10 transition-all text-zinc-500"
+                      title="Hapus Slide Ini"
                     >
-                      <Plus className="w-3 h-3" />
-                      <span>Pakai</span>
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
-                  </div>
+                  )}
                 </div>
               </div>
-            ))}
+
+              {/* Title / Headline Input */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-mono text-zinc-300 font-bold uppercase flex items-center gap-1.5">
+                    <span>Judul / Headline Slide {activeSlideIndex + 1}:</span>
+                  </label>
+                  <span className="text-[10px] font-mono text-zinc-500">
+                    {currentSlide.title?.length || 0} karakter
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={currentSlide.title || ''}
+                  onChange={(e) => handleUpdateSlideTitle(activeSlideIndex, e.target.value)}
+                  placeholder="Masukkan headline slide yang padat & menarik..."
+                  className="w-full px-3.5 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm font-bold font-headline text-white placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b] transition-all"
+                />
+              </div>
+
+              {/* Content Body Textarea */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-mono text-zinc-300 font-bold uppercase flex items-center gap-1.5">
+                    <span>Isi Narasi / Teks Slide {activeSlideIndex + 1}:</span>
+                  </label>
+                  <span className={`text-[10px] font-mono ${
+                    (currentSlide.body?.length || 0) > 260 ? 'text-amber-400 font-bold' : 'text-zinc-500'
+                  }`}>
+                    {currentSlide.body?.length || 0}/260 karakter
+                  </span>
+                </div>
+                <textarea
+                  rows={3}
+                  value={currentSlide.body || ''}
+                  onChange={(e) => handleUpdateSlideBody(activeSlideIndex, e.target.value)}
+                  placeholder="Tulis narasi editorial slide di sini..."
+                  className="w-full p-3.5 bg-zinc-900 border border-zinc-800 rounded-xl text-xs font-sans text-zinc-100 leading-relaxed placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b] transition-all resize-y"
+                />
+              </div>
+
+              {/* Visual Photo Picker Section (Synchronized Instantly with Preview) */}
+              <div className="pt-3 border-t border-zinc-800 space-y-3 text-xs font-mono">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-zinc-200 font-bold uppercase flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#e2ff3b]" />
+                    <span>FOTO VISUAL SLIDE {activeSlideIndex + 1} (UNSPLASH / WIKIMEDIA)</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShuffleSeed(prev => prev + 1)}
+                    className="px-2.5 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-[10px] flex items-center gap-1.5 transition-all shadow-sm"
+                  >
+                    <Dices className="w-3.5 h-3.5 text-[#e2ff3b]" />
+                    <span>🎲 Acak Foto</span>
+                  </button>
+                </div>
+
+                {/* Smart Entity Keywords from Headline (1-Click Instant Search) */}
+                {smartKeywords.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800">
+                    <span className="text-[10px] text-[#e2ff3b] font-mono font-bold uppercase tracking-wider flex items-center gap-1 mr-1">
+                      <Sparkles className="w-3 h-3 text-[#e2ff3b]" />
+                      <span>Saran Judul:</span>
+                    </span>
+                    {smartKeywords.map((kw) => (
+                      <button
+                        key={kw}
+                        type="button"
+                        onClick={() => setPhotoSearchQuery(kw)}
+                        className={`px-2.5 py-1 rounded-md text-[10px] font-mono capitalize transition-all ${
+                          photoSearchQuery.toLowerCase() === kw.toLowerCase()
+                            ? 'bg-[#e2ff3b] text-black font-bold shadow'
+                            : 'bg-[#e2ff3b]/10 text-[#e2ff3b] hover:bg-[#e2ff3b] hover:text-black border border-[#e2ff3b]/30'
+                        }`}
+                      >
+                        #{kw}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Quick Search Topic Pills */}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {[
+                    { label: '🐼 Panda / Satwa', q: 'panda' },
+                    { label: '🌿 Hutan / Lingkungan', q: 'forest' },
+                    { label: '🏛️ DPR / Politik', q: 'politics' },
+                    { label: '⚖️ Sidang / Hukum', q: 'court' },
+                    { label: '🤖 AI & Robotik', q: 'robot' },
+                    { label: '📱 Gadget / Sosmed', q: 'technology' },
+                    { label: '💼 Bisnis & Pasar', q: 'business' },
+                    { label: '☕ Kopi Konoha', q: 'coffee' }
+                  ].map(pill => (
+                    <button
+                      key={pill.q}
+                      type="button"
+                      onClick={() => setPhotoSearchQuery(pill.q)}
+                      className={`px-2.5 py-1 rounded-md text-[10px] font-mono transition-all ${
+                        photoSearchQuery.toLowerCase() === pill.q.toLowerCase()
+                          ? 'bg-[#e2ff3b] text-black font-bold'
+                          : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                      }`}
+                    >
+                      {pill.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Search Bar for Unsplash / Wikimedia */}
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    {isSearchingPhotos ? (
+                      <Loader2 className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#e2ff3b] animate-spin" />
+                    ) : (
+                      <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                    )}
+                    <input
+                      type="text"
+                      placeholder="Ketik kata kunci foto Unsplash (misal: panda, kebakaran hutan, polisi, dpr)..."
+                      value={photoSearchQuery}
+                      onChange={(e) => setPhotoSearchQuery(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b] transition-all"
+                    />
+                  </div>
+                  {photoSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setPhotoSearchQuery('')}
+                      className="px-2.5 py-2 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white text-[11px]"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+
+                {/* Thumbnail Gallery (1-Click instant apply to active slide!) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] text-zinc-400 font-mono">
+                    <span>Pilih foto (otomatis masuk ke Preview Slide {activeSlideIndex + 1}):</span>
+                    <span className="text-[#e2ff3b] font-bold">1-Klik Ganti Preview</span>
+                  </div>
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                    {displayPhotos.map((photo) => {
+                      const isCurrentPhoto = currentSlide.photoUrl === photo.url;
+                      return (
+                        <button
+                          key={photo.id}
+                          type="button"
+                          onClick={() => handleSetSlidePhoto(activeSlideIndex, photo.url)}
+                          className={`group relative aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all ${
+                            isCurrentPhoto
+                              ? 'border-[#e2ff3b] scale-105 shadow-xl ring-2 ring-[#e2ff3b]/50 z-10'
+                              : 'border-zinc-800 hover:border-zinc-500 opacity-80 hover:opacity-100 hover:scale-[1.02]'
+                          }`}
+                          title={photo.name}
+                        >
+                          <img src={photo.url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                          {isCurrentPhoto && (
+                            <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[#e2ff3b] text-black flex items-center justify-center font-bold text-[10px] shadow-md">
+                              ✓
+                            </div>
+                          )}
+                          <span className="absolute inset-x-0 bottom-0 bg-black/80 text-[8px] text-white truncate px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            {photo.name}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Custom URL Input Fallback */}
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="text"
+                    placeholder="...atau tempel URL gambar custom khusus untuk slide ini"
+                    value={customPhotoInput}
+                    onChange={(e) => setCustomPhotoInput(e.target.value)}
+                    className="flex-1 px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-700"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (customPhotoInput.trim()) {
+                        handleSetSlidePhoto(activeSlideIndex, customPhotoInput.trim());
+                        setCustomPhotoInput('');
+                      }
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-mono text-xs flex items-center gap-1.5 transition-all shrink-0"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Pasang</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* BOTTOM QUICK SLIDE SWITCHER BAR */}
+              <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
+                <button
+                  type="button"
+                  disabled={activeSlideIndex === 0}
+                  onClick={() => setActiveSlideIndex(prev => Math.max(0, prev - 1))}
+                  className="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all disabled:opacity-30 disabled:hover:bg-zinc-900"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Slide Sebelumnya</span>
+                </button>
+
+                <div className="flex items-center gap-1.5">
+                  {editedPost.slides.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setActiveSlideIndex(i)}
+                      className={`w-6 h-6 rounded-lg text-xs font-mono font-bold transition-all ${
+                        activeSlideIndex === i
+                          ? 'bg-[#e2ff3b] text-black shadow-md scale-110'
+                          : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+
+                {activeSlideIndex < editedPost.slides.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => setActiveSlideIndex(prev => Math.min(editedPost.slides.length - 1, prev + 1))}
+                    className="px-3.5 py-2 rounded-xl bg-[#e2ff3b] hover:bg-[#d4f52f] text-black text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+                  >
+                    <span>Slide Berikutnya</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddSlide}
+                    className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-dashed border-[#e2ff3b]/40 text-[#e2ff3b] text-xs font-mono font-bold flex items-center gap-1.5 transition-all hover:border-[#e2ff3b]"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Tambah Slide Baru</span>
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         )}
 

@@ -139,19 +139,19 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-5 overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-[#0e1016] border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-5 overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-2xl my-auto text-zinc-900">
         {/* Header */}
-        <div className="p-5 border-b border-zinc-800 bg-zinc-950/80 flex items-center justify-between">
+        <div className="p-5 border-b border-zinc-200 bg-zinc-50 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#e2ff3b] text-black font-headline font-black text-sm flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-zinc-900 text-white font-headline font-black text-sm flex items-center justify-center shadow-sm">
               +
             </div>
             <div>
-              <h3 className="text-sm font-mono font-bold text-white uppercase tracking-wider">
+              <h3 className="text-sm font-mono font-bold text-zinc-900 uppercase tracking-wider">
                 INPUT BERITA BARU (LIVE PRODUCTION)
               </h3>
-              <p className="text-[11px] font-mono text-zinc-400">
+              <p className="text-[11px] font-mono text-zinc-500">
                 Otomatis mengenerate 5-slide carousel 4:5 dengan foto komersil bebas & sumber resmi
               </p>
             </div>
@@ -159,7 +159,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800"
+            className="p-1.5 text-zinc-400 hover:text-zinc-900 rounded-lg hover:bg-zinc-100"
           >
             <X className="w-5 h-5" />
           </button>
@@ -169,7 +169,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4 text-xs font-mono">
           {/* Judul Berita */}
           <div>
-            <label className="block text-zinc-300 font-bold mb-1.5 uppercase">
+            <label className="block text-zinc-800 font-bold mb-1.5 uppercase">
               1. Judul Berita / Topik:
             </label>
             <input
@@ -178,29 +178,29 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="Contoh: Kemenkominfo Wajibkan Lisensi AI Generatif Mulai Bulan Depan"
-              className="w-full px-3.5 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b]"
+              className="w-full px-3.5 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:border-zinc-900 shadow-sm"
             />
           </div>
 
           {/* Highlighted Words & Kategori */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-zinc-400 mb-1">Kata Kunci Highlight Kuning (Opsional):</label>
+              <label className="block text-zinc-600 mb-1">Kata Kunci Highlight Kuning (Opsional):</label>
               <input
                 type="text"
                 value={highlightKeyword}
                 onChange={(e) => setHighlightKeyword(e.target.value)}
                 placeholder="Contoh: WAJIBKAN LISENSI AI"
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b]"
+                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:border-zinc-900 shadow-sm"
               />
             </div>
 
             <div>
-              <label className="block text-zinc-400 mb-1">Kategori Konten:</label>
+              <label className="block text-zinc-600 mb-1">Kategori Konten:</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as any)}
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-[#e2ff3b]"
+                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 focus:bg-white focus:outline-none focus:border-zinc-900 shadow-sm"
               >
                 <option value="AI">AI (Artificial Intelligence)</option>
                 <option value="TEKNOLOGI">TEKNOLOGI</option>
@@ -214,38 +214,38 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           {/* Sumber Informasi & Link Asli */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-zinc-400 mb-1">Nama Sumber Berita Resmi:</label>
+              <label className="block text-zinc-600 mb-1">Nama Sumber Berita Resmi:</label>
               <input
                 type="text"
                 required
                 value={sourceName}
                 onChange={(e) => setSourceName(e.target.value)}
                 placeholder="detikInet, CNN Indonesia, Antara, The Verge..."
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b]"
+                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:border-zinc-900 shadow-sm"
               />
             </div>
 
             <div>
-              <label className="block text-zinc-400 mb-1">Link URL Artikel Sumber Asli:</label>
+              <label className="block text-zinc-600 mb-1">Link URL Artikel Sumber Asli:</label>
               <input
                 type="url"
                 required
                 value={sourceUrl}
                 onChange={(e) => setSourceUrl(e.target.value)}
                 placeholder="https://inet.detik.com/cyberlife/..."
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#e2ff3b]"
+                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:border-zinc-900 shadow-sm"
               />
             </div>
           </div>
 
           {/* Gambar Bebas Komersil / Open Source Presets */}
-          <div className="pt-2 border-t border-zinc-800 space-y-2">
+          <div className="pt-2 border-t border-zinc-200 space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-zinc-300 font-bold uppercase flex items-center gap-1.5">
-                <ImageIcon className="w-3.5 h-3.5 text-[#e2ff3b]" />
+              <label className="text-zinc-800 font-bold uppercase flex items-center gap-1.5">
+                <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
                 <span>Pilih Gambar Free Komersil (Unsplash CC0):</span>
               </label>
-              <span className="text-[10px] text-emerald-400 font-bold">100% AMAN HAK CIPTA</span>
+              <span className="text-[10px] text-emerald-700 font-bold">100% AMAN HAK CIPTA</span>
             </div>
 
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -259,8 +259,8 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   }}
                   className={`aspect-[4/3] rounded-xl overflow-hidden border-2 relative transition-all ${
                     selectedImageIndex === idx && !customImageUrl
-                      ? 'border-[#e2ff3b] ring-2 ring-[#e2ff3b]/40 scale-105'
-                      : 'border-zinc-800 opacity-60 hover:opacity-100'
+                      ? 'border-blue-600 ring-2 ring-blue-500/30 scale-105 shadow-md'
+                      : 'border-zinc-200 opacity-80 hover:opacity-100 hover:scale-[1.02]'
                   }`}
                 >
                   <img src={img.url} alt="" className="w-full h-full object-cover" />
@@ -278,7 +278,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 value={customImageUrl}
                 onChange={(e) => setCustomImageUrl(e.target.value)}
                 placeholder="...atau tempel URL foto komersil bebas milik kamu sendiri"
-                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-600 focus:outline-none focus:border-[#e2ff3b]"
+                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:border-zinc-400 shadow-sm"
               />
             </div>
           </div>
@@ -288,9 +288,9 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             <button
               type="submit"
               disabled={isProcessing}
-              className="w-full py-3.5 bg-[#e2ff3b] hover:bg-[#d4f52f] disabled:opacity-50 text-black font-bold font-mono text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95"
+              className="w-full py-3.5 bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 text-white font-bold font-mono text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 text-[#e2ff3b]" />
               <span>{isProcessing ? 'MENYUSUN 5 SLIDE CAROUSEL...' : 'GENERATE & MASUKKAN KE ANTRIAN REVIEW'}</span>
             </button>
           </div>

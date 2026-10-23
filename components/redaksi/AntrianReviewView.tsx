@@ -70,30 +70,30 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
   return (
     <div className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-8 space-y-6">
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 pb-5">
         <div className="space-y-1">
           <div className="text-xs font-mono tracking-widest text-zinc-500 uppercase font-semibold">
             MEJA EDITOR
           </div>
-          <h1 className="text-4xl sm:text-6xl font-black font-headline tracking-tight text-white leading-none">
+          <h1 className="text-4xl sm:text-6xl font-black font-headline tracking-tight text-zinc-900 leading-none">
             ANTRIAN REVIEW
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl pt-1">
+          <p className="text-xs sm:text-sm text-zinc-600 max-w-2xl pt-1">
             Cek fakta dari sumber asli, edit teks dan foto, lalu setujui. Tidak ada yang terposting tanpa persetujuan kamu.
           </p>
         </div>
 
         <button
           onClick={onOpenCreateModal}
-          className="px-4 py-2.5 bg-[#e2ff3b] hover:bg-[#d4f52f] text-black font-mono font-bold text-xs rounded-xl shadow-lg transition-all flex items-center gap-2 active:scale-95 shrink-0 self-start sm:self-auto"
+          className="px-4 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-mono font-bold text-xs rounded-xl shadow transition-all flex items-center gap-2 active:scale-95 shrink-0 self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#e2ff3b]" />
           <span>+ Buat Berita Baru</span>
         </button>
       </div>
 
       {/* Tabs and Action Buttons Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-3">
         <div className="flex items-center gap-6 overflow-x-auto no-scrollbar text-xs font-mono">
           {tabs.map((tab) => (
             <button
@@ -101,13 +101,13 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
               onClick={() => setActiveTab(tab.id as any)}
               className={`pb-2 transition-all flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'text-white font-bold border-b-2 border-white'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'text-zinc-950 font-bold border-b-2 border-zinc-950'
+                  : 'text-zinc-500 hover:text-zinc-800'
               }`}
             >
               <span>{tab.label}</span>
               <span className={`text-[11px] font-bold px-1.5 py-0.2 rounded-full ${
-                tab.id === 'perlu_review' && tab.count > 0 ? 'bg-[#e2ff3b] text-black' : 'bg-zinc-800 text-zinc-400'
+                tab.id === 'perlu_review' && tab.count > 0 ? 'bg-[#e2ff3b] text-black' : 'bg-zinc-200 text-zinc-700'
               }`}>
                 {tab.count}
               </span>
@@ -125,44 +125,44 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
               className="flex flex-col justify-between space-y-2.5 animate-pulse"
             >
               {/* The 4:5 Card Preview Skeleton */}
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800/80 bg-zinc-950 flex flex-col justify-between shadow-2xl">
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-200 bg-white flex flex-col justify-between shadow-md">
                 {/* Top Half: Cover Skeleton */}
-                <div className="relative h-1/2 w-full bg-zinc-900 overflow-hidden flex items-center justify-center">
+                <div className="relative h-1/2 w-full bg-zinc-100 overflow-hidden flex items-center justify-center">
                   <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
-                    <div className="h-3 w-20 bg-zinc-800 rounded" />
-                    <div className="h-3 w-8 bg-zinc-800 rounded" />
+                    <div className="h-3 w-20 bg-zinc-200 rounded" />
+                    <div className="h-3 w-8 bg-zinc-200 rounded" />
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-zinc-800/60" />
+                  <div className="w-8 h-8 rounded-full bg-zinc-200" />
                 </div>
 
                 {/* Bottom Half: Theme Color Skeleton */}
-                <div className="h-1/2 w-full p-3.5 sm:p-4 flex flex-col justify-between bg-zinc-900/90 border-t border-zinc-800/60">
+                <div className="h-1/2 w-full p-3.5 sm:p-4 flex flex-col justify-between bg-zinc-50 border-t border-zinc-200">
                   <div className="space-y-2">
-                    <div className="h-4 w-16 bg-zinc-800 rounded" />
+                    <div className="h-4 w-16 bg-zinc-200 rounded" />
                     <div className="space-y-1.5 pt-1">
-                      <div className="h-3.5 w-full bg-zinc-800 rounded" />
-                      <div className="h-3.5 w-4/5 bg-zinc-800 rounded" />
-                      <div className="h-3 w-2/3 bg-zinc-800/60 rounded" />
+                      <div className="h-3.5 w-full bg-zinc-200 rounded" />
+                      <div className="h-3.5 w-4/5 bg-zinc-200 rounded" />
+                      <div className="h-3 w-2/3 bg-zinc-200/80 rounded" />
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-zinc-800/50">
-                    <div className="h-3 w-16 bg-zinc-800/60 rounded" />
-                    <div className="h-6 w-6 rounded-md bg-zinc-800" />
+                  <div className="flex items-center justify-between pt-2 border-t border-zinc-200">
+                    <div className="h-3 w-16 bg-zinc-200 rounded" />
+                    <div className="h-6 w-6 rounded-md bg-zinc-200" />
                   </div>
                 </div>
               </div>
 
               {/* Sub-text Skeleton */}
               <div className="space-y-1.5 px-1">
-                <div className="h-3 w-24 bg-zinc-800/60 rounded" />
-                <div className="h-3.5 w-3/4 bg-zinc-800/50 rounded" />
+                <div className="h-3 w-24 bg-zinc-200 rounded" />
+                <div className="h-3.5 w-3/4 bg-zinc-200 rounded" />
               </div>
 
               {/* Action Buttons Skeleton */}
               <div className="flex gap-2 pt-1 px-1">
-                <div className="h-7 flex-1 bg-zinc-800/60 rounded-xl" />
-                <div className="h-7 w-16 bg-zinc-800/60 rounded-xl" />
+                <div className="h-7 flex-1 bg-zinc-200 rounded-xl" />
+                <div className="h-7 w-16 bg-zinc-200 rounded-xl" />
               </div>
             </div>
           ))
@@ -175,7 +175,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
             {/* The 4:5 Card Preview */}
             <div 
               onClick={() => onOpenDetailEditor(post)}
-              className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 bg-black flex flex-col justify-between shadow-2xl cursor-pointer hover:border-zinc-700 transition-all hover:-translate-y-1"
+              className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-200/90 bg-black flex flex-col justify-between shadow-md hover:shadow-xl cursor-pointer hover:border-zinc-300 transition-all hover:-translate-y-1"
             >
               {/* Top Half: Cover Image */}
               <div className="relative h-1/2 w-full overflow-hidden bg-zinc-950">
@@ -251,7 +251,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
             <div className="space-y-1.5 px-1">
               <div 
                 onClick={() => onOpenDetailEditor(post)}
-                className="text-xs font-bold text-zinc-200 line-clamp-1 group-hover:text-white transition-colors cursor-pointer"
+                className="text-xs font-bold text-zinc-900 line-clamp-1 group-hover:text-blue-600 transition-colors cursor-pointer"
               >
                 {post.title}
               </div>
@@ -261,9 +261,9 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                   href={post.sourceUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-cyan-400 flex items-center gap-1 transition-colors"
+                  className="hover:text-blue-600 flex items-center gap-1 transition-colors"
                 >
-                  <Globe className="w-3 h-3 text-zinc-500" />
+                  <Globe className="w-3 h-3 text-zinc-400" />
                   <span>{post.source}</span>
                   <ExternalLink className="w-2.5 h-2.5" />
                 </a>
@@ -275,24 +275,24 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                 <div className="flex items-center gap-1.5 pt-1">
                   <button
                     onClick={() => onApprovePost(post.id)}
-                    className="flex-1 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 rounded-lg text-[11px] font-mono font-bold flex items-center justify-center gap-1 transition-all"
+                    className="flex-1 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 rounded-lg text-[11px] font-mono font-bold flex items-center justify-center gap-1 transition-all shadow-sm"
                   >
                     <Check className="w-3 h-3" />
                     <span>Setujui</span>
                   </button>
                   <button
                     onClick={(e) => handleCopyCaption(e, post)}
-                    className={`py-1.5 px-2 rounded-lg text-[11px] font-mono flex items-center gap-1 transition-all border ${
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-mono flex items-center gap-1 transition-all border shadow-sm ${
                       copiedPostId === post.id
-                        ? 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
-                        : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#e2ff3b] border-zinc-800'
+                        ? 'bg-emerald-100 border-emerald-400 text-emerald-800'
+                        : 'bg-white hover:bg-zinc-50 text-zinc-700 hover:text-black border-zinc-300'
                     }`}
                     title="Salin Caption Instagram"
                   >
                     {copiedPostId === post.id ? (
                       <>
-                        <Check className="w-3 h-3 text-emerald-400" />
-                        <span className="text-[10px] text-emerald-300">Tersalin</span>
+                        <Check className="w-3 h-3 text-emerald-600" />
+                        <span className="text-[10px] text-emerald-700 font-bold">Tersalin</span>
                       </>
                     ) : (
                       <>
@@ -303,7 +303,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                   </button>
                   <button
                     onClick={() => onRejectPost(post.id)}
-                    className="py-1.5 px-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-rose-400 border border-zinc-800 rounded-lg text-[11px] font-mono transition-all"
+                    className="py-1.5 px-2 bg-white hover:bg-rose-50 text-zinc-500 hover:text-rose-600 border border-zinc-200 hover:border-rose-300 rounded-lg text-[11px] font-mono transition-all shadow-sm"
                     title="Tolak / Arsipkan"
                   >
                     <XCircle className="w-3.5 h-3.5" />
@@ -313,15 +313,15 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                 <div className="flex items-center gap-1.5 pt-1">
                   <button
                     onClick={(e) => handleCopyCaption(e, post)}
-                    className={`flex-1 py-1.5 rounded-lg text-[11px] font-mono font-bold flex items-center justify-center gap-1 transition-all border ${
+                    className={`flex-1 py-1.5 rounded-lg text-[11px] font-mono font-bold flex items-center justify-center gap-1 transition-all border shadow-sm ${
                       copiedPostId === post.id
-                        ? 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
-                        : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-[#e2ff3b] border-zinc-800'
+                        ? 'bg-emerald-100 border-emerald-400 text-emerald-800'
+                        : 'bg-white hover:bg-zinc-50 text-zinc-700 hover:text-black border-zinc-300'
                     }`}
                   >
                     {copiedPostId === post.id ? (
                       <>
-                        <Check className="w-3 h-3 text-emerald-400" />
+                        <Check className="w-3 h-3 text-emerald-600" />
                         <span>Caption Tersalin!</span>
                       </>
                     ) : (
@@ -333,9 +333,10 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
                   </button>
                   <button
                     onClick={() => onOpenDetailEditor(post)}
-                    className="py-1.5 px-2.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 rounded-lg text-[11px] font-mono transition-all"
+                    className="py-1.5 px-2.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-[11px] font-mono transition-all shadow-sm flex items-center gap-1 font-bold"
                     title="Buka Editor Carousel"
                   >
+                    <span>Edit</span>
                     <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
@@ -348,15 +349,15 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
 
       {/* Empty State */}
       {!isLoading && filteredPosts.length === 0 && (
-        <div className="text-center py-16 bg-[#0f1117] rounded-3xl border border-dashed border-zinc-800 space-y-3">
-          <CheckSquare className="w-10 h-10 text-zinc-600 mx-auto" />
-          <h3 className="text-base font-bold text-white">Tidak Ada Konten di Tab Ini</h3>
+        <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-zinc-300 space-y-3 shadow-sm">
+          <CheckSquare className="w-10 h-10 text-zinc-400 mx-auto" />
+          <h3 className="text-base font-bold text-zinc-900">Tidak Ada Konten di Tab Ini</h3>
           <p className="text-xs font-mono text-zinc-500 max-w-sm mx-auto">
             Semua antrean telah diproses. Tekan tombol di bawah untuk membuat konten baru dari rilis berita terkini.
           </p>
           <button
             onClick={onOpenCreateModal}
-            className="px-4 py-2 bg-[#e2ff3b] text-black font-mono font-bold text-xs rounded-xl"
+            className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white font-mono font-bold text-xs rounded-xl shadow"
           >
             + Buat Berita Baru Sekarang
           </button>

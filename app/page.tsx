@@ -141,12 +141,12 @@ export default function HomePage() {
   const publishedCount = posts.filter((p) => p.status === 'sudah_posting').length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090a0f] text-zinc-100 bg-redaksi-grid relative">
+    <div className="min-h-screen flex flex-col bg-[#f8f9fa] text-zinc-900 bg-redaksi-grid relative">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-900 border border-[#e2ff3b]/60 text-white shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
-          <Sparkles className="w-4 h-4 text-[#e2ff3b] shrink-0" />
-          <span className="text-xs font-mono">{toastMessage}</span>
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-zinc-200 text-zinc-900 shadow-2xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span className="text-xs font-mono font-medium">{toastMessage}</span>
         </div>
       )}
 

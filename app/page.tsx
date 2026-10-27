@@ -10,6 +10,7 @@ import { SumberBeritaView } from '@/components/redaksi/SumberBeritaView';
 import { InstagramGridView } from '@/components/redaksi/InstagramGridView';
 import { CreatePostModal } from '@/components/redaksi/CreatePostModal';
 import { INITIAL_POSTS, RedaksiPost } from '@/data/redaksiData';
+import { loadRemote, saveRemote } from '@/utils/remoteState';
 
 const LOCAL_STORAGE_KEY = 'indonesia_hari_ini_posts_v5';
 
@@ -22,28 +23,21 @@ export default function HomePage() {
   const [isScouting, setIsScouting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Load from localStorage on mount & auto-sync daily news in background
+  // Load on mount (database first, localStorage as fallback), then auto-sync daily news
   useEffect(() => {
-    let currentPosts = INITIAL_POSTS;
-    try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        currentPosts = JSON.parse(saved);
-        setPosts(currentPosts);
-      } else {
-        setPosts(INITIAL_POSTS);
+    const persist = (list: RedaksiPost[]) => {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
+      } catch (e) {
+        console.warn('LocalStorage save failed', e);
       }
-    } catch (e) {
-      console.warn('LocalStorage load failed', e);
-      setPosts(INITIAL_POSTS);
-    } finally {
-      setIsLoading(false);
-    }
+      saveRemote('posts', list);
+    };
 
-    // Auto-sync every day or after 3 hours in the background
-    const lastSync = localStorage.getItem('indonesia_hari_ini_last_sync');
-    const now = Date.now();
-    if (!lastSync || now - parseInt(lastSync, 10) > 3 * 60 * 60 * 1000) {
+    const syncNews = (currentPosts: RedaksiPost[]) => {
+      const lastSync = localStorage.getItem('indonesia_hari_ini_last_sync');
+      const now = Date.now();
+      if (lastSync && now - parseInt(lastSync, 10) <= 3 * 60 * 60 * 1000) return;
       fetch('/api/rss?limit=12')
         .then((r) => r.json())
         .then((data) => {
@@ -53,17 +47,41 @@ export default function HomePage() {
             if (newItems.length > 0) {
               const merged = [...newItems, ...currentPosts];
               setPosts(merged);
-              try {
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
-              } catch (err) {
-                console.warn(err);
-              }
+              persist(merged);
             }
             localStorage.setItem('indonesia_hari_ini_last_sync', String(now));
           }
         })
         .catch((err) => console.warn('Auto-sync error:', err));
-    }
+    };
+
+    (async () => {
+      let currentPosts: RedaksiPost[] = INITIAL_POSTS;
+      let hasLocal = false;
+      try {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) {
+          currentPosts = JSON.parse(saved);
+          hasLocal = true;
+        }
+      } catch (e) {
+        console.warn('LocalStorage load failed', e);
+      }
+
+      const remote = await loadRemote('posts');
+      if (remote.ok && remote.value) {
+        currentPosts = remote.value as RedaksiPost[];
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentPosts));
+        } catch {}
+      } else if (remote.ok && hasLocal) {
+        saveRemote('posts', currentPosts);
+      }
+
+      setPosts(currentPosts);
+      setIsLoading(false);
+      syncNews(currentPosts);
+    })();
   }, []);
 
   // Save to localStorage whenever posts change
@@ -74,6 +92,7 @@ export default function HomePage() {
     } catch (e) {
       console.warn('LocalStorage save failed', e);
     }
+    saveRemote('posts', newPosts);
   };
 
   const handleOpenEditor = (post: RedaksiPost) => {

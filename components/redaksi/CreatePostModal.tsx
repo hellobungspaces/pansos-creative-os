@@ -1,5 +1,6 @@
 'use client';
 
+import { CATEGORIES } from '@/utils/categoryTheme';
 import React, { useState } from 'react';
 import { X, Sparkles, Image as ImageIcon, Link2, Check, Upload, Globe, Shield } from 'lucide-react';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
@@ -25,7 +26,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   onPostCreated
 }) => {
   const [headline, setHeadline] = useState('');
-  const [category, setCategory] = useState<'AI' | 'SOSMED' | 'TEKNOLOGI' | 'BISNIS' | 'MARKETING'>('AI');
+  const [category, setCategory] = useState<string>('KONOHA');
   const [sourceName, setSourceName] = useState('detikInet');
   const [sourceUrl, setSourceUrl] = useState('https://inet.detik.com');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -202,11 +203,9 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 onChange={(e) => setCategory(e.target.value as any)}
                 className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 focus:bg-white focus:outline-none focus:border-zinc-900 shadow-sm"
               >
-                <option value="AI">AI (Artificial Intelligence)</option>
-                <option value="TEKNOLOGI">TEKNOLOGI</option>
-                <option value="SOSMED">SOSMED & KULTUR</option>
-                <option value="BISNIS">BISNIS & STARTUP</option>
-                <option value="MARKETING">MARKETING & ADS</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c.tag} value={c.tag}>{c.icon} {c.name}</option>
+                ))}
               </select>
             </div>
           </div>

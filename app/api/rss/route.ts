@@ -69,18 +69,43 @@ const FREE_IMAGES: Record<string, string[]> = {
   ]
 };
 
+// Aliases: dedicated pools for new categories fall back to the closest verified pool
+FREE_IMAGES.HUKUM = FREE_IMAGES.KONOHA;
+FREE_IMAGES.KRIMINAL = [FREE_IMAGES.KONOHA[2], FREE_IMAGES.KONOHA[1], FREE_IMAGES.KONOHA[4], FREE_IMAGES.KONOHA[0], FREE_IMAGES.KONOHA[3]];
+FREE_IMAGES.KESEHATAN = [FREE_IMAGES.KONOHA[4], FREE_IMAGES.KONOHA[5], FREE_IMAGES.LINGKUNGAN[3], FREE_IMAGES.BISNIS[3], FREE_IMAGES.KONOHA[3]];
+FREE_IMAGES.PENDIDIKAN = [FREE_IMAGES.KONOHA[5], FREE_IMAGES.BISNIS[3], FREE_IMAGES.KONOHA[4], FREE_IMAGES.TEKNOLOGI[2], FREE_IMAGES.KONOHA[3]];
+FREE_IMAGES.OLAHRAGA = [FREE_IMAGES.KONOHA[4], FREE_IMAGES.KONOHA[3], FREE_IMAGES.SOSMED[2], FREE_IMAGES.KONOHA[5], FREE_IMAGES.BISNIS[4]];
+FREE_IMAGES.HIBURAN = [FREE_IMAGES.SOSMED[0], FREE_IMAGES.SOSMED[3], FREE_IMAGES.SOSMED[4], FREE_IMAGES.SOSMED[5], FREE_IMAGES.SOSMED[1]];
+FREE_IMAGES.TRANSPORTASI = [FREE_IMAGES.KONOHA[4], FREE_IMAGES.BISNIS[4], FREE_IMAGES.KONOHA[5], FREE_IMAGES.KONOHA[3], FREE_IMAGES.LINGKUNGAN[2]];
+FREE_IMAGES.VIRAL = [FREE_IMAGES.SOSMED[1], FREE_IMAGES.SOSMED[0], FREE_IMAGES.SOSMED[4], FREE_IMAGES.KONOHA[4], FREE_IMAGES.SOSMED[5]];
+
 interface FeedSourceDef {
   name: string;
   url: string;
-  categoryHint?: 'AI' | 'SOSMED' | 'TEKNOLOGI' | 'BISNIS' | 'MARKETING';
+  categoryHint: string;
 }
 
+const gnews = (q: string) => `https://news.google.com/rss/search?q=${encodeURIComponent(q)}+when:1d&hl=id&gl=ID&ceid=ID:id`;
+
+// Mixed national feed: politik, hukum, ekonomi, olahraga, hiburan, kesehatan, dll. Tech is only a minority.
 const SOURCES: FeedSourceDef[] = [
-  { name: 'ANTARA News', url: 'https://www.antaranews.com/rss/tekno.xml', categoryHint: 'TEKNOLOGI' },
-  { name: 'CNN Indonesia', url: 'https://www.cnnindonesia.com/teknologi/rss', categoryHint: 'TEKNOLOGI' },
-  { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/tech/rss', categoryHint: 'BISNIS' },
-  { name: 'Detikcom (detikInet)', url: 'https://news.google.com/rss/search?q=site:detik.com/inet&hl=id&gl=ID&ceid=ID:id', categoryHint: 'TEKNOLOGI' },
-  { name: 'Kompas.com', url: 'https://news.google.com/rss/search?q=site:kompas.com+teknologi&hl=id&gl=ID&ceid=ID:id', categoryHint: 'TEKNOLOGI' }
+  { name: 'ANTARA Terkini', url: 'https://www.antaranews.com/rss/terkini.xml', categoryHint: 'KONOHA' },
+  { name: 'ANTARA Politik', url: 'https://www.antaranews.com/rss/politik.xml', categoryHint: 'KONOHA' },
+  { name: 'ANTARA Hukum', url: 'https://www.antaranews.com/rss/hukum.xml', categoryHint: 'HUKUM' },
+  { name: 'ANTARA Ekonomi', url: 'https://www.antaranews.com/rss/ekonomi.xml', categoryHint: 'BISNIS' },
+  { name: 'ANTARA Olahraga', url: 'https://www.antaranews.com/rss/olahraga.xml', categoryHint: 'OLAHRAGA' },
+  { name: 'ANTARA Lifestyle', url: 'https://www.antaranews.com/rss/lifestyle.xml', categoryHint: 'VIRAL' },
+  { name: 'CNN Indonesia Nasional', url: 'https://www.cnnindonesia.com/nasional/rss', categoryHint: 'KONOHA' },
+  { name: 'CNN Indonesia Hiburan', url: 'https://www.cnnindonesia.com/hiburan/rss', categoryHint: 'HIBURAN' },
+  { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/news/rss', categoryHint: 'BISNIS' },
+  { name: 'Kompas.com', url: gnews('site:kompas.com'), categoryHint: 'KONOHA' },
+  { name: 'Detikcom', url: gnews('site:detik.com viral'), categoryHint: 'VIRAL' },
+  { name: 'Kesehatan', url: gnews('kesehatan Indonesia'), categoryHint: 'KESEHATAN' },
+  { name: 'Kriminal', url: gnews('kriminal polisi Indonesia'), categoryHint: 'KRIMINAL' },
+  { name: 'Transportasi & Kota', url: gnews('KRL OR macet OR transportasi Jakarta'), categoryHint: 'TRANSPORTASI' },
+  { name: 'Pendidikan', url: gnews('pendidikan OR kampus OR sekolah Indonesia'), categoryHint: 'PENDIDIKAN' },
+  { name: 'Google Trends ID', url: 'https://trends.google.com/trending/rss?geo=ID', categoryHint: 'VIRAL' },
+  { name: 'CNN Indonesia Teknologi', url: 'https://www.cnnindonesia.com/teknologi/rss', categoryHint: 'TEKNOLOGI' },
 ];
 
 function cleanXmlText(raw: string): string {
@@ -97,45 +122,31 @@ function cleanXmlText(raw: string): string {
     .trim();
 }
 
+// Ordered rules, first match wins. Specific topics first so e.g. "Ai Lian" panda never hits AI.
+const CATEGORY_RULES: Array<[string, RegExp]> = [
+  ['FAUNA', /\b(panda|hewan|satwa|binatang|kucing|anjing|harimau|gajah|burung|fauna|zoo|taman safari|konservasi)\b/i],
+  ['LINGKUNGAN', /\b(karhutla|kebakaran hutan|emisi|polusi|iklim|banjir|gempa|longsor|erupsi|cuaca|bmkg|lingkungan|karbon|bencana)\b/i],
+  ['HUKUM', /\b(kpk|korupsi|kejaksaan|kejagung|sidang|hakim|vonis|pasal|pengadilan|mk|mahkamah|tersangka|dakwaan)\b/i],
+  ['KRIMINAL', /\b(polisi|polda|polres|pembunuhan|pencurian|penipuan|begal|narkoba|ditangkap|pelaku|korban|tawuran|judol|judi online)\b/i],
+  ['KONOHA', /\b(dpr|menteri|presiden|prabowo|gibran|istana|pilkada|pemilu|bawaslu|apbn|kabinet|gubernur|bupati|kebijakan|demo|unjuk rasa|partai)\b/i],
+  ['KESEHATAN', /\b(kesehatan|keracunan|mbg|rumah sakit|penyakit|vaksin|bpjs|dokter|obat|gizi|stunting|kemenkes|wabah|virus)\b/i],
+  ['PENDIDIKAN', /\b(sekolah|kampus|mahasiswa|siswa|guru|kuliah|ukt|beasiswa|snbp|snbt|kurikulum|kemendikbud|lowongan|phk|pengangguran|cpns)\b/i],
+  ['OLAHRAGA', /\b(timnas|sepak bola|liga|piala|badminton|motogp|f1|pssi|garuda|atlet|olimpiade|juara|gol|pelatih)\b/i],
+  ['HIBURAN', /\b(artis|selebriti|film|bioskop|konser|penyanyi|aktor|aktris|drakor|k-pop|kpop|album|sinetron|seleb)\b/i],
+  ['TRANSPORTASI', /\b(krl|mrt|lrt|kereta|tol|macet|bandara|mudik|transjakarta|bbm|pertalite|motor listrik|mobil)\b/i],
+  ['AI', /\b(artificial intelligence|kecerdasan buatan|chatgpt|openai|claude|gemini|llm|deepfake|deepseek|model ai|generative ai)\b/i],
+  ['SOSMED', /\b(whatsapp|instagram|tiktok|twitter|medsos|sosmed|influencer|youtube|threads|netizen|warganet)\b/i],
+  ['BISNIS', /\b(saham|ihsg|investor|investasi|fintech|startup|ipo|triliun|ekonomi|rupiah|dolar|kripto|bitcoin|harga emas|inflasi|pajak|gaji|umr|subsidi)\b/i],
+  ['MARKETING', /\b(iklan|marketing|branding|kampanye)\b/i],
+  ['VIRAL', /\b(viral|trending|heboh|geger|ramai|fyp)\b/i],
+];
+
 function detectCategory(title: string, desc: string, defaultCat: string): string {
-  const combined = (title + ' ' + desc).toLowerCase();
-
-  // 1. Animals / Fauna / Satwa (CHECK FIRST to avoid Panda name like "Ai Lian" matching AI!)
-  if (combined.match(/\b(panda|hewan|satwa|binatang|kucing|anjing|harimau|gajah|burung|fauna|zoo|taman safari|konservasi|satwa liar)\b/i)) {
-    return 'FAUNA';
+  const combined = `${title} ${desc}`;
+  for (const [cat, re] of CATEGORY_RULES) {
+    if (re.test(combined)) return cat;
   }
-
-  // 2. Lingkungan / Karhutla / Iklim / Cuaca
-  if (combined.match(/\b(karhutla|kebakaran hutan|emisi|polusi|iklim|banjir|gempa|cuaca|bmkg|lingkungan|karbon|cams)\b/i)) {
-    return 'LINGKUNGAN';
-  }
-
-  // 3. Konoha / Politik / Hukum / Pemerintahan / Kasus
-  if (combined.match(/\b(dpr|menteri|kpk|korupsi|polisi|kejaksaan|uu|sidang|hakim|pasal|hukum|pejabat|pilkada|pemilu|tersangka|bawaslu)\b/i)) {
-    return 'KONOHA';
-  }
-
-  // 4. Strict Artificial Intelligence (Never single "ai" in names like Ai Lian or words like sampai)
-  if (combined.match(/\b(artificial intelligence|kecerdasan buatan|chatgpt|openai|claude|gemini|llm|deepfake|deepseek|model ai|teknologi ai|generative ai)\b/i)) {
-    return 'AI';
-  }
-
-  // 5. Sosmed / Media Sosial / Aplikasi Komunikasi
-  if (combined.match(/\b(whatsapp|wa|instagram|ig|tiktok|x |twitter|medsos|sosmed|influencer|youtube|meta|threads|netizen|warganet|viral)\b/i)) {
-    return 'SOSMED';
-  }
-
-  // 6. Bisnis / Finansial / Cuan / Pasar
-  if (combined.match(/\b(saham|investor|investasi|fintech|cuan|startup|ipo|triliun|miliar|ekonomi|rupiah|dolar|pasar modal|kripto|bitcoin|bappebti|gaji|umr|phk)\b/i)) {
-    return 'BISNIS';
-  }
-
-  // 7. Marketing / Iklan
-  if (combined.match(/\b(iklan|marketing|iklan visual|branding|kampanye|penjualan|sales|ads)\b/i)) {
-    return 'MARKETING';
-  }
-
-  return defaultCat || 'TEKNOLOGI';
+  return defaultCat || 'KONOHA';
 }
 
 function makeHighlightedTitle(title: string): string {
@@ -302,136 +313,165 @@ function findBestMatchingPhotos(title: string, desc: string, category: string, s
   return pool;
 }
 
-// Builds 5 COMPLETE, viral, logically cohesive slides with dedicated photos & punchy copy
+// Short, punchy copy per category: [title, body] for slides 2-5. Keep bodies under ~110 chars.
+type SlideCopy = Array<[string, string]>;
+
+const DEFAULT_COPY: SlideCopy = [
+  ['DUDUK PERKARA', 'Intinya: ini yang sebenarnya terjadi, tanpa framing dan potongan sepihak.'],
+  ['YANG BIKIN RAMAI', 'Satu fakta ini yang bikin publik langsung bereaksi.'],
+  ['DAMPAKNYA KE KAMU', 'Bukan cuma berita lewat. Ini bisa nyentuh rutinitas kita sehari-hari.'],
+  ['MENURUT KAMU?', 'Setuju atau nggak? Tulis opinimu di komentar 👇'],
+];
+
+const SLIDE_COPY: Record<string, SlideCopy> = {
+  KONOHA: [
+    ['KRONOLOGINYA', 'Rentetan kejadian yang bikin publik gaduh, diringkas biar kamu nggak ketinggalan.'],
+    ['YANG DISOROT', 'Publik menyorot satu hal: konsistensi aturan, tajam ke siapa dan tumpul ke siapa.'],
+    ['KENAPA PENTING', 'Keputusan di atas sana ujungnya ke dompet dan hidup kita juga.'],
+    ['KAWAL ATAU NGUAP?', 'Bakal tuntas sampai akar, atau ketutup isu baru? Tebak di komentar 👇'],
+  ],
+  HUKUM: [
+    ['KRONOLOGI KASUS', 'Dari awal sampai sekarang, urutan kejadiannya begini.'],
+    ['PASAL & PROSES', 'Ini pasal yang disorot dan tahapan hukum yang bakal dilalui.'],
+    ['YANG DIPERTARUHKAN', 'Putusannya bakal jadi preseden. Makanya semua mata tertuju ke sini.'],
+    ['ADIL NGGAK MENURUTMU?', 'Hukum tegak lurus atau masih pilih-pilih? Suaramu di komentar 👇'],
+  ],
+  KRIMINAL: [
+    ['KRONOLOGI KEJADIAN', 'Begini urutan kejadian versi laporan resmi aparat.'],
+    ['FAKTA DI LAPANGAN', 'Temuan polisi sejauh ini. Status masih dalam pengembangan.'],
+    ['PELAJARAN BUAT KITA', 'Modus makin licin. Waspada dan jangan asal percaya.'],
+    ['PERNAH ALAMI?', 'Ada pengalaman serupa? Bagi tipsnya biar yang lain aman 👇'],
+  ],
+  BISNIS: [
+    ['ANGKANYA', 'Pergerakan pasar dan harga yang jadi sorotan hari ini.'],
+    ['SIAPA CUAN, SIAPA BONCOS', 'Ada yang untung besar, ada yang kena imbas. Cek posisimu.'],
+    ['AMANIN DOMPETMU', 'Dana darurat dulu, jangan taruh semua telur di satu keranjang.'],
+    ['DOMPETMU LAGI IJO?', 'Hijau atau merah bulan ini? Curhat di komentar 👇'],
+  ],
+  OLAHRAGA: [
+    ['JALANNYA LAGA', 'Momen kunci yang bikin laga ini jadi omongan.'],
+    ['SOROTAN UTAMA', 'Satu keputusan dan satu aksi yang mengubah hasil akhir.'],
+    ['EFEKNYA KE DEPAN', 'Hasil ini menentukan langkah berikutnya di klasemen.'],
+    ['TIM SIAPA KAMU?', 'Puas atau emosi? Tulis prediksimu di komentar 👇'],
+  ],
+  HIBURAN: [
+    ['AWAL MULA', 'Berawal dari satu kabar yang langsung menyebar di linimasa.'],
+    ['YANG BIKIN HEBOH', 'Reaksi netizen kebelah dua. Ini cuplikan yang paling ramai.'],
+    ['KENAPA RAME BANGET', 'Karena menyentuh hal yang dekat sama kita semua.'],
+    ['KAMU TIM MANA?', 'Pro atau kontra? Debat sehat di komentar 👇'],
+  ],
+  KESEHATAN: [
+    ['APA YANG TERJADI', 'Kabar kesehatan terbaru yang perlu kamu tahu.'],
+    ['KATA PAKAR', 'Ini penjelasan tenaga medis dan data resminya.'],
+    ['YANG BISA KAMU LAKUKAN', 'Langkah sederhana buat jaga diri dan keluarga mulai hari ini.'],
+    ['SUDAH CEK KESEHATAN?', 'Share ke keluarga yang perlu tahu, tulis pengalamanmu 👇'],
+  ],
+  PENDIDIKAN: [
+    ['LATAR MASALAH', 'Isu yang lagi dikeluhkan pelajar, mahasiswa, dan pencari kerja.'],
+    ['FAKTA & ANGKA', 'Data resmi yang menunjukkan seberapa besar masalahnya.'],
+    ['IMBASNYA KE MASA DEPAN', 'Ini menentukan peluang kerja dan biaya hidup generasi sekarang.'],
+    ['KAMU ALAMI JUGA?', 'Ceritakan pengalamanmu di komentar 👇'],
+  ],
+  TRANSPORTASI: [
+    ['ADA APA', 'Perubahan yang langsung kerasa buat pengguna jalan dan transportasi umum.'],
+    ['DETAILNYA', 'Jadwal, tarif, dan aturan baru yang perlu kamu catat.'],
+    ['BUAT KAMU YANG KOMUTING', 'Siapkan rute alternatif dan berangkat lebih awal.'],
+    ['RUTE HARIANMU AMAN?', 'Cerita perjalananmu hari ini di komentar 👇'],
+  ],
+  LINGKUNGAN: [
+    ['KONDISI TERKINI', 'Pantauan terbaru menunjukkan situasi yang perlu diwaspadai.'],
+    ['ZONA & ANGKA', 'Daerah terdampak dan data resmi dari BMKG dan otoritas terkait.'],
+    ['SIAPKAN DIRI', 'Cek kondisi di kotamu tiap pagi dan siapkan perlengkapan darurat.'],
+    ['DAERAHMU GIMANA?', 'Kabari kondisi di tempatmu di komentar 👇'],
+  ],
+  FAUNA: [
+    ['KOK BISA VIRAL', 'Tingkahnya sukses bikin linimasa auto senyum.'],
+    ['DI BALIK KANDANG', 'Perawat dan tim konservasi menyiapkan perlakuan khusus buat satwa ini.'],
+    ['OBAT PENAT', 'Di tengah berita berat, kabar gemas ini jadi oase.'],
+    ['TIM GEMAS?', 'Siapa yang udah nonton berulang-ulang? Ngaku di komentar 👇'],
+  ],
+  VIRAL: [
+    ['AWAL MULANYA', 'Dari satu unggahan, jadi omongan sejuta orang.'],
+    ['KENAPA MENYEBAR', 'Relate, lucu, atau bikin emosi. Itu resep viralnya.'],
+    ['CEK FAKTA DULU', 'Sebelum ikut share, pastikan sumbernya jelas.'],
+    ['KAMU LIHAT JUGA?', 'Pendapatmu apa? Tulis di komentar 👇'],
+  ],
+  AI: [
+    ['TERNYATA SECEPAT ITU', 'Kemampuan baru yang melesat lebih cepat dari prediksi.'],
+    ['SISI RISIKONYA', 'Pakar mengingatkan soal privasi data dan penyalahgunaan.'],
+    ['NASIB KERJAANMU', 'Bukan anti teknologi. Jadikan AI co-pilot sebelum skill ketinggalan.'],
+    ['PAKAI AI BUAT APA?', 'Bantu kerjaan atau bikin was-was? Jujur di komentar 👇'],
+  ],
+  SOSMED: [
+    ['APA YANG BERUBAH', 'Platform mengubah sistem yang berimbas ke jutaan pengguna.'],
+    ['TRIK CEPAT', 'Matikan optimasi baterai agresif dan bersihkan cache dulu.'],
+    ['JANGAN KETINGGALAN', 'Cek setelan HP kamu sekarang biar info penting nggak telat.'],
+    ['PERNAH NGALAMIN?', 'Aplikasi mana yang paling bikin emosi? Curhat di komentar 👇'],
+  ],
+};
+
+// Builds 5 slides with a dedicated photo each and short copy.
 function buildFullEditorialSlides(item: { title: string; link: string; desc: string }, srcName: string, category: string, seed: number): SlideItem[] {
   const images = findBestMatchingPhotos(item.title, item.desc, category, seed);
-  const upperTitle = item.title.toUpperCase();
-  const cleanSnippet = item.desc && item.desc.length > 20
-    ? item.desc.slice(0, 170).replace(/\s+[^\s]*$/, '...')
-    : `Laporan resmi redaksi ${srcName} mengupas dinamika fakta terhangat yang langsung menyedot perhatian warga Konoha.`;
+  const snippet = item.desc && item.desc.length > 20
+    ? item.desc.slice(0, 110).replace(/\s+[^\s]*$/, '...')
+    : `Kabar terbaru dari ${srcName} yang lagi ramai dibahas.`;
+  const copy = SLIDE_COPY[category] || DEFAULT_COPY;
 
-  // Viral 5-slide conversational storytelling formula for Konoha Insight
-  let slide2Title = 'KRONOLOGI & DUDUK PERKARA';
-  let slide2Body = `Biar kita gak gampang kemakan framing liar atau potongan video sepihak: laporan resmi ${srcName} mengungkap duduk perkara aslinya bermula saat dinamika ini terpantau di lapangan.`;
+  const texts: Array<[string, string]> = [[item.title.toUpperCase(), snippet], ...copy];
 
-  let slide3Title = 'FAKTA PENTING YANG BIKIN HEBOH';
-  let slide3Body = `Poin yang bikin publik terbelalak: data dan temuan saksi di lapangan membuktikan ada anomali yang gak bisa dianggap sepele. Sorotan tajam netizen pun langsung mengalir deras.`;
+  return texts.map(([title, body], idx) => ({
+    number: idx + 1,
+    title,
+    body,
+    hasPhoto: true,
+    photoUrl: images[idx] || images[(seed + idx) % images.length],
+    photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+    sourceText: `Sumber: ${srcName}`
+  }));
+}
 
-  let slide4Title = 'IMBASNYA KE WARGA KONOHA';
-  let slide4Body = `Bagi kita warga Konoha yang hidup di era serba cepat, ini jadi pengingat keras: jangan cuma jadi penonton pasif, pahami dampaknya ke rutinitas dan keamanan kita sehari-hari.`;
+const STOPWORDS = new Set(['yang', 'dan', 'untuk', 'dengan', 'dari', 'pada', 'ini', 'itu', 'akan', 'bakal', 'oleh', 'dalam', 'ada', 'tak', 'tidak', 'video', 'jadi', 'saat', 'usai', 'soal']);
 
-  let slide5Title = 'MENURUT WARGA KONOHA GIMANA?';
-  let slide5Body = `Kalo menurut analisis kalian para warga Konoha yang kritis: ini beneran langkah solutif atau bakal nguap gitu aja kayak biasanya? Tulis opini tajam kamu di bawah! 👇`;
+function tokens(title: string): Set<string> {
+  return new Set(
+    title.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w.length > 3 && !STOPWORDS.has(w))
+  );
+}
 
-  if (category === 'FAUNA') {
-    slide2Title = 'KOK BISA BIKIN GEMPAR?';
-    slide2Body = `Laporan dari ${srcName} mengonfirmasi momen istimewa satwa ini yang langsung memikat jutaan pasang mata. Bukan sekadar atraksi biasa, tingkah uniknya sukses bikin linimasa auto tersenyum.`;
-    slide3Title = 'FAKTA SPESIAL DI BALIK KANDANG';
-    slide3Body = `Tim perawat dan konservasi menyiapkan perlakuan khusus demi menjaga kesehatan satwa langka ini. Fakta membuktikan upaya pelestarian habitat membutuhkan komitmen jangka panjang.`;
-    slide4Title = 'PENYEJUK DI TENGAH PENINGNYA KONOHA';
-    slide4Body = `Di tengah riuhnya drama politik dan isu Konoha yang bikin pening, kabar gemas dari dunia satwa ini setidaknya jadi oase penyejuk mata dan pengingat buat jaga kelestarian alam.`;
-    slide5Title = 'KAMU TIM GEMAS JUGA?';
-    slide5Body = `Siapa di sini yang seharian udah scroll video satwa gemas ini berulang-ulang? Tulis celetukan dan uneg-uneg kamu di kolom komentar! 👇`;
-  } else if (category === 'LINGKUNGAN') {
-    slide2Title = 'TITIK MERAH & ANCAMAN UDARA';
-    slide2Body = `Data pantauan satelit dan laporan ${srcName} merekam lonjakan partikel berbahaya. Kabut asap dan anomali cuaca mulai meluas, memicu keprihatinan serius warga lintas daerah.`;
-    slide3Title = 'ANGKA & ZONA MERAH BAHAYA';
-    slide3Body = `Indeks PM2.5 menunjukkan paparan partikel mikro yang mampu menembus saluran pernapasan. Pakar memperingatkan kelompok rentan agar tidak meremehkan ancaman kabut polusi.`;
-    slide4Title = 'WAKTUNYA WARGA SIAPKAN MASKER';
-    slide4Body = `Pelajaran buat warga Konoha: cek kualitas udara di kotamu tiap pagi, siapkan masker standar medis, dan dorong para pemangku kebijakan buat ambil tindakan konkret sebelum makin parah.`;
-    slide5Title = 'GIMANA LANGIT DI DAERAHMU?';
-    slide5Body = `Kondisi langit di kotamu hari ini masih biru cerah atau udah berkabut abu-abu pekat? Tulis kondisi daerah tempat tinggal kamu di kolom komentar! 👇`;
-  } else if (category === 'KONOHA') {
-    slide2Title = 'KRONOLOGI YANG BIKIN GERAM';
-    slide2Body = `Laporan investigasi mendalam ${srcName} membongkar rentetan fakta yang memicu kegaduhan publik. Isu ini langsung memancing adu argumen sengit antara para pengamat dan warganet.`;
-    slide3Title = 'CELAH ATURAN YANG DISOROT';
-    slide3Body = `Sorotan publik tertuju pada konsistensi penegakan aturan: jangan sampai hukum cuma tajam ke bawah tapi tumpul ke atas saat menyentuh lingkaran kekuasaan atau pihak berkantong tebal.`;
-    slide4Title = 'KENAPA KITA JANGAN SAMPAI LENGAH';
-    slide4Body = `Sebagai warga Konoha yang cerdas, kita wajib kritis membedah: apakah kebijakan ini beneran berpihak ke rakyat banyak, atau sekadar drama kosmetik demi meredam amarah sesaat?`;
-    slide5Title = 'KAWAL TERUS ATAU BAKAL NGUAP?';
-    slide5Body = `Menurut terawangan warga Konoha: kasus ini bakal dituntaskan sampai akar-akarnya atau nguap tertutup isu baru lagi? Tulis tebakan kamu di bawah! 👇`;
-  } else if (category === 'AI') {
-    slide2Title = 'LOMPATAN YANG BIKIN MERINDING';
-    slide2Body = `Kemajuan kecerdasan buatan generasi terbaru yang dilaporkan ${srcName} melesat lebih cepat dari prediksi para ahli. Otomatisasi pekerjaan kompleks kini bisa beres dalam hitungan detik.`;
-    slide3Title = 'DATA & POTENSI CELAH PRIVASI';
-    slide3Body = `Di balik kecanggihannya, pakar teknologi mengingatkan risiko pengawasan algoritma dan perlindungan data pribadi pengguna yang seringkali diolah tanpa izin eksplisit.`;
-    slide4Title = 'GIMANA NASIB PEKERJA KONOHA?';
-    slide4Body = `Kunci buat warga Konoha bukan anti pada teknologi, tapi beradaptasi! Jadikan AI sebagai co-pilot peningkat cuan dan produktivitas sebelum skill kita ketinggalan zaman.`;
-    slide5Title = 'KAMU UDAH PAKAI AI UNTUK APA?';
-    slide5Body = `Apakah AI sekarang udah ngebantu kerjaan harianmu atau kamu masih takut digantikan robot? Bagikan pengalaman jujur kamu di kolom komentar! 👇`;
-  } else if (category === 'SOSMED') {
-    slide2Title = 'UPDATE FITUR & MASALAH PENGGUNA';
-    slide2Body = `Berdasarkan rangkuman ${srcName}, platform medsos melakukan perubahan algoritma dan sistem background yang berimbas langsung pada notifikasi serta kenyamanan jutaan pengguna.`;
-    slide3Title = 'TRIK & SOLUSI INSTAN';
-    slide3Body = `Gak perlu panik atau ganti HP baru: langkah paling ampuh adalah menonaktifkan optimasi baterai agresif untuk aplikasi medsos dan membersihkan data cache yang menumpuk.`;
-    slide4Title = 'JANGAN SAMPAI KETINGGALAN INFO';
-    slide4Body = `Jangan biarkan urusan kerjaan penting atau obrolan santai bareng keluarga jadi macet cuma gara-gara notifikasi delay berjam-jam. Cek setelan smartphone kamu sekarang juga.`;
-    slide5Title = 'PERNAH NGELUH HAL SERUPA?';
-    slide5Body = `Aplikasi apa yang paling sering bikin kamu emosi karena notifikasinya suka ngadat atau telat bunyi? Curhat bareng di kolom komentar! 👇`;
-  } else if (category === 'BISNIS') {
-    slide2Title = 'PERGERAKAN ARUS MODAL & DATA';
-    slide2Body = `Laporan analis finansial dari ${srcName} mencatat pergeseran sentimen pasar dan lonjakan transaksi yang didominasi oleh investor ritel muda yang makin melek instrumen keuangan.`;
-    slide3Title = 'SIAPA YANG PALING CUAN & RUGI?';
-    slide3Body = `Volatilitas harga instrumen investasi menciptakan peluang imbal hasil tinggi, tapi otoritas mengingatkan bahaya jeratan FOMO tanpa pemahaman analisis risiko yang matang.`;
-    slide4Title = 'STRATEGI AMANIN DOMPET KITA';
-    slide4Body = `Bagi warga Konoha: rumus bertahan di tengah ketidakpastian ekonomi adalah perbanyak pos dana darurat dan jangan taruh semua telur dalam satu keranjang spekulatif.`;
-    slide5Title = 'PORTOFOLIO KAMU LAGI IJO ATAU MERAH?';
-    slide5Body = `Kondisi tabungan atau investasi kamu di bulan ini gimana? Masih optimis cuan to the moon atau lagi gigit jari? Diskusi santai di kolom komentar! 👇`;
-  }
+function sharedCount(a: Set<string>, b: Set<string>): number {
+  let n = 0;
+  a.forEach((w) => { if (b.has(w)) n++; });
+  return n;
+}
 
-  const p1 = images[0] || images[seed % images.length];
-  const p2 = images[1] || images[(seed + 1) % images.length];
-  const p3 = images[2] || images[(seed + 2) % images.length];
-  const p4 = images[3] || images[(seed + 3) % images.length];
-  const p5 = images[4] || images[(seed + 4) % images.length];
+// Heat of a topic for Indonesian IG audiences (0-10)
+const CATEGORY_HEAT: Record<string, number> = {
+  KRIMINAL: 10, HUKUM: 10, KONOHA: 9, VIRAL: 9, HIBURAN: 8, BISNIS: 7, OLAHRAGA: 7, KESEHATAN: 6,
+  TRANSPORTASI: 6, PENDIDIKAN: 6, LINGKUNGAN: 6, SOSMED: 6, FAUNA: 5, AI: 5, TEKNOLOGI: 3, MARKETING: 2,
+};
 
-  return [
-    {
-      number: 1,
-      title: upperTitle,
-      body: cleanSnippet,
-      hasPhoto: true,
-      photoUrl: p1,
-      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-      sourceText: `Sumber: ${srcName}`
-    },
-    {
-      number: 2,
-      title: slide2Title,
-      body: slide2Body,
-      hasPhoto: true,
-      photoUrl: p2,
-      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-      sourceText: `Sumber: ${srcName}`
-    },
-    {
-      number: 3,
-      title: slide3Title,
-      body: slide3Body,
-      hasPhoto: true,
-      photoUrl: p3,
-      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-      sourceText: `Sumber: ${srcName}`
-    },
-    {
-      number: 4,
-      title: slide4Title,
-      body: slide4Body,
-      hasPhoto: true,
-      photoUrl: p4,
-      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-      sourceText: `Sumber: ${srcName}`
-    },
-    {
-      number: 5,
-      title: slide5Title,
-      body: slide5Body,
-      hasPhoto: true,
-      photoUrl: p5,
-      photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-      sourceText: `Sumber: ${srcName}`
-    }
-  ];
+// Real signals instead of random: freshness, cross-outlet coverage, Google Trends match, topic heat, hooky headline.
+function scoreVirality(posts: RedaksiPost[], ageById: Map<string, number>) {
+  const tk = posts.map((p) => tokens(p.title));
+  const trendIdx = posts.map((p, i) => (p.source === 'Google Trends ID' ? i : -1)).filter((i) => i >= 0);
+
+  posts.forEach((p, i) => {
+    const age = ageById.get(p.id) ?? 12;
+    const fresh = Math.max(0, 20 - Math.round(age * 1.2)); // 0-20
+    const outlets = new Set<string>();
+    posts.forEach((q, j) => {
+      if (j !== i && q.source !== p.source && sharedCount(tk[i], tk[j]) >= 2) outlets.add(q.source);
+    });
+    const cross = Math.min(25, outlets.size * 12); // 0-25
+    const trending = trendIdx.some((j) => j !== i && sharedCount(tk[i], tk[j]) >= 1) || p.source === 'Google Trends ID' ? 15 : 0;
+    const heat = CATEGORY_HEAT[p.category] ?? 4;
+    const hook = /[0-9]|\?|!|\bviral\b|\bheboh\b|\bterungkap\b/i.test(p.title) ? 5 : 0;
+    p.viralScore = Math.min(99, 35 + fresh + cross + trending + heat + hook);
+  });
+
+  // Highest potential first inside the same batch
+  posts.sort((a, b) => b.viralScore - a.viralScore);
 }
 
 export async function GET(req: Request) {
@@ -440,6 +480,7 @@ export async function GET(req: Request) {
   const maxAgeHours = parseFloat(searchParams.get('maxAgeHours') || '24'); // default strictly 24 hours (anti-basi)
 
   const collectedPosts: RedaksiPost[] = [];
+  const ageById = new Map<string, number>();
 
   // Parallel fetch from top trusted sources with 3.5s timeout
   await Promise.all(
@@ -463,7 +504,7 @@ export async function GET(req: Request) {
         const xml = await res.text();
         const parsed = parseFeedItems(xml, src.name);
 
-        parsed.forEach((item, itemIdx) => {
+        parsed.slice(0, 4).forEach((item, itemIdx) => {
           const { timeAgo, ageHours } = formatTimeAgo(item.pubDate);
 
           // FILTER: Discard news older than maxAgeHours (anti-basi: maks 24 jam)
@@ -471,14 +512,16 @@ export async function GET(req: Request) {
             return;
           }
 
-          const category = detectCategory(item.title, item.desc, src.categoryHint || 'TEKNOLOGI');
+          const category = detectCategory(item.title, item.desc, src.categoryHint);
           const upperTitle = item.title.toUpperCase();
           const seed = sourceIdx * 5 + itemIdx;
 
           // Build 5 complete slides with rich visuals on EVERY slide
           const slides = buildFullEditorialSlides(item, src.name, category, seed);
           const coverImg = slides[0].photoUrl || (FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI)[0];
-          const viralScore = 85 + Math.floor(Math.random() * 12); // 85 - 96
+          const viralScore = 0; // computed after all feeds are collected (see scoreVirality)
+          const postId = `rss-${Date.now()}-${sourceIdx}-${itemIdx}`;
+          ageById.set(postId, ageHours);
 
           let hostDomain = '';
           try {
@@ -487,10 +530,10 @@ export async function GET(req: Request) {
             hostDomain = src.name.toLowerCase().replace(/\s+/g, '');
           }
 
-          const caption = `${item.title}.\n\nLaporan terverifikasi dari ${src.name} mengabarkan realitas penting terkini yang wajib diketahui warga Konoha. Simak rangkuman lengkap 5 slide di atas.\n\n📌 Sumber Berita: ${src.name} (${hostDomain})\n🔗 Tautan Asli: ${item.link}\n📷 Lisensi Foto: Unsplash (Free Commercial Use - CC0 / Unsplash License)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#KonohaInsight #WargaKonoha #${category} #BeritaTerkini #KulturDigital #${src.name.replace(/[^a-zA-Z]/g, '')}`;
+          const caption = `${item.title}.\n\nRingkasan dari ${src.name}. Geser 5 slide di atas 👆\n\n📌 Sumber Berita: ${src.name} (${hostDomain})\n🔗 Tautan Asli: ${item.link}\n📷 Lisensi Foto: Unsplash (Free Commercial Use - CC0 / Unsplash License)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\n#KonohaInsight #WargaKonoha #${category} #BeritaTerkini #KulturDigital #${src.name.replace(/[^a-zA-Z]/g, '')}`;
 
           collectedPosts.push({
-            id: `rss-${Date.now()}-${sourceIdx}-${itemIdx}`,
+            id: postId,
             category,
             title: upperTitle,
             highlightedTitle: makeHighlightedTitle(upperTitle),
@@ -514,6 +557,8 @@ export async function GET(req: Request) {
       }
     })
   );
+
+  scoreVirality(collectedPosts, ageById);
 
   // If feeds returned nothing (e.g. offline sandbox or server network block),
   // return curated Indonesian real news with ALL 5 SLIDES READY TO PRODUCE
@@ -716,7 +761,19 @@ export async function GET(req: Request) {
   }
 
   // Deduplicate and slice to limit
-  const results = collectedPosts.slice(0, requestedLimit);
+  // Round-robin across categories so one topic (e.g. tech) can't flood the queue
+  const byCat = new Map<string, RedaksiPost[]>();
+  for (const post of collectedPosts) {
+    byCat.set(post.category, [...(byCat.get(post.category) || []), post]);
+  }
+  const buckets = Array.from(byCat.values());
+  const results: RedaksiPost[] = [];
+  while (results.length < requestedLimit && buckets.some((b) => b.length)) {
+    for (const b of buckets) {
+      const next = b.shift();
+      if (next && results.length < requestedLimit) results.push(next);
+    }
+  }
 
   return NextResponse.json({
     success: true,

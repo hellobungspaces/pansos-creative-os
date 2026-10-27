@@ -33,7 +33,7 @@ import {
   Type
 } from 'lucide-react';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
-import { getCategoryTheme } from '@/utils/categoryTheme';
+import { getCategoryTheme, CATEGORIES } from '@/utils/categoryTheme';
 
 interface CarouselEditorModalProps {
   post: RedaksiPost | null;
@@ -807,6 +807,11 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
               </div>
             </div>
 
+            <details className="w-full max-w-[360px] group rounded-xl border border-zinc-200 bg-white">
+              <summary className="cursor-pointer select-none px-3 py-2 text-[11px] font-mono font-bold text-zinc-700 flex items-center gap-1.5">
+                <SlidersHorizontal className="w-3.5 h-3.5" /> Warna &amp; font
+              </summary>
+              <div className="p-2 space-y-2">
             {/* Theme Color Selector Palette */}
             <div className="w-full max-w-[360px] p-3 bg-zinc-50 border border-zinc-200 rounded-xl space-y-2">
               <div className="text-[10px] font-mono text-zinc-500 uppercase flex items-center justify-between">
@@ -883,30 +888,8 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                 })}
               </div>
             </div>
-
-            {/* Slide Navigation Thumbnails */}
-            <div className="w-full max-w-[360px] flex items-center justify-between gap-1 overflow-x-auto pb-1">
-              {editedPost.slides.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveSlideIndex(idx)}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
-                    activeSlideIndex === idx
-                      ? 'bg-zinc-900 text-white shadow-sm'
-                      : 'bg-white text-zinc-600 hover:text-zinc-900 border border-zinc-200 hover:bg-zinc-50'
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-              <button
-                onClick={handleAddSlide}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-200 flex items-center justify-center shrink-0 shadow-sm"
-                title="Tambah Slide Baru"
-              >
-                <Plus className="w-3.5 h-3.5 text-blue-600" />
-              </button>
-            </div>
+              </div>
+            </details>
 
             {/* Download Buttons Bar */}
             <div className="w-full max-w-[360px] space-y-2 text-xs font-mono">
@@ -928,62 +911,6 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                   <Download className="w-3.5 h-3.5 text-zinc-600" />
                   <span>Slide {activeSlideIndex + 1}</span>
                 </button>
-              </div>
-
-              {/* Caption Instagram Quick Box on Left Pane */}
-              <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-2xl space-y-2">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="flex items-center gap-1.5 font-bold text-zinc-900">
-                    <Instagram className="w-3.5 h-3.5 text-[#e1306c]" />
-                    <span>Caption Instagram</span>
-                  </span>
-                  <span className={`text-[10px] font-mono ${
-                    (editedPost.caption?.length || 0) > 2200 ? 'text-rose-600 font-bold' : 'text-zinc-500'
-                  }`}>
-                    {editedPost.caption?.length || 0}/2,200
-                  </span>
-                </div>
-
-                <div 
-                  onClick={() => setViewTab('caption')}
-                  className="p-2.5 bg-white border border-zinc-200 rounded-xl text-[11px] text-zinc-700 font-sans line-clamp-3 cursor-pointer hover:border-zinc-400 transition-all leading-relaxed shadow-sm"
-                  title="Klik untuk membuka editor caption Instagram"
-                >
-                  {editedPost.caption || 'Caption Instagram belum diisi...'}
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-0.5">
-                  <button
-                    type="button"
-                    onClick={handleCopyCaption}
-                    className={`py-2 px-2.5 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all shadow-sm ${
-                      copiedCaption
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-zinc-900 hover:bg-zinc-800 text-white active:scale-95'
-                    }`}
-                  >
-                    {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedCaption ? 'Tersalin!' : 'Salin Caption'}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setViewTab('caption')}
-                    className="py-2 px-2.5 rounded-xl text-xs font-mono font-bold bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-300 flex items-center justify-center gap-1.5 transition-all shadow-sm"
-                  >
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-zinc-600" />
-                    <span>Edit Caption</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-zinc-50 border border-zinc-200 text-[10px] text-zinc-600 space-y-1">
-                <div className="flex items-center gap-1 text-emerald-700 font-bold">
-                  <ShieldCheck className="w-3 h-3" />
-                  <span>STATUS: FOTO BERSIH & LEGAL</span>
-                </div>
-                <div>Sumber Artikel: {editedPost.source}</div>
-                <div>Lisensi Visual: Unsplash Curated (Atribusi di Caption)</div>
               </div>
             </div>
           </div>
@@ -1042,8 +969,11 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
             {/* TAB CONTENT 1: SLIDE EDITOR */}
             {viewTab === 'slides' && (
               <div className="space-y-6">
-                {/* Category & Tag Editor Card */}
-                <div className="p-4 rounded-2xl bg-white border border-zinc-200 shadow-sm space-y-3">
+                <details className="rounded-2xl bg-white border border-zinc-200">
+                  <summary className="cursor-pointer select-none px-4 py-2.5 text-xs font-mono font-bold text-zinc-700">
+                    Kategori: {editedPost.category}
+                  </summary>
+                <div className="p-4 pt-1 space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
                       <Tag className="w-4 h-4 text-blue-600" />
@@ -1073,16 +1003,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                   {/* Quick Category Presets */}
                   <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-zinc-200">
                     <span className="text-[10px] font-mono text-zinc-500 mr-1">Preset Cepat:</span>
-                    {[
-                      { tag: 'FAUNA', icon: '🐼' },
-                      { tag: 'LINGKUNGAN', icon: '🌿' },
-                      { tag: 'KONOHA', icon: '🏛️' },
-                      { tag: 'AI', icon: '🤖' },
-                      { tag: 'SOSMED', icon: '📱' },
-                      { tag: 'BISNIS', icon: '💼' },
-                      { tag: 'TEKNOLOGI', icon: '⚡' },
-                      { tag: 'VIRAL', icon: '🔥' }
-                    ].map(item => {
+                    {CATEGORIES.map(item => {
                       const theme = getCategoryTheme(item.tag);
                       const isSelected = (editedPost.category || '').toUpperCase() === item.tag;
                       return (
@@ -1104,6 +1025,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                     })}
                   </div>
                 </div>
+                </details>
 
             {/* ACTIVE SLIDE FOCUSED INSPECTOR (Zero Friction, 100% Synced) */}
             <div className="p-5 rounded-2xl bg-white border border-zinc-200 shadow-sm space-y-5 animate-in fade-in duration-200">
@@ -1382,56 +1304,6 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
                     <span>Pasang</span>
                   </button>
                 </div>
-              </div>
-
-              {/* BOTTOM QUICK SLIDE SWITCHER BAR */}
-              <div className="pt-4 border-t border-zinc-200 flex items-center justify-between">
-                <button
-                  type="button"
-                  disabled={activeSlideIndex === 0}
-                  onClick={() => setActiveSlideIndex(prev => Math.max(0, prev - 1))}
-                  className="px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-700 hover:text-black text-xs font-mono font-bold flex items-center gap-1.5 transition-all disabled:opacity-30 disabled:hover:bg-zinc-100"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Slide Sebelumnya</span>
-                </button>
-
-                <div className="flex items-center gap-1.5">
-                  {editedPost.slides.map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setActiveSlideIndex(i)}
-                      className={`w-6 h-6 rounded-lg text-xs font-mono font-bold transition-all ${
-                        activeSlideIndex === i
-                          ? 'bg-zinc-900 text-white shadow scale-110'
-                          : 'bg-zinc-100 text-zinc-600 hover:text-black border border-zinc-200 hover:bg-zinc-200'
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                </div>
-
-                {activeSlideIndex < editedPost.slides.length - 1 ? (
-                  <button
-                    type="button"
-                    onClick={() => setActiveSlideIndex(prev => Math.min(editedPost.slides.length - 1, prev + 1))}
-                    className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow active:scale-95"
-                  >
-                    <span>Slide Berikutnya</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleAddSlide}
-                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-50 border border-dashed border-zinc-400 text-zinc-900 text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-sm"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Tambah Slide Baru</span>
-                  </button>
-                )}
               </div>
             </div>
           </div>

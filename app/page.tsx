@@ -44,7 +44,7 @@ export default function HomePage() {
     const lastSync = localStorage.getItem('indonesia_hari_ini_last_sync');
     const now = Date.now();
     if (!lastSync || now - parseInt(lastSync, 10) > 3 * 60 * 60 * 1000) {
-      fetch('/api/rss?limit=6')
+      fetch('/api/rss?limit=12')
         .then((r) => r.json())
         .then((data) => {
           if (data.success && data.posts && data.posts.length > 0) {
@@ -112,7 +112,7 @@ export default function HomePage() {
   const handleLiveScout = async () => {
     setIsScouting(true);
     try {
-      const res = await fetch('/api/rss?limit=6');
+      const res = await fetch('/api/rss?limit=12');
       const data = await res.json();
       if (data.success && data.posts && data.posts.length > 0) {
         const existingTitles = new Set(posts.map((p) => p.title.toLowerCase().trim()));
@@ -137,8 +137,6 @@ export default function HomePage() {
   };
 
   const reviewCount = posts.filter((p) => p.status === 'perlu_review').length;
-  const scheduledCount = posts.filter((p) => p.status === 'terjadwal').length;
-  const publishedCount = posts.filter((p) => p.status === 'sudah_posting').length;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f8f9fa] text-zinc-900 bg-redaksi-grid relative">
@@ -169,11 +167,10 @@ export default function HomePage() {
       <main className="flex-1 pb-16">
         {activeTab === 'ruang_redaksi' && (
           <RuangRedaksiView
+            posts={posts}
             onGoToReview={() => setActiveTab('antrian_review')}
+            onOpenPost={handleOpenEditor}
             onSearchClick={handleLiveScout}
-            reviewCount={reviewCount}
-            scheduledCount={scheduledCount}
-            publishedCount={publishedCount}
             isScouting={isScouting}
             isLoading={isLoading}
           />

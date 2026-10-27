@@ -27,8 +27,7 @@ export interface RedaksiPost {
   caption: string;
   status: 'perlu_review' | 'disetujui' | 'terjadwal' | 'sudah_posting' | 'ditolak';
   scheduledTime?: string;
-  themeColor?: string;
-  fontPairing?: string; // 'bebas' | 'syne' | 'oswald' | 'fraunces' | 'space'
+  template?: string; // id from utils/cardTemplates
 }
 
 export interface ActivityLog {

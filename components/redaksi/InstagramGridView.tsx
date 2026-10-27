@@ -3,6 +3,7 @@
 import React from 'react';
 import { Instagram, Heart, MessageCircle, Layers, CheckCircle2 } from 'lucide-react';
 import { RedaksiPost } from '@/data/redaksiData';
+import { blockBg } from '@/utils/cardTemplates';
 import { getCategoryTheme } from '@/utils/categoryTheme';
 
 interface InstagramGridViewProps {
@@ -86,7 +87,7 @@ export const InstagramGridView: React.FC<InstagramGridViewProps> = ({
               {/* Bottom Half: Theme Color Block (Default Royal Blue) */}
               <div 
                 className="h-1/2 w-full p-3 flex flex-col justify-between text-white relative"
-                style={{ backgroundColor: post.themeColor || '#2446f5' }}
+                style={{ backgroundColor: blockBg(post.template) }}
               >
                 <div>
                   <span 

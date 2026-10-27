@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { CheckSquare, AlertTriangle, ArrowRight, Check, Plus, ExternalLink, Globe, Sparkles, XCircle, Copy, Instagram } from 'lucide-react';
 import { RedaksiPost } from '@/data/redaksiData';
+import { blockBg } from '@/utils/cardTemplates';
 import { getCategoryTheme, CATEGORIES } from '@/utils/categoryTheme';
 
 interface AntrianReviewViewProps {
@@ -218,7 +219,7 @@ export const AntrianReviewView: React.FC<AntrianReviewViewProps> = ({
               {/* Bottom Half: Theme Color Block (Default Royal Blue) */}
               <div 
                 className="h-1/2 w-full p-3.5 sm:p-4 flex flex-col justify-between relative text-white"
-                style={{ backgroundColor: post.themeColor || '#2446f5' }}
+                style={{ backgroundColor: blockBg(post.template) }}
               >
                 {/* Dynamic Category Tag */}
                 <div className="flex items-center justify-between">

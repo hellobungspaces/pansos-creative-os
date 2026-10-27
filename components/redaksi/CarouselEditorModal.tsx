@@ -34,6 +34,9 @@ import {
 } from 'lucide-react';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
 import { getCategoryTheme, CATEGORIES } from '@/utils/categoryTheme';
+import { CARD_TEMPLATES, getTemplate } from '@/utils/cardTemplates';
+import { CardCanvas } from './CardCanvas';
+import { CardInput, renderCard } from '@/utils/renderCard';
 
 interface CarouselEditorModalProps {
   post: RedaksiPost | null;
@@ -41,96 +44,6 @@ interface CarouselEditorModalProps {
   onSave: (updatedPost: RedaksiPost) => void;
   onMarkPublished?: (postId: string) => void;
 }
-
-const THEME_COLORS = [
-  { name: 'Royal Blue (Signature)', hex: '#2446f5' },
-  { name: 'Noir Dark (Minimalist)', hex: '#111319' },
-  { name: 'Breaking Alert (Merah)', hex: '#991b1b' },
-  { name: 'Emerald Cuan (Bisnis)', hex: '#065f46' },
-  { name: 'Cyber Violet (Sosmed)', hex: '#581c87' },
-];
-
-export interface FontPreset {
-  id: string;
-  name: string;
-  badge: string;
-  headlineFont: string;
-  bodyFont: string;
-  canvasTitleFont: string;
-  canvasBodyFont: string;
-  titleClass: string;
-  descClass: string;
-  license: string;
-  description: string;
-}
-
-export const FONT_PRESETS: FontPreset[] = [
-  {
-    id: 'bebas',
-    name: 'Bebas Neue + Inter',
-    badge: 'Viral Media',
-    headlineFont: 'Bebas Neue',
-    bodyFont: 'Inter',
-    canvasTitleFont: '900 60px "Bebas Neue", "Oswald", sans-serif',
-    canvasBodyFont: '400 34px "Inter", -apple-system, sans-serif',
-    titleClass: 'font-pair-bebas-title',
-    descClass: 'font-pair-bebas-desc',
-    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
-    description: 'Punchy & jangkung, standar emas akun media homeless/viral (Narasi, Folkative).'
-  },
-  {
-    id: 'syne',
-    name: 'Syne + Plus Jakarta Sans',
-    badge: 'Modern Satire',
-    headlineFont: 'Syne (800)',
-    bodyFont: 'Plus Jakarta Sans',
-    canvasTitleFont: '800 48px "Syne", -apple-system, sans-serif',
-    canvasBodyFont: '500 33px "Plus Jakarta Sans", sans-serif',
-    titleClass: 'font-pair-syne-title',
-    descClass: 'font-pair-syne-desc',
-    license: 'SIL Open Font License 1.1 (Plus Jakarta Sans karya studio Indonesia)',
-    description: 'Estetika kontemporer, tajam, dan elegan untuk menyindir isu sosial cerdas.'
-  },
-  {
-    id: 'fraunces',
-    name: 'Fraunces + Work Sans',
-    badge: 'Parodi Koran',
-    headlineFont: 'Fraunces (Black)',
-    bodyFont: 'Work Sans',
-    canvasTitleFont: '900 48px "Fraunces", "Playfair Display", serif',
-    canvasBodyFont: '400 33px "Work Sans", sans-serif',
-    titleClass: 'font-pair-fraunces-title',
-    descClass: 'font-pair-fraunces-desc',
-    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
-    description: 'Serif berbobot ala New Yorker / The Onion edisi investigasi Konoha.'
-  },
-  {
-    id: 'space',
-    name: 'Space Grotesk + DM Sans',
-    badge: 'Citizen Leak',
-    headlineFont: 'Space Grotesk',
-    bodyFont: 'DM Sans',
-    canvasTitleFont: '700 50px "Space Grotesk", sans-serif',
-    canvasBodyFont: '400 34px "DM Sans", sans-serif',
-    titleClass: 'font-pair-space-title',
-    descClass: 'font-pair-space-desc',
-    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
-    description: 'Nuansa tech hacker, underground intel, data-driven whistleblowing.'
-  },
-  {
-    id: 'oswald',
-    name: 'Oswald + Inter',
-    badge: 'Tabloid Heavy',
-    headlineFont: 'Oswald (Bold)',
-    bodyFont: 'Inter',
-    canvasTitleFont: '900 52px "Oswald", "Anton", sans-serif',
-    canvasBodyFont: '400 34px "Inter", -apple-system, sans-serif',
-    titleClass: 'font-pair-oswald-title',
-    descClass: 'font-pair-oswald-desc',
-    license: 'SIL Open Font License 1.1 (100% Free Komersil)',
-    description: 'Gaya headline tebal rapat klasik media massa dan breaking alert.'
-  }
-];
 
 const POPULAR_HASHTAGS = [
   '#KonohaInsight',
@@ -294,7 +207,7 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
   }, [editedPost.slides.length]);
 
   const currentSlide = editedPost.slides[activeSlideIndex] || editedPost.slides[0];
-  const activeFontPreset = FONT_PRESETS.find(f => f.id === (editedPost.fontPairing || 'bebas')) || FONT_PRESETS[0];
+  const activeTemplate = getTemplate(editedPost.template);
 
   const allHashtags = useMemo(() => {
     const list = [...POPULAR_HASHTAGS];
@@ -429,147 +342,26 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
     setTimeout(() => setCopiedCaption(false), 2000);
   };
 
-  // High-Resolution 1080x1350px Native HTML5 Canvas Renderer (Clean, No Watermarks)
-  const renderSlideToCanvas = (slideIdx: number): Promise<string> => {
-    return new Promise((resolve) => {
-      const slide = editedPost.slides[slideIdx];
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1350;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return resolve('');
+  // Single renderer shared by the live preview and PNG export (1080x1350)
+  const cardInputFor = (slideIdx: number): CardInput => {
+    const slide = editedPost.slides[slideIdx];
+    return {
+      template: activeTemplate,
+      title: slide.title,
+      body: slide.body,
+      photoUrl: slide.photoUrl || editedPost.coverImage,
+      category: editedPost.category || 'BERITA',
+      sourceText: slide.sourceText || `Sumber: ${editedPost.source}`,
+      index: slideIdx,
+      total: editedPost.slides.length,
+      showBadge: slideIdx === 0,
+    };
+  };
 
-      const drawContent = (img?: HTMLImageElement) => {
-        // Top Half: Photo with subtle vignette
-        if (img) {
-          ctx.drawImage(img, 0, 0, 1080, 675);
-          // Soft bottom vignette shadow
-          const vignette = ctx.createLinearGradient(0, 480, 0, 675);
-          vignette.addColorStop(0, 'rgba(0,0,0,0)');
-          vignette.addColorStop(1, 'rgba(0,0,0,0.45)');
-          ctx.fillStyle = vignette;
-          ctx.fillRect(0, 480, 1080, 195);
-        } else {
-          // Elegant dark editorial fallback
-          const grad = ctx.createLinearGradient(0, 0, 1080, 675);
-          grad.addColorStop(0, '#090a0f');
-          grad.addColorStop(1, '#181b26');
-          ctx.fillStyle = grad;
-          ctx.fillRect(0, 0, 1080, 675);
-
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-          ctx.font = '900 64px Oswald, Anton, sans-serif';
-          ctx.fillText('KONOHA INSIGHT', 60, 360);
-        }
-
-        // Top Overlay Bar: Only Clean Brand & Slide Index (No messy watermarks)
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '900 28px -apple-system, Oswald, sans-serif';
-        ctx.fillText('• KONOHA INSIGHT', 50, 65);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 24px monospace';
-        ctx.fillText(`${slideIdx + 1}/${editedPost.totalSlides}`, 970, 65);
-
-        // Bottom Half: Theme Color Block (Default Signature Royal Blue #2446f5)
-        ctx.fillStyle = editedPost.themeColor || '#2446f5';
-        ctx.fillRect(0, 675, 1080, 675);
-
-        // Dynamic Category Tag on slide 1 (Dynamic Width, Shape, & Color)
-        if (slideIdx === 0) {
-          const catText = (editedPost.category || 'BERITA').toUpperCase();
-          const theme = getCategoryTheme(catText);
-          ctx.font = '900 24px -apple-system, BlinkMacSystemFont, "Oswald", sans-serif';
-          const textMetrics = ctx.measureText(catText);
-          const padX = 22;
-          const badgeWidth = textMetrics.width + (padX * 2);
-          const badgeHeight = 46;
-          const badgeX = 60;
-          const badgeY = 712;
-          const badgeRadius = 10;
-
-          ctx.fillStyle = theme.bg;
-          if (typeof (ctx as any).roundRect === 'function') {
-            ctx.beginPath();
-            (ctx as any).roundRect(badgeX, badgeY, badgeWidth, badgeHeight, badgeRadius);
-            ctx.fill();
-          } else {
-            ctx.fillRect(badgeX, badgeY, badgeWidth, badgeHeight);
-          }
-
-          ctx.fillStyle = theme.text;
-          ctx.fillText(catText, badgeX + padX, badgeY + 32);
-        }
-
-        // Slide Title (Bold with Dynamic Font Pairing)
-        const canvasFontPreset = FONT_PRESETS.find(f => f.id === (editedPost.fontPairing || 'bebas')) || FONT_PRESETS[0];
-        ctx.fillStyle = '#e2ff3b';
-        ctx.font = canvasFontPreset.canvasTitleFont;
-        
-        // Wrap Title
-        const titleWords = slide.title.split(' ');
-        let titleLine = '';
-        let titleY = slideIdx === 0 ? 825 : 765;
-        for (let n = 0; n < titleWords.length; n++) {
-          const testLine = titleLine + titleWords[n] + ' ';
-          const metrics = ctx.measureText(testLine);
-          if (metrics.width > 960 && n > 0) {
-            ctx.fillText(titleLine, 60, titleY);
-            titleLine = titleWords[n] + ' ';
-            titleY += 62;
-          } else {
-            titleLine = testLine;
-          }
-        }
-        ctx.fillText(titleLine, 60, titleY);
-
-        // Body Text (White with Dynamic Font Pairing)
-        ctx.fillStyle = '#ffffff';
-        ctx.font = canvasFontPreset.canvasBodyFont;
-        const bodyWords = slide.body.split(' ');
-        let bodyLine = '';
-        let bodyY = titleY + 65;
-        for (let n = 0; n < bodyWords.length; n++) {
-          const testBodyLine = bodyLine + bodyWords[n] + ' ';
-          const metrics = ctx.measureText(testBodyLine);
-          if (metrics.width > 960 && n > 0) {
-            ctx.fillText(bodyLine, 60, bodyY);
-            bodyLine = bodyWords[n] + ' ';
-            bodyY += 50;
-          } else {
-            bodyLine = testBodyLine;
-          }
-        }
-        ctx.fillText(bodyLine, 60, bodyY);
-
-        // Divider
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(60, 1260);
-        ctx.lineTo(1020, 1260);
-        ctx.stroke();
-
-        // Footer Bar: Clear, Respectful Source Attribution
-        ctx.fillStyle = '#dbeafe';
-        ctx.font = 'bold 24px monospace';
-        ctx.fillText(slide.sourceText || `Sumber: ${editedPost.source}`, 60, 1305);
-        ctx.fillText('Geser ➔', 940, 1305);
-
-        resolve(canvas.toDataURL('image/png'));
-      };
-
-      const photoUrl = slide.photoUrl || editedPost.coverImage;
-      if (photoUrl) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => drawContent(img);
-        img.onerror = () => drawContent();
-        img.src = photoUrl;
-      } else {
-        drawContent();
-      }
-    });
+  const renderSlideToCanvas = async (slideIdx: number): Promise<string> => {
+    const canvas = document.createElement('canvas');
+    await renderCard(canvas, cardInputFor(slideIdx), 1080);
+    return canvas.toDataURL('image/png');
   };
 
   const handleDownloadSingleSlide = async () => {
@@ -726,170 +518,50 @@ export const CarouselEditorModal: React.FC<CarouselEditorModalProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 overflow-y-auto flex-1">
           {/* LEFT PANE: 4:5 Card Preview + Color Palette + Action Buttons (5 Cols) */}
           <div className="lg:col-span-5 space-y-4 flex flex-col items-center lg:items-start">
-            {/* The 4:5 Card Preview */}
-            <div className="relative w-full max-w-[360px] aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 bg-black flex flex-col justify-between shadow-2xl">
-              {/* Top Half: Photo with subtle vignette (No ugly watermarks) */}
-              <div className="relative h-1/2 w-full bg-zinc-950 overflow-hidden">
-                {currentSlide.photoUrl || editedPost.coverImage ? (
-                  <img
-                    src={currentSlide.photoUrl || editedPost.coverImage}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-zinc-900 to-[#121520] flex flex-col items-center justify-center p-4 text-center">
-                    <span className="text-[10px] font-mono uppercase text-[#e2ff3b] font-bold tracking-widest mb-1">
-                      {editedPost.category} · SLIDE {activeSlideIndex + 1}
-                    </span>
-                    <span className="text-sm font-headline text-zinc-300 font-black tracking-wider">
-                      KONOHA INSIGHT
-                    </span>
-                  </div>
-                )}
-
-                {/* Soft bottom vignette shadow */}
-                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-
-                {/* Slide index overlay */}
-                <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur text-white font-mono text-[10px] font-bold">
-                  {activeSlideIndex + 1}/{editedPost.slides.length}
-                </div>
-
-                {/* Left/Right Card Navigation Arrows */}
-                <button
-                  onClick={() => setActiveSlideIndex((prev) => (prev > 0 ? prev - 1 : editedPost.slides.length - 1))}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-all"
-                  aria-label="Previous slide"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={() => setActiveSlideIndex((prev) => (prev < editedPost.slides.length - 1 ? prev + 1 : 0))}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition-all"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Bottom Half: Theme Color Block (Default Royal Blue #2446f5) */}
-              <div 
-                className="h-1/2 w-full p-5 flex flex-col justify-between text-white transition-colors duration-300"
-                style={{ backgroundColor: editedPost.themeColor || '#2446f5' }}
+            <div className="relative w-full max-w-[360px] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900">
+              <CardCanvas input={cardInputFor(activeSlideIndex)} width={720} className="w-full block" />
+              <button
+                onClick={() => setActiveSlideIndex((prev) => (prev > 0 ? prev - 1 : editedPost.slides.length - 1))}
+                aria-label="Slide sebelumnya"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center"
               >
-                <div className="space-y-2">
-                  {activeSlideIndex === 0 && (
-                    <div className="mb-1">
-                      <span 
-                        className="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-mono font-black uppercase tracking-wider shadow-sm transition-all"
-                        style={{
-                          backgroundColor: getCategoryTheme(editedPost.category).bg,
-                          color: getCategoryTheme(editedPost.category).text
-                        }}
-                      >
-                        {editedPost.category}
-                      </span>
-                    </div>
-                  )}
-                  <h4 className={`text-base sm:text-lg font-black text-[#e2ff3b] uppercase leading-tight line-clamp-3 transition-all ${activeFontPreset.titleClass}`}>
-                    {currentSlide.title}
-                  </h4>
-                  <p className={`text-xs text-white/95 leading-relaxed line-clamp-5 transition-all ${activeFontPreset.descClass}`}>
-                    {currentSlide.body}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-white/20 text-[9px] font-mono text-white/80">
-                  <span className="truncate max-w-[180px]">{currentSlide.sourceText || `Sumber: ${editedPost.source}`}</span>
-                  <span>Geser ➔</span>
-                </div>
-              </div>
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setActiveSlideIndex((prev) => (prev < editedPost.slides.length - 1 ? prev + 1 : 0))}
+                aria-label="Slide berikutnya"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
 
-            <details className="w-full max-w-[360px] group rounded-xl border border-zinc-200 bg-white">
-              <summary className="cursor-pointer select-none px-3 py-2 text-[11px] font-mono font-bold text-zinc-700 flex items-center gap-1.5">
-                <SlidersHorizontal className="w-3.5 h-3.5" /> Warna &amp; font
-              </summary>
-              <div className="p-2 space-y-2">
-            {/* Theme Color Selector Palette */}
-            <div className="w-full max-w-[360px] p-3 bg-zinc-50 border border-zinc-200 rounded-xl space-y-2">
-              <div className="text-[10px] font-mono text-zinc-500 uppercase flex items-center justify-between">
-                <span className="flex items-center gap-1.5 font-bold text-zinc-700">
-                  <Palette className="w-3 h-3 text-blue-600" />
-                  <span>Warna Tema Blok:</span>
-                </span>
-                <span className="font-bold text-zinc-900">
-                  {THEME_COLORS.find(c => c.hex === (editedPost.themeColor || '#2446f5'))?.name || 'Royal Blue'}
-                </span>
+            {/* Template picker */}
+            <div className="w-full max-w-[360px] space-y-2">
+              <div className="text-[11px] font-mono font-bold text-zinc-700 flex items-center justify-between">
+                <span>Template</span>
+                <span className="text-zinc-500 font-normal">{activeTemplate.name}</span>
               </div>
-              <div className="flex items-center justify-between gap-2">
-                {THEME_COLORS.map(c => (
-                  <button
-                    key={c.hex}
-                    type="button"
-                    onClick={() => setEditedPost({ ...editedPost, themeColor: c.hex })}
-                    className={`flex-1 h-7 rounded-lg border-2 transition-all flex items-center justify-center ${
-                      (editedPost.themeColor || '#2446f5') === c.hex ? 'border-zinc-900 scale-105 shadow-md ring-2 ring-zinc-900/20' : 'border-zinc-300 opacity-75 hover:opacity-100'
-                    }`}
-                    style={{ backgroundColor: c.hex }}
-                    title={c.name}
-                  >
-                    {(editedPost.themeColor || '#2446f5') === c.hex && (
-                      <Check className="w-3.5 h-3.5 text-white drop-shadow" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Font Typography Pairing Selector (100% Free Commercial / SIL OFL) */}
-            <div className="w-full max-w-[360px] p-3 bg-zinc-50 border border-zinc-200 rounded-xl space-y-2">
-              <div className="text-[10px] font-mono text-zinc-500 uppercase flex items-center justify-between">
-                <span className="flex items-center gap-1.5 font-bold text-zinc-700">
-                  <Type className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Tipografi (Free Komersil):</span>
-                </span>
-                <span className="font-bold text-zinc-900 text-[10px] truncate max-w-[150px]">
-                  {activeFontPreset.badge}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 gap-1.5 max-h-[175px] overflow-y-auto no-scrollbar pr-0.5">
-                {FONT_PRESETS.map((preset) => {
-                  const isSelected = (editedPost.fontPairing || 'bebas') === preset.id;
+              <div className="grid grid-cols-3 gap-2">
+                {CARD_TEMPLATES.map((t) => {
+                  const selected = t.id === activeTemplate.id;
                   return (
                     <button
-                      key={preset.id}
+                      key={t.id}
                       type="button"
-                      onClick={() => setEditedPost({ ...editedPost, fontPairing: preset.id })}
-                      className={`w-full p-2 rounded-xl text-left border transition-all flex items-center justify-between gap-2 ${
-                        isSelected
-                          ? 'bg-white border-zinc-900 text-zinc-900 shadow ring-1 ring-zinc-900/10'
-                          : 'bg-white/70 hover:bg-white border-zinc-200 text-zinc-700'
-                      }`}
+                      onClick={() => setEditedPost({ ...editedPost, template: t.id })}
+                      title={t.hint}
+                      className={`rounded-lg border-2 p-1 text-left transition-all ${selected ? 'border-zinc-900 shadow-md' : 'border-zinc-200 hover:border-zinc-400'}`}
                     >
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
-                          <span className={`text-xs font-bold leading-tight ${preset.titleClass}`}>
-                            {preset.headlineFont}
-                          </span>
-                          <span className="text-[10px] text-zinc-500 font-mono">+ {preset.bodyFont}</span>
-                        </div>
-                        <p className="text-[9px] text-zinc-500 line-clamp-1 mt-0.5">{preset.description}</p>
+                      <div className="rounded overflow-hidden bg-zinc-200">
+                        <CardCanvas input={{ ...cardInputFor(activeSlideIndex), template: t }} width={200} className="w-full block" />
                       </div>
-                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold shrink-0 ${
-                        isSelected ? 'bg-zinc-900 text-white shadow-sm' : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
-                      }`}>
-                        {preset.badge}
-                      </span>
+                      <div className="text-[9px] font-mono font-bold text-zinc-700 mt-1 truncate">{t.name}</div>
                     </button>
                   );
                 })}
               </div>
             </div>
-              </div>
-            </details>
 
             {/* Download Buttons Bar */}
             <div className="w-full max-w-[360px] space-y-2 text-xs font-mono">

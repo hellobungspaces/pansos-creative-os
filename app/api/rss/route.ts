@@ -1,83 +1,31 @@
 import { NextResponse } from 'next/server';
 import { RedaksiPost, SlideItem } from '@/data/redaksiData';
 
-// Curated fallback photo pools by category
-const FREE_IMAGES: Record<string, string[]> = {
-  FAUNA: [
-    'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=1080&auto=format&fit=crop&q=85', // Panda makan bambu
-    'https://images.unsplash.com/photo-1527118732049-c88155f2107c?w=1080&auto=format&fit=crop&q=85', // Bayi panda di pohon
-    'https://images.unsplash.com/photo-1548247416-ec66f4900b2e?w=1080&auto=format&fit=crop&q=85', // Red panda lucu
-    'https://images.unsplash.com/photo-1579202673506-ca3ce28943ef?w=1080&auto=format&fit=crop&q=85', // Panda raksasa santai
-    'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=1080&auto=format&fit=crop&q=85', // Panda bermain
-    'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1080&auto=format&fit=crop&q=85', // Kucing gemas
-  ],
-  LINGKUNGAN: [
-    'https://images.unsplash.com/photo-1602980085566-4c40b8fecf06?w=1080&auto=format&fit=crop&q=85', // Karhutla & kobaran api
-    'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1080&auto=format&fit=crop&q=85', // Asap hutan kebakaran
-    'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=1080&auto=format&fit=crop&q=85', // Polusi kabut kota
-    'https://images.unsplash.com/photo-1511497584788-87676104235f?w=1080&auto=format&fit=crop&q=85', // Hutan tropis
-    'https://images.unsplash.com/photo-1547683905-f686c993aae5?w=1080&auto=format&fit=crop&q=85', // Banjir & cuaca ekstrem
-    'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1080&auto=format&fit=crop&q=85', // Alam berkabut
-  ],
-  KONOHA: [
-    'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85', // Gedung parlemen / DPR
-    'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85', // Palu sidang hukum
-    'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1080&auto=format&fit=crop&q=85', // Garis investigasi polisi
-    'https://images.unsplash.com/photo-1596405835955-4532a63c0d61?w=1080&auto=format&fit=crop&q=85', // Bendera merah putih & sidang
-    'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1080&auto=format&fit=crop&q=85', // Jalanan ibu kota Jakarta
-    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85', // Diskusi pejabat / tim
-  ],
-  AI: [
-    'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1080&auto=format&fit=crop&q=85', // AI Neural brain
-    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1080&auto=format&fit=crop&q=85', // Glowing futuristik
-    'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1080&auto=format&fit=crop&q=85', // Robotik humanoid
-    'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1080&auto=format&fit=crop&q=85', // Robotic hand
-    'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&auto=format&fit=crop&q=85', // Cyber matrix code
-    'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=1080&auto=format&fit=crop&q=85', // AI developer
-  ],
-  SOSMED: [
-    'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85',
-  ],
-  BISNIS: [
-    'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85', // Candlestick trading
-    'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=1080&auto=format&fit=crop&q=85', // Bitcoin fisik
-    'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1080&auto=format&fit=crop&q=85', // Financial chart
-    'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1080&auto=format&fit=crop&q=85', // Modern office
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1080&auto=format&fit=crop&q=85', // Skyscrapers
-    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85',
-  ],
-  MARKETING: [
-    'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1080&auto=format&fit=crop&q=85',
-  ],
-  TEKNOLOGI: [
-    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
-    'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1080&auto=format&fit=crop&q=85',
-  ]
-};
+// Fallback photo pools. EVERY entry was checked by eye; only add a photo after looking at it.
+// Real, headline-specific photos come from Wikimedia Commons (see resolveRealPhotos). These pools
+// are last resort and exist only for topics where a generic photo is not misleading.
+const U = (id: string) => `https://images.unsplash.com/${id}?w=1080&auto=format&fit=crop&q=85`;
 
-// Aliases: dedicated pools for new categories fall back to the closest verified pool
-FREE_IMAGES.HUKUM = FREE_IMAGES.KONOHA;
-FREE_IMAGES.KRIMINAL = [FREE_IMAGES.KONOHA[2], FREE_IMAGES.KONOHA[1], FREE_IMAGES.KONOHA[4], FREE_IMAGES.KONOHA[0], FREE_IMAGES.KONOHA[3]];
-FREE_IMAGES.KESEHATAN = [FREE_IMAGES.KONOHA[4], FREE_IMAGES.KONOHA[5], FREE_IMAGES.LINGKUNGAN[3], FREE_IMAGES.BISNIS[3], FREE_IMAGES.KONOHA[3]];
-FREE_IMAGES.PENDIDIKAN = [FREE_IMAGES.KONOHA[5], FREE_IMAGES.BISNIS[3], FREE_IMAGES.KONOHA[4], FREE_IMAGES.TEKNOLOGI[2], FREE_IMAGES.KONOHA[3]];
-FREE_IMAGES.OLAHRAGA = [FREE_IMAGES.KONOHA[4], FREE_IMAGES.KONOHA[3], FREE_IMAGES.SOSMED[2], FREE_IMAGES.KONOHA[5], FREE_IMAGES.BISNIS[4]];
-FREE_IMAGES.HIBURAN = [FREE_IMAGES.SOSMED[0], FREE_IMAGES.SOSMED[3], FREE_IMAGES.SOSMED[4], FREE_IMAGES.SOSMED[5], FREE_IMAGES.SOSMED[1]];
-FREE_IMAGES.TRANSPORTASI = [FREE_IMAGES.KONOHA[4], FREE_IMAGES.BISNIS[4], FREE_IMAGES.KONOHA[5], FREE_IMAGES.KONOHA[3], FREE_IMAGES.LINGKUNGAN[2]];
-FREE_IMAGES.VIRAL = [FREE_IMAGES.SOSMED[1], FREE_IMAGES.SOSMED[0], FREE_IMAGES.SOSMED[4], FREE_IMAGES.KONOHA[4], FREE_IMAGES.SOSMED[5]];
+// Dark neutral card background. Better than a wrong photo.
+const NEUTRAL_IMAGE =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1f33"/><stop offset="1" stop-color="#07080d"/></linearGradient></defs><rect width="1080" height="1350" fill="url(#g)"/></svg>'
+  );
+
+const PANDA = [U('photo-1527118732049-c88155f2107c'), U('photo-1564349683136-77e08dba1ef7')];
+const CAT = ['photo-1514888286974-6c03e2ca1dba', 'photo-1518791841217-8f162f1e1131', 'photo-1533738363-b7f9aef128ce', 'photo-1543852786-1cf6624b9987', 'photo-1548247416-ec66f4900b2e', 'photo-1573865526739-10659fec78a5', 'photo-1579202673506-ca3ce28943ef'].map(U);
+
+const FREE_IMAGES: Record<string, string[]> = {
+  FAUNA: [...PANDA, U('photo-1561731216-c3a4d99437d5'), U('photo-1534567153574-2b12153a87f0')], // panda, tiger, giraffes
+  LINGKUNGAN: [U('photo-1547683905-f686c993aae5'), U('photo-1611273426858-450d8e3c9fce'), U('photo-1509316975850-ff9c5deb0cd9'), U('photo-1464822759023-fed622ff2c3b'), U('photo-1470071459604-3b5ec3a7fe05')], // flood, smokestacks, fog forest, mountains
+  HUKUM: [U('photo-1589578527966-fdac0f44566c'), U('photo-1589829545856-d10d557cf95f')], // lady justice
+  AI: [U('photo-1677442136019-21780ecad995'), U('photo-1620712943543-bcc4688e7485'), U('photo-1535378917042-10a22c95931a'), U('photo-1543512214-318c7553f230'), U('photo-1550751827-4bd374c3f58b'), U('photo-1526374965328-7f61d4dc18c5')],
+  SOSMED: [U('photo-1511707171634-5f897ff02aa9'), U('photo-1555774698-0b77e0d5fac6'), U('photo-1567581935884-3349723552ca'), U('photo-1611162616305-c69b3fa7fbe0'), U('photo-1611162617213-7d7a39e9b1d7'), U('photo-1516251193007-45ef944ab0c6')],
+  BISNIS: [U('photo-1590283603385-17ffb3a7f29f'), U('photo-1611974789855-9c2a0a7236a3'), U('photo-1516245834210-c4c142787335')], // charts, bitcoin
+  MARKETING: [U('photo-1519389950473-47ba0277781c'), U('photo-1522071820081-009f0129c71c'), U('photo-1557804506-669a67965ba0')],
+  TEKNOLOGI: [U('photo-1518770660439-4636190af475'), U('photo-1550751827-4bd374c3f58b'), U('photo-1526374965328-7f61d4dc18c5'), U('photo-1531297484001-80022131f5a1'), U('photo-1460925895917-afdab827c52f'), U('photo-1519389950473-47ba0277781c')],
+};
 
 interface FeedSourceDef {
   name: string;
@@ -216,101 +164,187 @@ function parseFeedItems(xmlText: string, sourceName: string): Array<{ title: str
   return items;
 }
 
-// Precise entity photo matcher so headlines never get mismatched stock photos
+// Last-resort matcher: only returns photos that really depict the topic, otherwise a neutral background.
 function findBestMatchingPhotos(title: string, desc: string, category: string, seed: number): string[] {
-  const combined = (title + ' ' + desc).toLowerCase();
+  const c = (title + ' ' + desc).toLowerCase();
+  if (/\b(panda|ai lian|chongqing|bambu)\b/.test(c)) return PANDA;
+  if (/\b(kucing|kitten|anabul)\b/.test(c)) return CAT;
+  if (/\b(harimau)\b/.test(c)) return [FREE_IMAGES.FAUNA[2]];
+  if (/\b(banjir)\b/.test(c)) return [FREE_IMAGES.LINGKUNGAN[0]];
+  if (/\b(karhutla|asap|polusi|emisi)\b/.test(c)) return [FREE_IMAGES.LINGKUNGAN[1], FREE_IMAGES.LINGKUNGAN[2]];
+  if (/\b(kripto|crypto|bitcoin)\b/.test(c)) return [FREE_IMAGES.BISNIS[2], FREE_IMAGES.BISNIS[1]];
+  if (/\b(saham|ihsg)\b/.test(c)) return [FREE_IMAGES.BISNIS[1], FREE_IMAGES.BISNIS[0]];
+  if (/\b(sidang|hakim|pengadilan|vonis|kpk)\b/.test(c)) return FREE_IMAGES.HUKUM;
+  const pool = FREE_IMAGES[category];
+  return pool && pool.length ? pool : [NEUTRAL_IMAGE];
+}
 
-  // 1. Panda / Ai Lian / Kebun Binatang Chongqing / Satwa Spesifik
-  if (combined.match(/\b(panda|ai lian|chongqing|bambu)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1527118732049-c88155f2107c?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1548247416-ec66f4900b2e?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1579202673506-ca3ce28943ef?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=1080&auto=format&fit=crop&q=85'
-    ];
+// ---- Real, headline-specific photos from Wikimedia Commons (free licenses, author credited) ----
+interface CommonsPhoto { url: string; attribution: string }
+
+const commonsCache = new Map<string, Promise<CommonsPhoto[]>>();
+const BAD_TITLE = /logo|map|icon|signature|flag|seal|emblem|diagram|chart|poster|stamp|coat of arms|banner|screenshot|cover/i;
+
+function searchCommons(q: string): Promise<CommonsPhoto[]> {
+  let p = commonsCache.get(q);
+  if (!p) {
+    p = (async () => {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4500);
+        const url =
+          'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=12' +
+          `&gsrsearch=${encodeURIComponent(q)}&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=1080&format=json&origin=*`;
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'KonohaInsight/1.0 (editor@konohainsight.org)' },
+          signal: controller.signal,
+          next: { revalidate: 3600 }
+        });
+        clearTimeout(timer);
+        if (!res.ok) return [];
+        const data = await res.json();
+        const pages = (Object.values(data.query?.pages || {}) as any[]).sort((a, b) => (a.index || 0) - (b.index || 0));
+        const out: CommonsPhoto[] = [];
+        for (const pg of pages) {
+          const info = pg.imageinfo?.[0];
+          if (!info || info.mime !== 'image/jpeg' || (info.width || 0) < 900 || BAD_TITLE.test(pg.title || '')) continue;
+          const meta = info.extmetadata || {};
+          const artist = String(meta.Artist?.value || 'Wikimedia Commons').replace(/<[^>]*>/g, '').trim().slice(0, 40);
+          const license = String(meta.LicenseShortName?.value || 'CC').trim();
+          out.push({ url: info.thumburl || info.url, attribution: `Foto: ${artist} / Wikimedia Commons (${license})` });
+        }
+        return out;
+      } catch {
+        return [];
+      }
+    })();
+    commonsCache.set(q, p);
   }
+  return p;
+}
 
-  // 2. Kucing / Anabul / Pet
-  if (combined.match(/\b(kucing|cat|kitten|anabul)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=1080&auto=format&fit=crop&q=85'
-    ];
+// ---- Stock photo APIs (optional, enabled by env keys). Better than Commons for generic topics. ----
+const PEXELS_KEY = process.env.PEXELS_API_KEY;
+const UNSPLASH_KEY = process.env.UNSPLASH_ACCESS_KEY;
+
+// English queries: stock APIs match English tags far better than Indonesian
+const CATEGORY_STOCK_QUERY: Record<string, string> = {
+  BISNIS: 'stock market', KESEHATAN: 'doctor hospital', PENDIDIKAN: 'students classroom', OLAHRAGA: 'football stadium',
+  HIBURAN: 'concert crowd', TRANSPORTASI: 'city traffic', LINGKUNGAN: 'forest environment', SOSMED: 'smartphone social media',
+  AI: 'artificial intelligence robot', TEKNOLOGI: 'technology', KRIMINAL: 'police tape', HUKUM: 'courtroom gavel',
+};
+
+const stockCache = new Map<string, Promise<CommonsPhoto[]>>();
+
+function searchStock(q: string): Promise<CommonsPhoto[]> {
+  let p = stockCache.get(q);
+  if (!p) {
+    p = (async () => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4500);
+      try {
+        if (PEXELS_KEY) {
+          const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(q)}&per_page=6&orientation=portrait`, {
+            headers: { Authorization: PEXELS_KEY },
+            signal: controller.signal,
+            next: { revalidate: 3600 }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const out = (data.photos || []).map((ph: any) => ({
+              url: ph.src?.large2x || ph.src?.large,
+              attribution: `Foto: ${ph.photographer} / Pexels`
+            })).filter((x: CommonsPhoto) => x.url);
+            if (out.length) return out as CommonsPhoto[];
+          }
+        }
+        if (UNSPLASH_KEY) {
+          const res = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=6&orientation=portrait&content_filter=high`, {
+            headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` },
+            signal: controller.signal,
+            next: { revalidate: 3600 }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            return (data.results || []).map((ph: any) => ({
+              url: ph.urls?.regular,
+              attribution: `Foto: ${ph.user?.name || 'Unsplash'} / Unsplash`
+            })).filter((x: CommonsPhoto) => x.url) as CommonsPhoto[];
+          }
+        }
+      } catch {
+        /* fall through */
+      } finally {
+        clearTimeout(timer);
+      }
+      return [];
+    })();
+    stockCache.set(q, p);
   }
+  return p;
+}
 
-  // 3. Karhutla / Kebakaran Hutan / Asap / Titik Panas
-  if (combined.match(/\b(karhutla|kebakaran|asap|titik panas|cams|emisi|polusi|kabut)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1602980085566-4c40b8fecf06?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1511497584788-87676104235f?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1547683905-f686c993aae5?w=1080&auto=format&fit=crop&q=85'
-    ];
+const CAP_STOP = new Set(['Video', 'Foto', 'Ini', 'Itu', 'Kata', 'Soal', 'Usai', 'Cara', 'Apa', 'Kenapa', 'Jadi', 'Bakal', 'Hari', 'Pemerintah', 'Polisi', 'Warga', 'Indonesia', 'Rp', 'Di', 'Ke', 'Dari', 'Yang', 'Dan']);
+
+const KEYWORD_QUERIES: Array<[RegExp, string]> = [
+  [/\bpanda\b/i, 'giant panda'], [/\bkucing\b/i, 'domestic cat'], [/\bkarhutla|kebakaran hutan\b/i, 'forest fire Indonesia'],
+  [/\bbanjir\b/i, 'flood Indonesia'], [/\bgempa\b/i, 'earthquake damage'], [/\bkrl\b/i, 'KRL Commuter Line'], [/\bmrt\b/i, 'MRT Jakarta'],
+  [/\blrt\b/i, 'LRT Jakarta'], [/\btransjakarta\b/i, 'Transjakarta bus'], [/\bbandara\b/i, 'Soekarno-Hatta International Airport'],
+  [/\bdpr\b/i, 'Gedung DPR MPR'], [/\bistana\b/i, 'Istana Merdeka'], [/\bkpk\b/i, 'Komisi Pemberantasan Korupsi'],
+  [/\bihsg|bursa efek|saham\b/i, 'Indonesia Stock Exchange'], [/\brupiah\b/i, 'Indonesian rupiah banknotes'],
+  [/\bsepak bola|timnas|liga 1\b/i, 'Indonesia national football team'], [/\bbadminton\b/i, 'Indonesia badminton'], [/\bmotogp\b/i, 'MotoGP'],
+  [/\bsekolah|siswa\b/i, 'school students Indonesia'], [/\bkampus|mahasiswa\b/i, 'university students Indonesia'],
+  [/\brumah sakit\b/i, 'hospital Indonesia'], [/\btol\b/i, 'toll road Indonesia'], [/\bmudik\b/i, 'mudik Indonesia'],
+  [/\bsawit\b/i, 'oil palm plantation'], [/\bnikel\b/i, 'nickel mining Indonesia'], [/\bbatu bara\b/i, 'coal mining Indonesia'],
+  [/\bpolisi|polda|polres\b/i, 'Indonesian National Police'], [/\bsidang|pengadilan\b/i, 'Indonesian court'],
+];
+
+function entityQueries(title: string, desc: string, category: string): string[] {
+  const queries: string[] = [];
+  const words = title.split(/\s+/);
+  const capRatio = words.filter((w) => /^[A-Z]/.test(w)).length / Math.max(1, words.length);
+  // Names only make sense when the headline is not Title Case / ALL CAPS
+  if (capRatio < 0.7) {
+    const seqs = (title.match(/[A-Z][\w.'-]+(?:\s+(?:bin|binti|van|de|[A-Z][\w.'-]+))*/g) || [])
+      .map((x) => x.trim())
+      .filter((x) => x.length >= 4 && !CAP_STOP.has(x))
+      .filter((x) => category !== 'VIRAL' || x.includes(' ')); // single capitalized words in viral headlines are rarely names
+    seqs.sort((a, b) => b.length - a.length);
+    queries.push(...seqs.slice(0, 2));
   }
+  const text = `${title} ${desc}`;
+  for (const [re, q] of KEYWORD_QUERIES) if (re.test(text) && queries.length < 4) queries.push(q);
+  // No generic per-category query on purpose: a vaguely related photo misleads more than a neutral card.
+  return Array.from(new Set(queries)).slice(0, 4);
+}
 
-  // 4. Banjir / Cuaca / BMKG
-  if (combined.match(/\b(banjir|cuaca|hujan|badai|bmkg|gempa)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1547683905-f686c993aae5?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1511497584788-87676104235f?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1602980085566-4c40b8fecf06?w=1080&auto=format&fit=crop&q=85'
-    ];
+// Replace slide photos with real, topic-specific ones: named entities via Commons, then stock APIs.
+async function resolveRealPhotos(post: RedaksiPost, origTitle: string, desc: string) {
+  const queries = entityQueries(origTitle, desc, post.category);
+  const results = await Promise.all(queries.map(searchCommons));
+  const seen = new Set<string>();
+  const photos: CommonsPhoto[] = [];
+  const add = (list: CommonsPhoto[], n: number) =>
+    list.slice(0, n).forEach((ph) => { if (!seen.has(ph.url) && photos.length < 5) { seen.add(ph.url); photos.push(ph); } });
+  results.forEach((list) => add(list, 3));
+
+  // Stock APIs fill the gap when Commons found fewer than 3 photos
+  if ((PEXELS_KEY || UNSPLASH_KEY) && photos.length < 3) {
+    const text = `${origTitle} ${desc}`;
+    const stockQueries = KEYWORD_QUERIES.filter(([re]) => re.test(text)).map(([, q]) => q).slice(0, 2);
+    if (CATEGORY_STOCK_QUERY[post.category]) stockQueries.push(CATEGORY_STOCK_QUERY[post.category]);
+    const stock = await Promise.all(Array.from(new Set(stockQueries)).map(searchStock));
+    stock.forEach((list) => add(list, 3));
   }
-
-  // 5. Hukum / Sidang / Polisi / KPK / Hakim / Kasus
-  if (combined.match(/\b(sidang|hakim|kpk|kejaksaan|polisi|tersangka|kasus|hukum|pengadilan|penjara|vonis|uu)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1596405835955-4532a63c0d61?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1080&auto=format&fit=crop&q=85'
-    ];
-  }
-
-  // 6. DPR / Menteri / Pejabat / Politik Konoha
-  if (combined.match(/\b(dpr|menteri|pejabat|parlemen|pilkada|pemilu|bawaslu|presiden|istana|politik)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1596405835955-4532a63c0d61?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85'
-    ];
-  }
-
-  // 7. WhatsApp / Medsos / Smartphone
-  if (combined.match(/\b(whatsapp|wa|instagram|ig|tiktok|x |twitter|medsos|sosmed|smartphone|hp|android|ios|iphone)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=1080&auto=format&fit=crop&q=85'
-    ];
-  }
-
-  // 8. Saham / Kripto / Bitcoin / Cuan
-  if (combined.match(/\b(saham|kripto|crypto|bitcoin|cuan|investasi|ihsg|rupiah|dolar|bappebti)\b/i)) {
-    return [
-      'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1080&auto=format&fit=crop&q=85',
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1080&auto=format&fit=crop&q=85'
-    ];
-  }
-
-  // Default: Fallback to category pool
-  const pool = FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI;
-  return pool;
+  if (photos.length === 0) return;
+  post.slides = post.slides.map((sl, i) => {
+    const ph = photos[i % photos.length];
+    return { ...sl, photoUrl: ph.url, photoAttribution: ph.attribution };
+  });
+  post.coverImage = photos[0].url;
+  post.coverImageAttribution = photos[0].attribution;
+  post.licenseInfo = 'Free license (Wikimedia Commons / Pexels / Unsplash) · author credited';
+  post.caption = post.caption.replace(/📷 Lisensi Foto:[^\n]*/, `📷 ${photos[0].attribution}`);
 }
 
 // Short, punchy copy per category: [title, body] for slides 2-5. Keep bodies under ~110 chars.
@@ -426,7 +460,7 @@ function buildFullEditorialSlides(item: { title: string; link: string; desc: str
     body,
     hasPhoto: true,
     photoUrl: images[idx] || images[(seed + idx) % images.length],
-    photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+    photoAttribution: (images[idx] || '').startsWith('data:') ? '' : 'Foto: Unsplash (Free Commercial Use)',
     sourceText: `Sumber: ${srcName}`
   }));
 }
@@ -481,6 +515,7 @@ export async function GET(req: Request) {
 
   const collectedPosts: RedaksiPost[] = [];
   const ageById = new Map<string, number>();
+  const sourceTextById = new Map<string, { title: string; desc: string }>();
 
   // Parallel fetch from top trusted sources with 3.5s timeout
   await Promise.all(
@@ -518,10 +553,11 @@ export async function GET(req: Request) {
 
           // Build 5 complete slides with rich visuals on EVERY slide
           const slides = buildFullEditorialSlides(item, src.name, category, seed);
-          const coverImg = slides[0].photoUrl || (FREE_IMAGES[category] || FREE_IMAGES.TEKNOLOGI)[0];
+          const coverImg = slides[0].photoUrl || NEUTRAL_IMAGE;
           const viralScore = 0; // computed after all feeds are collected (see scoreVirality)
           const postId = `rss-${Date.now()}-${sourceIdx}-${itemIdx}`;
           ageById.set(postId, ageHours);
+          sourceTextById.set(postId, { title: item.title, desc: item.desc });
 
           let hostDomain = '';
           try {
@@ -774,6 +810,13 @@ export async function GET(req: Request) {
       if (next && results.length < requestedLimit) results.push(next);
     }
   }
+
+  await Promise.all(
+    results.map((post) => {
+      const src = sourceTextById.get(post.id);
+      return src ? resolveRealPhotos(post, src.title, src.desc) : Promise.resolve();
+    })
+  );
 
   return NextResponse.json({
     success: true,

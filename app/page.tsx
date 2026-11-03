@@ -37,8 +37,9 @@ export default function HomePage() {
     const syncNews = (currentPosts: RedaksiPost[]) => {
       const lastSync = localStorage.getItem('konoha_insight_last_sync');
       const now = Date.now();
-      if (lastSync && now - parseInt(lastSync, 10) <= 3 * 60 * 60 * 1000) return;
-      fetch('/api/rss?limit=12')
+      // Only skip if we already have plenty of posts (> 6) and synced recently
+      if (currentPosts.length >= 6 && lastSync && now - parseInt(lastSync, 10) <= 2 * 60 * 60 * 1000) return;
+      fetch('/api/rss?limit=16&maxAgeHours=48')
         .then((r) => r.json())
         .then((data) => {
           if (data.success && data.posts && data.posts.length > 0) {
@@ -131,7 +132,7 @@ export default function HomePage() {
   const handleLiveScout = async () => {
     setIsScouting(true);
     try {
-      const res = await fetch('/api/rss?limit=12');
+      const res = await fetch('/api/rss?limit=16&maxAgeHours=48');
       const data = await res.json();
       if (data.success && data.posts && data.posts.length > 0) {
         const existingTitles = new Set(posts.map((p) => p.title.toLowerCase().trim()));

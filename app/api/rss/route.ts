@@ -526,8 +526,8 @@ function scoreVirality(posts: RedaksiPost[], ageById: Map<string, number>) {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const requestedLimit = parseInt(searchParams.get('limit') || '8', 10);
-  const maxAgeHours = parseFloat(searchParams.get('maxAgeHours') || '24'); // default strictly 24 hours (anti-basi)
+  const requestedLimit = parseInt(searchParams.get('limit') || '16', 10);
+  const maxAgeHours = parseFloat(searchParams.get('maxAgeHours') || '48'); // default ideal 48 jam (2 hari) untuk carousel context
 
   const collectedPosts: RedaksiPost[] = [];
   const ageById = new Map<string, number>();

@@ -41,7 +41,7 @@ Live Production: [https://konoha-insight.vercel.app](https://konoha-insight.verc
 ## 🚀 Jalankan di Localhost
 
 ```bash
-cd "/Users/gilangsegoro/Downloads/ Bung Coding"
+cd "konoha-insight"
 npm run dev
 # Buka http://localhost:3000 di browser
 ```

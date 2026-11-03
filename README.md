@@ -3,7 +3,7 @@
 > **Sistem operasional redaksi otonom untuk Homeless Media Konoha Insight (@konoha.insight).**  
 > Menggabungkan pemantau tren otomatis 24 jam, kurasi media kredibel (Kompas, Detik, CNN, Antara), penyusunan naskah sarkas cerdas, studio caption Instagram, dan render kartu carousel 4:5 native canvas.
 
-Live Production: [https://konoha-insight.vercel.app](https://konoha-insight.vercel.app) (juga aktif di [https://konohainsight.vercel.app](https://konohainsight.vercel.app))
+Live Production: [https://pansos-creative-os.vercel.app](https://pansos-creative-os.vercel.app) (Domain Alias: [https://konoha-insight.vercel.app](https://konoha-insight.vercel.app))
 
 ---
 

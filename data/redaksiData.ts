@@ -115,360 +115,71 @@ export const INITIAL_POSTS: RedaksiPost[] = [
     caption: 'Skandal intelijen dan hukum paling mengguncang Konoha tahun ini! Bareskrim Polri resmi menetapkan tiga tersangka (inisial LSP, ASN, EH) atas dugaan tindak pidana penyadapan ilegal (illegal tapping) dan penghapusan data elektronik.\n\nYang bikin bulu kuduk merinding: target sadapan tanpa izin ini menyasar nomor ponsel Presiden RI, pejabat negara, petinggi partai, aktivis LSM, hingga wartawan. Data sadapan sempat dikumpulkan di server khusus sebelum diduga diperintahkan dihapus untuk menghilangkan barang bukti.\n\nSimak rincian fakta dan kronologinya di 5 slide di atas 👆\n\n📌 Sumber Laporan: Bareskrim Polri / Kompas TV / Detikcom\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\nKalo menurut lo, ini murni kelalaian oknum atau ada agenda yang jauh lebih besar? Tumpahkan opinimu di kolom komentar! 👇\n\n#KonohaInsight #WargaKonoha #HukumKonoha #Polri #PenyadapanIlegal #BreakingNews #KasusPolisi #SkandalHukum'
   },
   {
-    id: 'post-1',
-    category: 'AI',
-    title: 'ALEXA PLUS MENDADAK NYANYI "LALALA" SELAMA BEBERAPA MENIT',
-    highlightedTitle: 'ALEXA PLUS MENDADAK <span class="text-[#e2ff3b]">NYANYI "LALALA"</span> SELAMA BEBERAPA MENIT',
-    source: 'The Verge',
-    sourceUrl: 'https://www.theverge.com/tech',
-    licenseInfo: 'Unsplash Free Commercial License',
-    timeAgo: '49 mnt lalu',
-    viralScore: 92,
-    coverImage: 'https://images.unsplash.com/photo-1543512214-318c7553f230?w=1080&auto=format&fit=crop&q=85',
-    coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
-    sourceBadge: 'The Verge',
-    totalSlides: 5,
-    hasRiskWarning: false,
-    status: 'perlu_review',
-    slides: [
-      {
-        number: 1,
-        title: 'ALEXA PLUS MENDADAK NYANYI "LALALA" SELAMA BEBERAPA MENIT',
-        body: 'Pengguna Amazon Alexa Plus di berbagai negara melaporkan anomali suara misterius di tengah malam.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1543512214-318c7553f230?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: The Verge'
-      },
-      {
-        number: 2,
-        title: 'ANOMALI DI TENGAH MALAM',
-        body: 'Perangkat pintar Amazon tiba-tiba memutar lantunan lagu berulang-ulang tanpa ada perintah dari pemilik rumah.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: The Verge'
-      },
-      {
-        number: 3,
-        title: 'TANGGAPAN RESMI AMAZON',
-        body: 'Amazon menyatakan bahwa hal ini terjadi akibat bug sinkronisasi cache model bahasa generatif audio terbaru pada firmware perangkat.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: The Verge'
-      },
-      {
-        number: 4,
-        title: 'POTENSI RISIKO PRIVASI SMART HOME',
-        body: 'Pakar keamanan siber memperingatkan pentingnya mematikan mikrofon fisik saat tidak digunakan untuk mencegah kebocoran audio latar.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: The Verge'
-      },
-      {
-        number: 5,
-        title: 'MENURUT KAMU GIMANA?',
-        body: 'Kalau smart speaker di kamar lo tiba-tiba nyanyi sendiri jam 2 pagi, apa yang bakal lo lakuin pertama kali? Tulis di komentar! 👇',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: The Verge'
-      }
-    ],
-    caption: 'Alexa Plus mendadak bernyanyi sendiri di tengah malam tanpa ada perintah suara sama sekali. Kejadian aneh ini memicu kekhawatiran privasi perangkat pintar di rumah para warga Konoha.\n\nSimak slide 1 sampai 5 untuk fakta lengkap dan tanggapan resmi Amazon.\n\n📌 Sumber Informasi: The Verge (theverge.com)\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\nKalau smart speaker lo mendadak nyanyi tengah malam, lo bakal ngapain? Tulis di bawah 👇\n\n#AlexaBug #SmartHome #ArtificialIntelligence #KeamananDigital #KonohaInsight #WargaKonoha'
-  },
-  {
-    id: 'post-2',
-    category: 'AI',
-    title: 'ANCAMAN DI CLAUDE TERDETEKSI, PENGGUNA DILAPORKAN DAN DITANGKAP',
-    highlightedTitle: 'ANCAMAN DI CLAUDE TERDETEKSI, <span class="text-[#e2ff3b]">PENGGUNA DILAPORKAN DAN DITANGKAP</span>',
-    source: 'detikInet',
-    sourceUrl: 'https://inet.detik.com',
-    licenseInfo: 'Unsplash Free Commercial License',
+    id: 'post-gibran-sadap',
+    category: 'KONOHA',
+    title: 'YUSRIL BUKA SUARA SOAL DUGAAN GIBRAN TURUT JADI SASARAN PENYADAPAN',
+    highlightedTitle: 'YUSRIL BUKA SUARA SOAL <span class="text-[#e2ff3b]">GIBRAN JADI SASARAN</span> PENYADAPAN',
+    source: 'Detikcom',
+    sourceUrl: 'https://news.detik.com',
+    licenseInfo: 'Wikimedia Commons Free CC License',
     timeAgo: '1 jam lalu',
-    viralScore: 95,
-    coverImage: 'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=1080&auto=format&fit=crop&q=85',
+    viralScore: 96,
+    coverImage: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85',
     coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
-    sourceBadge: 'detikcom',
-    totalSlides: 6,
+    sourceBadge: 'Detikcom',
+    totalSlides: 5,
     hasRiskWarning: true,
     status: 'perlu_review',
+    template: 'mono-gelap',
     slides: [
       {
         number: 1,
-        title: 'ANCAMAN DI CLAUDE TERDETEKSI, PENGGUNA DILAPORKAN DAN DITANGKAP',
-        body: 'Seorang pengguna ditangkap setelah menulis ancaman penembakan massal terhadap kantor polisi lokal melalui chatbot AI Claude.',
+        title: 'YUSRIL BUKA SUARA SOAL DUGAAN GIBRAN TURUT JADI SASARAN PENYADAPAN',
+        body: 'Menko Hukum, HAM, Imigrasi, dan Pemasyarakatan Yusril Ihza Mahendra merespons dugaan keterlibatan sadapan ilegal yang menyasar jajaran pucuk pimpinan nasional Konoha.',
         hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=1080&auto=format&fit=crop&q=85',
+        photoUrl: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=1080&auto=format&fit=crop&q=85',
         photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: detikInet'
+        sourceText: 'Sumber: Detikcom'
       },
       {
         number: 2,
-        title: 'APA YANG TERJADI?',
-        body: 'Kepada penyidik, ia mengaku memakai chatbot itu seperti buku harian pribadi tanpa menyadari sistem pengawasan keselamatan Anthropic.',
+        title: 'SIAPA SAJA KORBAN ELITE?',
+        body: 'Selain ponsel Presiden Prabowo Subianto, spekulasi berkembang mengenai nomor telepon Wapres Gibran Rakabuming Raka serta deretan menteri kabinet yang diduga ikut terpantau radar penyadapan non-prosedural.',
         hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&auto=format&fit=crop&q=85',
+        photoUrl: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=1080&auto=format&fit=crop&q=85',
         photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: detikInet'
+        sourceText: 'Sumber: Antara News'
       },
       {
         number: 3,
-        title: 'ANCAMAN TERDETEKSI OTOMATIS',
-        body: 'Menurut laporan kepolisian, sistem keselamatan Claude menandai tulisan tersebut sebagai konten berbahaya tingkat tinggi. Potongan percakapannya kemudian diteruskan kepada peninjau manusia di Anthropic.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: detikInet'
-      },
-      {
-        number: 4,
-        title: 'ANTHROPIC HUBUNGI APARAT',
-        body: 'Setelah ancaman dinilai nyata dan kredibel, Anthropic melaporkannya kepada penegak hukum. Perusahaan menegaskan komitmen nol toleransi terhadap kekerasan.',
+        title: 'PENJELASAN RESMI KEMENKO HUKUM',
+        body: 'Yusril menegaskan pemerintah menyerahkan pengusutan sepenuhnya kepada Bareskrim Polri. Penyadapan tanpa izin hakim atau kebutuhan pro-justitia jelas merupakan tindak pidana berat perusak tatanan negara.',
         hasPhoto: true,
         photoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85',
         photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: detikInet'
+        sourceText: 'Sumber: Kompas.com'
+      },
+      {
+        number: 4,
+        title: 'SKANDAL INTELIJEN TERBESAR',
+        body: 'Publik menyoroti celah keamanan komunikasi para pejabat tertinggi. Jika lingkaran ring satu bisa disadap secara internal selama berbulan-bulan, ada krisis kepercayaan serius di tubuh aparat intelijen.',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1453873531674-2151abc01707?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+        sourceText: 'Sumber: Detikcom'
       },
       {
         number: 5,
-        title: 'BATASAN PRIVASI CHATBOT AI',
-        body: 'Kasus ini membuka mata publik bahwa percakapan dengan AI tidak sepenuhnya privat dan dapat diakses ketika terindikasi tindak kriminal.',
+        title: 'BAGAIMANA NASIB KASUS INI?',
+        body: 'Apakah Bareskrim berani membuka seluruh rekaman dan aktor intelektual di balik skandal sadap ini, atau bakal berakhir antiklimaks? Tulis prediksimu di komentar! 👇',
         hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1080&auto=format&fit=crop&q=85',
+        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85',
         photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: detikInet'
-      },
-      {
-        number: 6,
-        title: 'MENURUT KAMU GIMANA?',
-        body: 'Apakah langkah Anthropic melaporkan pengguna sudah tepat, atau ini melanggar privasi percakapan? Tulis pendapat kamu di bawah! 👇',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: detikInet'
+        sourceText: 'Sumber: Konoha Insight Redaksi'
       }
     ],
-    caption: 'Kasus pertama pengguna AI dilaporkan langsung oleh pengembangnya ke polisi. Pengguna Claude ditangkap setelah terdeteksi menuliskan ancaman penembakan.\n\nPelajaran penting: chatbot AI bukan buku harian tanpa pengawasan pihak ketiga. Gimana tanggapan kamu?\n\n📌 Sumber Berita: detikInet (inet.detik.com)\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\n#ClaudeAI #Anthropic #CyberLaw #KeamananDigital #KonohaInsight #WargaKonoha #BeritaTerkini'
+    caption: 'Babak baru drama penyadapan terbesar di Konoha! Menko Yusril Ihza Mahendra akhirnya buka suara menanggapi isu nomor telepon Wapres Gibran Rakabuming Raka yang santer disebut turut menjadi target sadapan ilegal para tersangka mantan petinggi kepolisian.\n\nSimak perkembangan 5 slide di atas 👆\n\n📌 Sumber: Detikcom / Antara\n#KonohaInsight #WargaKonoha #HukumKonoha #Penyadapan #Yusril #Gibran #BreakingNews'
   },
-  {
-    id: 'post-3',
-    category: 'BISNIS',
-    title: 'TRANSAKSI KRIPTO INDONESIA NAIK 12,87%, BITCOIN JADI PENGGERAK',
-    highlightedTitle: 'TRANSAKSI KRIPTO INDONESIA <span class="text-[#e2ff3b]">NAIK 12,87%, BITCOIN JADI PENGGERAK</span>',
-    source: 'Selular.id',
-    sourceUrl: 'https://selular.id',
-    licenseInfo: 'Unsplash Free Commercial License',
-    timeAgo: '2 jam lalu',
-    viralScore: 88,
-    coverImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85',
-    coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
-    totalSlides: 4,
-    hasRiskWarning: true,
-    status: 'perlu_review',
-    slides: [
-      {
-        number: 1,
-        title: 'TRANSAKSI KRIPTO INDONESIA NAIK 12,87%',
-        body: 'Bappebti mencatat lonjakan transaksi aset kripto nasional didorong oleh reli harga Bitcoin global sepanjang kuartal ini.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1080&auto=format&fit=crop&q=85',
-        sourceText: 'Sumber: Selular.id'
-      },
-      {
-        number: 2,
-        title: 'DOMINASI INVESTOR RITEL MUDA',
-        body: 'Data demografi menunjukkan 62% transaksi dilakukan oleh investor berusia di bawah 30 tahun dengan rata-rata modal awal Rp 500.000.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Bappebti / Selular.id'
-      },
-      {
-        number: 3,
-        title: 'TANTANGAN REGULASI PAJAK',
-        body: 'Pemerintah terus mematangkan integrasi pelaporan pajak PPh dan PPN transaksi kripto agar ekosistem tetap transparan.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Selular.id'
-      },
-      {
-        number: 4,
-        title: 'PORTOFOLIO KAMU BAGAIMANA?',
-        body: 'Apakah kamu aktif trading kripto atau lebih memilih instrumen investasi konvensional? Tulis strategi kamu di bawah! 👇',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Selular.id'
-      }
-    ],
-    caption: 'Pasar kripto di Indonesia kembali bergairah. Transaksi naik 12,87% didominasi investor ritel generasi muda.\n\nPortofolio kripto kamu masih hijau atau nyangkut? Ceritakan di kolom komentar!\n\n📌 Sumber Informasi: Selular.id\n📷 Lisensi Visual: Unsplash (Free Commercial Use)\n\n#Bitcoin #KriptoIndonesia #Bappebti #InvestasiMuda #KonohaInsight #WargaKonoha'
-  },
-  {
-    id: 'post-4',
-    category: 'SOSMED',
-    title: 'INSTAGRAM UJI FITUR READ-ONLY BEBAS LURKING TANPA TAKUT KELIKE',
-    highlightedTitle: 'INSTAGRAM UJI <span class="text-[#e2ff3b]">FITUR READ-ONLY</span> BEBAS LURKING TANPA TAKUT KELIKE',
-    source: 'Social Media Today',
-    sourceUrl: 'https://www.socialmediatoday.com',
-    licenseInfo: 'Unsplash Free Commercial License',
-    timeAgo: '4 jam lalu',
-    viralScore: 97,
-    coverImage: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1080&auto=format&fit=crop&q=85',
-    coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
-    totalSlides: 4,
-    hasRiskWarning: false,
-    status: 'perlu_review',
-    slides: [
-      {
-        number: 1,
-        title: 'INSTAGRAM UJI FITUR READ-ONLY BEBAS LURKING TANPA TAKUT KELIKE',
-        body: 'Fitur baru memungkinkan stalking profil tanpa sengaja menekan tombol double tap like yang memalukan.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1080&auto=format&fit=crop&q=85',
-        sourceText: 'Sumber: Social Media Today'
-      },
-      {
-        number: 2,
-        title: 'BAGAIMANA CARA KERJANYA?',
-        body: 'Saat mode "Read-Only Visit" diaktifkan, semua tombol like, follow, dan reply story dinonaktifkan sementara untuk profil tersebut.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Social Media Today'
-      },
-      {
-        number: 3,
-        title: 'MENGAPA DIKEMBANGKAN SEKARANG?',
-        body: 'Instagram merespons tingginya angka pembuatan second account ("fake account") yang khusus dibuat hanya untuk memantau tanpa interaksi.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Social Media Today'
-      },
-      {
-        number: 4,
-        title: 'TAG TEMEN KAMU YANG BUTUH!',
-        body: 'Kirim postingan ini ke teman kamu yang hobi stalking akun mantan atau kompetitor bisnis! Tulis komentarmu di bawah 👇',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Social Media Today'
-      }
-    ],
-    caption: 'Kabar gembira buat para silent reader dan stalker handal! Instagram akhirnya menguji mode Read-Only yang mematikan tombol like ganda secara otomatis saat mengunjungi profil orang lain.\n\nTag temen lo yang paling butuh fitur ini secepatnya! 👇\n\n📌 Sumber: Social Media Today (socialmediatoday.com)\n📷 Lisensi: Unsplash (Free Commercial Use)\n\n#InstagramFeature #StalkerFriendly #SosmedNews #KulturDigital #KonohaInsight #WargaKonoha'
-  },
-  {
-    id: 'post-5',
-    category: 'TEKNOLOGI',
-    title: 'WHATSAPP STOP DUKUNGAN HP LAWAS MULAI OKTOBER 2026',
-    highlightedTitle: 'WHATSAPP STOP <span class="text-[#e2ff3b]">DUKUNGAN HP LAWAS</span> MULAI OKTOBER 2026',
-    source: 'CNN Indonesia',
-    sourceUrl: 'https://www.cnnindonesia.com/teknologi',
-    licenseInfo: 'Unsplash Free Commercial License',
-    timeAgo: '6 jam lalu',
-    viralScore: 91,
-    coverImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
-    coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
-    totalSlides: 4,
-    hasRiskWarning: false,
-    status: 'perlu_review',
-    slides: [
-      {
-        number: 1,
-        title: 'WHATSAPP STOP DUKUNGAN HP LAWAS MULAI OKTOBER 2026',
-        body: 'Deretan ponsel dengan sistem operasi Android dan iOS versi lama tidak bisa lagi mengakses aplikasi WhatsApp.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
-        sourceText: 'Sumber: CNN Indonesia'
-      },
-      {
-        number: 2,
-        title: 'DAFTAR VERSI YANG TERDAMPAK',
-        body: 'WhatsApp mewajibkan minimal Android 5.0 (Lollipop) dan iOS 12 untuk memenuhi standar enkripsi end-to-end yang ditingkatkan.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1567581935884-3349723552ca?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: WhatsApp FAQ / CNN Indonesia'
-      },
-      {
-        number: 3,
-        title: 'CARA MENGAMANKAN DATA CHAT',
-        body: 'Pengguna disarankan segera melakukan backup chat ke Google Drive atau iCloud sebelum tanggal efektif penghentian.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: CNN Indonesia'
-      },
-      {
-        number: 4,
-        title: 'CEK HP ORANG TUA KAMU SEKARANG!',
-        body: 'Pastikan HP anggota keluarga di rumah sudah diperbarui ke versi OS yang didukung agar komunikasi tidak terputus. Gimana dengan HP kamu? 👇',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: CNN Indonesia'
-      }
-    ],
-    caption: 'Cek HP kamu dan orang tua di rumah sekarang! WhatsApp resmi mengumumkan batas akhir dukungan untuk sistem operasi lawas demi standar keamanan enkripsi baru.\n\nSimak syarat minimum OS di slide di atas.\n\n📌 Sumber Informasi: CNN Indonesia (cnnindonesia.com)\n📷 Lisensi Gambar: Unsplash (Free Commercial Use)\n\n#WhatsAppUpdate #GadgetNews #Teknologi #KonohaInsight #WargaKonoha'
-  },
-  {
-    id: 'post-6',
-    category: 'MARKETING',
-    title: 'OPENAI UJI IKLAN VISUAL SAAT PENGGUNA BIKIN GAMBAR DI CHATGPT',
-    highlightedTitle: 'OPENAI UJI <span class="text-[#e2ff3b]">IKLAN VISUAL</span> SAAT PENGGUNA BIKIN GAMBAR DI CHATGPT',
-    source: 'Selular.id',
-    sourceUrl: 'https://selular.id',
-    licenseInfo: 'Unsplash Free Commercial License',
-    timeAgo: '7 jam lalu',
-    viralScore: 94,
-    coverImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1080&auto=format&fit=crop&q=85',
-    coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
-    totalSlides: 4,
-    hasRiskWarning: false,
-    status: 'perlu_review',
-    slides: [
-      {
-        number: 1,
-        title: 'OPENAI UJI IKLAN VISUAL SAAT PENGGUNA BIKIN GAMBAR DI CHATGPT',
-        body: 'Format sponsor komersial mulai diuji coba masuk ke antarmuka generasi prompt gambar ChatGPT.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1080&auto=format&fit=crop&q=85',
-        sourceText: 'Sumber: Selular.id'
-      },
-      {
-        number: 2,
-        title: 'MONETISASI BARU ERA AI',
-        body: 'Setelah biaya komputasi server GPU membengkak, OpenAI mulai membuka inventaris penempatan produk secara kontekstual.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Selular.id'
-      },
-      {
-        number: 3,
-        title: 'REAKSI KOMUNITAS PENGGUNA',
-        body: 'Sebagian pelanggan ChatGPT Plus memprotes potensi masuknya iklan di layanan berbayar yang seharusnya bebas distraksi.',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Selular.id'
-      },
-      {
-        number: 4,
-        title: 'MENURUT KAMU GIMANA?',
-        body: 'Apakah kamu rela ada iklan di chatbot AI demi harga langganan yang lebih terjangkau? Tulis pendapat kamu di komentar! 👇',
-        hasPhoto: true,
-        photoUrl: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1080&auto=format&fit=crop&q=85',
-        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
-        sourceText: 'Sumber: Selular.id'
-      }
-    ],
-    caption: 'Babak baru monetisasi AI: OpenAI dikabarkan mulai menguji penempatan iklan visual saat pengguna menghasilkan gambar di ChatGPT.\n\nApakah ini langkah wajar bisnis atau tanda penurunan kualitas pengalaman pengguna?\n\n📌 Sumber: Selular.id\n📷 Lisensi: Unsplash (Free Commercial Use)\n\n#OpenAI #ChatGPT #DigitalMarketing #AIAds #KonohaInsight #WargaKonoha'
-  }
 ];
 
 export const ACTIVITY_LOGS: ActivityLog[] = [

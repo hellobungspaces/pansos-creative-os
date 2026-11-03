@@ -12,7 +12,7 @@ import { CreatePostModal } from '@/components/redaksi/CreatePostModal';
 import { INITIAL_POSTS, RedaksiPost } from '@/data/redaksiData';
 import { loadRemote, saveRemote } from '@/utils/remoteState';
 
-const LOCAL_STORAGE_KEY = 'konoha_insight_posts_v6';
+const LOCAL_STORAGE_KEY = 'konoha_insight_posts_v7';
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'ruang_redaksi' | 'antrian_review' | 'editor' | 'sumber_berita' | 'instagram_grid'>('ruang_redaksi');

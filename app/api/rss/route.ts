@@ -347,112 +347,128 @@ async function resolveRealPhotos(post: RedaksiPost, origTitle: string, desc: str
   post.caption = post.caption.replace(/📷 Lisensi Foto:[^\n]*/, `📷 ${photos[0].attribution}`);
 }
 
-// Short, punchy copy per category: [title, body] for slides 2-5. Keep bodies under ~110 chars.
+// Substantive, engaging editorial copy per category: [title, body] for slides 2-5 (160-220 chars).
 type SlideCopy = Array<[string, string]>;
 
 const DEFAULT_COPY: SlideCopy = [
-  ['DUDUK PERKARA', 'Intinya: ini yang sebenarnya terjadi, tanpa framing dan potongan sepihak.'],
-  ['YANG BIKIN RAMAI', 'Satu fakta ini yang bikin publik langsung bereaksi.'],
-  ['DAMPAKNYA KE KAMU', 'Bukan cuma berita lewat. Ini bisa nyentuh rutinitas kita sehari-hari.'],
-  ['MENURUT KAMU?', 'Setuju atau nggak? Tulis opinimu di komentar 👇'],
+  ['DUDUK PERKARA & KRONOLOGI', 'Penyelidikan mendalam membongkar fakta-fakta kunci yang sebelumnya luput dari sorotan. Perkembangan terbaru ini langsung memicu gelombang atensi luas di linimasa.'],
+  ['POIN KRUSIAL YANG DISOROT', 'Bukan sekadar kabar lewat, ada aspek kepatuhan dan etika publik yang dipertaruhkan. Fakta di lapangan menunjukkan dinamika yang jauh lebih kompleks dari sekadar headline.'],
+  ['DAMPAKNYA KE WARGA', 'Keputusan dan insiden ini bakal berimbas ke rutinitas masyarakat banyak. Ini jadi pengingat penting soal transparansi dan akuntabilitas di ruang publik Konoha.'],
+  ['MENURUT WARGA KONOHA?', 'Bagaimana pandanganmu melihat duduk perkara ini? Apakah ini langkah yang tepat atau masih menyisakan tanda tanya besar? Tulis opinimu di kolom komentar! 👇'],
 ];
 
 const SLIDE_COPY: Record<string, SlideCopy> = {
   KONOHA: [
-    ['KRONOLOGINYA', 'Rentetan kejadian yang bikin publik gaduh, diringkas biar kamu nggak ketinggalan.'],
-    ['YANG DISOROT', 'Publik menyorot satu hal: konsistensi aturan, tajam ke siapa dan tumpul ke siapa.'],
-    ['KENAPA PENTING', 'Keputusan di atas sana ujungnya ke dompet dan hidup kita juga.'],
-    ['KAWAL ATAU NGUAP?', 'Bakal tuntas sampai akar, atau ketutup isu baru? Tebak di komentar 👇'],
+    ['KRONOLOGI & LATAR BELAKANG', 'Rentetan keputusan elite penguasa kembali menuai polemik panas di kalangan publik. Di balik retorika manis, ada kebijakan krusial yang diputuskan terburu-buru tanpa uji publik.'],
+    ['YANG PALING DISOROT', 'Publik menyoroti konsistensi aturan: tajam ke siapa dan tumpul ke siapa. Alokasi anggaran dan wewenang kekuasaan diuji demi memastikan keadilan bagi seluruh rakyat jelata.'],
+    ['DAMPAK NYATA KE KANTONG', 'Keputusan di atas sana ujungnya selalu bermuara ke dompet dan beban hidup rakyat kecil. Saat aturan baru disahkan, siapa yang menanggung dampaknya sehari-hari?'],
+    ['KAWAL ATAU NGUAP?', 'Bakal diusut tuntas sampai ke akar kekuasaan, atau bakal nguap tertutup isu sensasional baru? Tebak nasib akhirnya di kolom komentar! 👇'],
   ],
   HUKUM: [
-    ['KRONOLOGI KASUS', 'Dari awal sampai sekarang, urutan kejadiannya begini.'],
-    ['PASAL & PROSES', 'Ini pasal yang disorot dan tahapan hukum yang bakal dilalui.'],
-    ['YANG DIPERTARUHKAN', 'Putusannya bakal jadi preseden. Makanya semua mata tertuju ke sini.'],
-    ['ADIL NGGAK MENURUTMU?', 'Hukum tegak lurus atau masih pilih-pilih? Suaramu di komentar 👇'],
+    ['DUDUK PERKARA & KRONOLOGI', 'Penyelidikan mendalam membongkar rentetan fakta yang sebelumnya tertutup rapat. Proses hukum kini memasuki babak penentuan dengan bukti-bukti baru yang mulai dibuka ke publik.'],
+    ['PASAL & PROSES HUKUM', 'Jeratan pasal berlapis menanti para pihak yang terlibat. Publik kini menuntut transparansi penuh agar proses peradilan tidak mandek di tengah jalan atau berakhir kompromi.'],
+    ['YANG DIPERTARUHKAN', 'Bukan sekadar vonis di atas kertas, kasus ini menguji integritas aparat penegak hukum dan rasa keadilan warga. Akankah hukum tegak lurus atau kembali tebang pilih?'],
+    ['SUARA WARGA KONOHA', 'Menurut kamu, akankah kasus ini diusut tuntas sampai ke dalang utamanya, atau bakal tenggelam tertutup pengalihan isu lagi? Tulis suaramu di kolom komentar! 👇'],
   ],
   KRIMINAL: [
-    ['KRONOLOGI KEJADIAN', 'Begini urutan kejadian versi laporan resmi aparat.'],
-    ['FAKTA DI LAPANGAN', 'Temuan polisi sejauh ini. Status masih dalam pengembangan.'],
-    ['PELAJARAN BUAT KITA', 'Modus makin licin. Waspada dan jangan asal percaya.'],
-    ['PERNAH ALAMI?', 'Ada pengalaman serupa? Bagi tipsnya biar yang lain aman 👇'],
+    ['KRONOLOGI & MODUS OPERANDI', 'Aparat kepolisian membeberkan modus operandi yang terencana rapi. Pelaku memanfaatkan celah kelengahan sebelum akhirnya jejak kejahatan digitalnya berhasil diendus tim penyidik.'],
+    ['TEMUAN BARANG BUKTI', 'Sejumlah barang bukti kunci dan rekaman digital telah diamankan penyidik. Pemeriksaan maraton mengungkap motif tersembunyi yang melibatkan jejaring lebih luas.'],
+    ['PELAJARAN BUAT KITA', 'Modus kriminalitas terus bermutasi makin licin dan canggih. Kasus ini jadi alarm keras bagi masyarakat untuk selalu waspada dan tidak mudah terlena oleh skema mencurigakan.'],
+    ['HUKUMAN APA YANG PANTAS?', 'Sanksi apa yang paling adil untuk memberikan efek jera maksimal bagi para pelaku tindak pidana seperti ini? Tumpahkan argumenmu di bawah! 👇'],
   ],
   BISNIS: [
-    ['ANGKANYA', 'Pergerakan pasar dan harga yang jadi sorotan hari ini.'],
-    ['SIAPA CUAN, SIAPA BONCOS', 'Ada yang untung besar, ada yang kena imbas. Cek posisimu.'],
-    ['AMANIN DOMPETMU', 'Dana darurat dulu, jangan taruh semua telur di satu keranjang.'],
-    ['DOMPETMU LAGI IJO?', 'Hijau atau merah bulan ini? Curhat di komentar 👇'],
+    ['ANGKA & PERGERAKAN PASAR', 'Fluktuasi angka dan sentimen pasar hari ini menjadi sorotan para analis. Arus perputaran modal memperlihatkan pergeseran signifikan yang berdampak langsung ke sektor riil.'],
+    ['SIAPA CUAN, SIAPA BONCOS', 'Ada konglomerasi yang meraup cuan berlipat, namun tak sedikit pelaku usaha kecil yang tercekik inflasi dan pengetatan likuiditas. Cek posisi keuanganmu sekarang.'],
+    ['AMANIN ASET & CASH FLOW', 'Kondisi ekonomi menuntut strategi defensif: perkuat dana darurat, evaluasi portofolio, dan hindari spekulasi liar sebelum badai volatilitas mereda.'],
+    ['DOMPETMU IKUTAN MERINGIS?', 'Portofolio dan dompetmu bulan ini masih bertahan hijau atau udah boncos berdarah-darah? Curhat finansial di kolom komentar! 👇'],
   ],
   OLAHRAGA: [
-    ['JALANNYA LAGA', 'Momen kunci yang bikin laga ini jadi omongan.'],
-    ['SOROTAN UTAMA', 'Satu keputusan dan satu aksi yang mengubah hasil akhir.'],
-    ['EFEKNYA KE DEPAN', 'Hasil ini menentukan langkah berikutnya di klasemen.'],
-    ['TIM SIAPA KAMU?', 'Puas atau emosi? Tulis prediksimu di komentar 👇'],
+    ['DRAMA DI ATAS LAPANGAN', 'Tensi tinggi dan duel adu strategi menyajikan drama menegangkan hingga menit-menit akhir. Setiap perebutan bola menjadi pertaruhan gengsi kedua kubu.'],
+    ['SOROTAN & MOMEN KUNCI', 'Satu keputusan kontroversial dan aksi brilian pemain kunci membalikkan jalannya laga. Perdebatan strategi pelatih langsung membanjiri ruang diskusi netizen.'],
+    ['IMBASNYA KE KLASEMEN', 'Tambahan poin krusial ini mengubah peta persaingan dan peluang gelar juara. Pertandingan berikutnya dipastikan bakal jadi partai hidup-mati yang lebih panas.'],
+    ['PUAS ATAU KECEWA?', 'Bagaimana penilaianmu terhadap performa tim kesayangan hari ini? Siapa pemain terbaik dan terburuk versimu? Tulis di komentar! 👇'],
   ],
   HIBURAN: [
-    ['AWAL MULA', 'Berawal dari satu kabar yang langsung menyebar di linimasa.'],
-    ['YANG BIKIN HEBOH', 'Reaksi netizen kebelah dua. Ini cuplikan yang paling ramai.'],
-    ['KENAPA RAME BANGET', 'Karena menyentuh hal yang dekat sama kita semua.'],
-    ['KAMU TIM MANA?', 'Pro atau kontra? Debat sehat di komentar 👇'],
+    ['AWAL MULA KEHEBOHAN', 'Berawal dari unggahan di balik layar, kabar ini langsung meledak dan mendominasi linimasa media sosial. Netizen langsung terbelah menjadi dua kubu yang saling adu argumen.'],
+    ['FAKTA DI BALIK SOROTAN', 'Klarifikasi dan temuan fakta baru perlahan mulai terungkap ke permukaan. Dinamika panggung hiburan kembali memperlihatkan sisi lain yang jarang dilihat publik.'],
+    ['KENAPA BISA SERAMAI INI', 'Isu ini menyentuh kultur pop dan ekspektasi penggemar yang begitu fanatik. Setiap gerak-gerik sang figur publik kini berada di bawah mikroskop warganet.'],
+    ['KAMU PRO ATAU KONTRA?', 'Apakah drama ini murni ekspresi karya atau cuma sekadar trik marketing settingan demi engagement? Spill teorimu di komentar! 👇'],
   ],
   KESEHATAN: [
-    ['APA YANG TERJADI', 'Kabar kesehatan terbaru yang perlu kamu tahu.'],
-    ['KATA PAKAR', 'Ini penjelasan tenaga medis dan data resminya.'],
-    ['YANG BISA KAMU LAKUKAN', 'Langkah sederhana buat jaga diri dan keluarga mulai hari ini.'],
-    ['SUDAH CEK KESEHATAN?', 'Share ke keluarga yang perlu tahu, tulis pengalamanmu 👇'],
+    ['TEMUAN MEDIS TERBARU', 'Laporan klinis dan pantauan otoritas kesehatan merilis data krusial terkait tren penyakit saat ini. Pola penularan dan gejala khas perlu diantisipasi sejak dini.'],
+    ['KATA PAKAR & DATA RESMI', 'Tenaga medis menekankan pentingnya langkah pencegahan terukur berbasis bukti ilmiah, bukan sekadar mitos atau kabar burung yang berseliweran di grup keluarga.'],
+    ['LANGKAH PERLINDUNGAN DIRI', 'Mulai dari disiplin sanitasi, pola makan bergizi, hingga pengecekan berkala menjadi benteng utama menjaga imun tubuh di tengah perubahan cuaca tak menentu.'],
+    ['SUDAH CEK KESEHATAN KELUARGA?', 'Sudahkah kamu dan keluarga menerapkan langkah antisipasi ini hari ini? Bagikan tips sehat andalanmu di kolom komentar! 👇'],
   ],
   PENDIDIKAN: [
-    ['LATAR MASALAH', 'Isu yang lagi dikeluhkan pelajar, mahasiswa, dan pencari kerja.'],
-    ['FAKTA & ANGKA', 'Data resmi yang menunjukkan seberapa besar masalahnya.'],
-    ['IMBASNYA KE MASA DEPAN', 'Ini menentukan peluang kerja dan biaya hidup generasi sekarang.'],
-    ['KAMU ALAMI JUGA?', 'Ceritakan pengalamanmu di komentar 👇'],
+    ['LATAR PERSOALAN', 'Keluhan seputar biaya kuliah, kurikulum, dan seleksi masuk kembali mencuat ke publik. Generasi muda menghadapi tantangan struktural yang kian berat.'],
+    ['DATA & ANGKANYA', 'Riset menunjukkan ketimpangan akses dan beban biaya yang kian memberatkan kantong orang tua. Masa depan anak bangsa tak boleh terkendala oleh birokrasi kaku.'],
+    ['PELUANG KARIER KE DEPAN', 'Tuntutan industri melesat cepat sementara kurikulum kerap tertinggal. Mahasiswa dan pencari kerja dituntut adaptif menguasai skill digital masa depan.'],
+    ['KAMU JUGA MENGALAMINYA?', 'Bagikan pengalaman dan unek-unekmu seputar dunia pendidikan dan susahnya cari kerja saat ini di kolom komentar! 👇'],
   ],
   TRANSPORTASI: [
-    ['ADA APA', 'Perubahan yang langsung kerasa buat pengguna jalan dan transportasi umum.'],
-    ['DETAILNYA', 'Jadwal, tarif, dan aturan baru yang perlu kamu catat.'],
-    ['BUAT KAMU YANG KOMUTING', 'Siapkan rute alternatif dan berangkat lebih awal.'],
-    ['RUTE HARIANMU AMAN?', 'Cerita perjalananmu hari ini di komentar 👇'],
+    ['PERUBAHAN ATURAN & TARIF', 'Penyesuaian jadwal, rute, dan tarif angkutan publik langsung dirasakan jutaan komuter. Akses mobilitas perkotaan kembali diuji oleh lonjakan volume pengguna.'],
+    ['DETAIL DI LAPANGAN', 'Kepadatan di jam-jam sibuk menuntut perbaikan fasilitas dan ketepatan armada. Pengguna jalan diimbau cermat memantau titik kemacetan dan jalur alternatif.'],
+    ['TIPS UNTUK KOMUTER', 'Siapkan saldo uang elektronik lebih awal, gunakan moda transportasi terintegrasi, dan jangan lupa pantau aplikasi peta navigasi sebelum tancap gas.'],
+    ['RUTE HARIANMU GIMANA?', 'Seberapa parah drama perjalanan berangkat dan pulang kerjamu hari ini? Ceritakan rute terberatmu di kolom komentar! 👇'],
   ],
   LINGKUNGAN: [
-    ['KONDISI TERKINI', 'Pantauan terbaru menunjukkan situasi yang perlu diwaspadai.'],
-    ['ZONA & ANGKA', 'Daerah terdampak dan data resmi dari BMKG dan otoritas terkait.'],
-    ['SIAPKAN DIRI', 'Cek kondisi di kotamu tiap pagi dan siapkan perlengkapan darurat.'],
-    ['DAERAHMU GIMANA?', 'Kabari kondisi di tempatmu di komentar 👇'],
+    ['PERINGATAN DINI EKOLOGIS', 'Data satelit dan laporan BMKG mendeteksi anomali cuaca ekstrem serta peningkatan risiko bencana alam di sejumlah titik rawan yang harus segera diwaspadai.'],
+    ['ZONA DAMPAK & DEGRADASI', 'Alih fungsi lahan dan krisis iklim nyata memperparah kerentanan lingkungan. Kerusakan ekosistem bukan lagi ancaman masa depan, melainkan realitas hari ini.'],
+    ['MITIGASI & TANGGUNG JAWAB', 'Kesiapsiagaan warga serta ketegasan aparat menindak perusak alam menjadi kunci keselamatan. Jangan tunggu bencana datang baru sibuk saling menyalahkan.'],
+    ['BAGAIMANA KONDISI KOTAMU?', 'Apakah daerah tempat tinggalmu aman dari banjir, polusi, atau cuaca ekstrem belakangan ini? Kabari kami di kolom komentar! 👇'],
   ],
   FAUNA: [
-    ['KOK BISA VIRAL', 'Tingkahnya sukses bikin linimasa auto senyum.'],
-    ['DI BALIK KANDANG', 'Perawat dan tim konservasi menyiapkan perlakuan khusus buat satwa ini.'],
-    ['OBAT PENAT', 'Di tengah berita berat, kabar gemas ini jadi oase.'],
-    ['TIM GEMAS?', 'Siapa yang udah nonton berulang-ulang? Ngaku di komentar 👇'],
+    ['TINGKAH YANG BIKIN MELELEH', 'Tingkah pola menggemaskan satwa ini sukses mencuri perhatian dan menjadi oase pelepas stres di tengah hiruk-pikuk berita linimasa yang melelahkan.'],
+    ['DI BALIK PROGRAM KONSERVASI', 'Di balik momen viralnya, ada kerja keras tim dokter hewan dan perawat satwa yang mendedikasikan waktu menjaga kelestarian spesies langka ini.'],
+    ['EDUKASI & PELESTARIAN ALAM', 'Kabar satwa ini mengingatkan kita akan pentingnya menjaga habitat alami dari kepunahan. Menjaga satwa adalah menjaga keseimbangan bumi kita sendiri.'],
+    ['SIAPA YANG GAK TAHAN GEMAS?', 'Berapa kali kamu memutar ulang video gemas ini hari ini? Tag temanmu yang paling butuh asupan konten lucu ini! 👇'],
   ],
   VIRAL: [
-    ['AWAL MULANYA', 'Dari satu unggahan, jadi omongan sejuta orang.'],
-    ['KENAPA MENYEBAR', 'Relate, lucu, atau bikin emosi. Itu resep viralnya.'],
-    ['CEK FAKTA DULU', 'Sebelum ikut share, pastikan sumbernya jelas.'],
-    ['KAMU LIHAT JUGA?', 'Pendapatmu apa? Tulis di komentar 👇'],
+    ['DARI UNGGAHAN JADI FENOMENA', 'Satu cuplikan video singkat dalam sekejap ditonton jutaan kali dan memicu reaksi berantai dari para konten kreator serta warganet lintas platform.'],
+    ['KENAPA CEPAT BANGET MENYEBAR?', 'Kombinasi humor relate, absurditas khas warga Konoha, dan algoritma yang tepat membuat konten ini merajai trending topic dalam hitungan jam.'],
+    ['SARING SEBELUM DISHARE', 'Di balik keriuhan viralitas, tetaplah bijak menyaring fakta dan tidak terburu-buru menghakimi sebelum duduk perkara yang sebenarnya terkonfirmasi utuh.'],
+    ['PENDAPATMU TENTANG TREN INI?', 'Menurutmu konten seperti ini memang pantas viral atau cuma bikin bising linimasa aja? Kasih rating dan komentarmu di bawah! 👇'],
   ],
   AI: [
-    ['TERNYATA SECEPAT ITU', 'Kemampuan baru yang melesat lebih cepat dari prediksi.'],
-    ['SISI RISIKONYA', 'Pakar mengingatkan soal privasi data dan penyalahgunaan.'],
-    ['NASIB KERJAANMU', 'Bukan anti teknologi. Jadikan AI co-pilot sebelum skill ketinggalan.'],
-    ['PAKAI AI BUAT APA?', 'Bantu kerjaan atau bikin was-was? Jujur di komentar 👇'],
+    ['LOMPATAN TEKNOLOGI TERBARU', 'Inovasi kecerdasan buatan kembali menembus batasan nalar manusia. Model komputasi terbaru ini mampu menyelesaikan tugas rumit dalam hitungan detik.'],
+    ['RISIKO & ETIKA DIGITAL', 'Para pakar keamanan siber memperingatkan potensi kebocoran privasi, deepfake, dan pengikisan hak cipta yang menuntut regulasi perlindungan data yang ketat.'],
+    ['ADAPTASI ATAU TERSINGKIR', 'AI bukan lagi masa depan, melainkan realitas kerja hari ini. Kuncinya bukan takut digantikan, melainkan memanfaatkan AI sebagai co-pilot produktivitas.'],
+    ['KAMU UDAH PAKAI BUAT APA?', 'Apakah kehadiran AI di kantormu bikin pekerjaan makin enteng atau justru bikin was-was kena PHK? Curhat di kolom komentar! 👇'],
   ],
   SOSMED: [
-    ['APA YANG BERUBAH', 'Platform mengubah sistem yang berimbas ke jutaan pengguna.'],
-    ['TRIK CEPAT', 'Matikan optimasi baterai agresif dan bersihkan cache dulu.'],
-    ['JANGAN KETINGGALAN', 'Cek setelan HP kamu sekarang biar info penting nggak telat.'],
-    ['PERNAH NGALAMIN?', 'Aplikasi mana yang paling bikin emosi? Curhat di komentar 👇'],
+    ['FITUR BARU & PERUBAHAN SISTEM', 'Platform media sosial kembali merilis pembaruan antarmuka dan algoritma rekomendasi konten yang berimbas ke jutaan pengguna aktif harian.'],
+    ['DAMPAK KE KREATOR & PENGGUNA', 'Perubahan ini memengaruhi jangkauan distribusi konten dan interaksi organik. Kreator dan pengiklan dituntut putar otak menyesuaikan strategi baru.'],
+    ['TIPS OPTIMASI AKUN', 'Pastikan selalu memperbarui versi aplikasi, bersihkan berkas cache secara rutin, dan aktifkan autentikasi dua faktor demi keamanan privasi akunmu.'],
+    ['LEBIH SUKA VERSI DULU ATAU SEKARANG?', 'Apakah fitur terbaru ini mempermudah aktivitasmu atau malah bikin aplikasi makin berat dan ribet? Spill opinimu di bawah! 👇'],
+  ],
+  MARKETING: [
+    ['STRATEGI KAMPANYE KREATIF', 'Brand ini meluncurkan gebrakan komunikasi yang memicu percakapan masif. Eksperimen narasi yang berani membuktikan kekuatan storytelling di era digital.'],
+    ['EKSEKUSI & FORMULA SUKSES', 'Integrasi kanal omnichannel dan sentuhan empati audiens berhasil mengonversi atensi publik menjadi loyalitas konsumen yang bernilai tinggi.'],
+    ['PELAJARAN BAGI PEBISNIS', 'Di tengah banjir informasi, brand harus memiliki diferensiasi tajam dan pesan otentik agar tidak tenggelam dalam kebisingan pasar modern.'],
+    ['KAMPANYE INI SUKSES ATAU GAGAL?', 'Menurut analisamu, apakah strategi marketing ini berhasil memikat konsumen atau justru blunder? Berikan nilaimu di komentar! 👇'],
   ],
 };
 
-// Builds 5 slides with a dedicated photo each and short copy.
+// Builds 5 slides with rich visual photo each and substantive editorial journalism.
 function buildFullEditorialSlides(item: { title: string; link: string; desc: string }, srcName: string, category: string, seed: number): SlideItem[] {
   const images = findBestMatchingPhotos(item.title, item.desc, category, seed);
-  const snippet = item.desc && item.desc.length > 20
-    ? item.desc.slice(0, 110).replace(/\s+[^\s]*$/, '...')
-    : `Kabar terbaru dari ${srcName} yang lagi ramai dibahas.`;
+  const cleanDesc = (item.desc || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+  // Slide 1 summary: use rich cleaned snippet (up to 180 chars)
+  const snippet = cleanDesc.length > 30
+    ? cleanDesc.slice(0, 180).replace(/\s+[^\s]*$/, '...')
+    : `Laporan resmi terverifikasi dari ${srcName} merangkum poin-poin krusial yang tengah menyita perhatian publik hari ini.`;
+
   const copy = SLIDE_COPY[category] || DEFAULT_COPY;
 
-  const texts: Array<[string, string]> = [[item.title.toUpperCase(), snippet], ...copy];
+  const texts: Array<[string, string]> = [
+    [item.title.toUpperCase(), snippet],
+    copy[0],
+    copy[1],
+    copy[2],
+    copy[3],
+  ];
 
   return texts.map(([title, body], idx) => ({
     number: idx + 1,

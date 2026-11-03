@@ -49,6 +49,72 @@ export interface NewsSource {
 
 export const INITIAL_POSTS: RedaksiPost[] = [
   {
+    id: 'post-sadap-polisi',
+    category: 'HUKUM',
+    title: 'POLRI TETAPKAN 3 TERSANGKA PENYADAPAN HP PRESIDEN & PEJABAT',
+    highlightedTitle: 'POLRI TETAPKAN <span class="text-[#e2ff3b]">3 TERSANGKA PENYADAPAN</span> HP PRESIDEN & PEJABAT',
+    source: 'Bareskrim Polri',
+    sourceUrl: 'https://news.detik.com',
+    licenseInfo: 'Wikimedia Commons Free CC License',
+    timeAgo: 'Baru saja',
+    viralScore: 98,
+    coverImage: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85',
+    coverImageAttribution: 'Foto: Unsplash (Free Commercial Use)',
+    sourceBadge: 'Bareskrim Polri',
+    totalSlides: 5,
+    hasRiskWarning: true,
+    status: 'perlu_review',
+    template: 'mono-gelap',
+    slides: [
+      {
+        number: 1,
+        title: 'POLRI TETAPKAN 3 TERSANGKA PENYADAPAN HP PRESIDEN & PEJABAT',
+        body: 'Bareskrim Polri resmi menetapkan tiga tersangka kasus dugaan penyadapan ilegal (illegal tapping). Sasaran sadapan mencakup nomor ponsel Presiden RI, pejabat negara, menteri, hingga pimpinan ormas dan media.',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+        sourceText: 'Sumber: Bareskrim Polri'
+      },
+      {
+        number: 2,
+        title: 'SIAPA SAJA YANG TERJERAT?',
+        body: 'Tiga tersangka berinisial LSP, ASN, dan EH terindikasi sebagai perwira tinggi dan mantan petinggi kepolisian. Penyelidikan ilmiah membuktikan aksi penyadapan dilakukan secara non-prosedural di luar mandat hukum resmi.',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1453873531674-2151abc01707?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+        sourceText: 'Sumber: Detikcom / Antara'
+      },
+      {
+        number: 3,
+        title: 'MODUS SERVER RAHASIA & HAPUS JEJAK',
+        body: 'Hasil rekaman percakapan dimasukkan ke tautan server khusus tanpa verifikasi sah. Menjelang kasus terendus pada akhir Oktober 2026, para tersangka diduga memerintahkan penghapusan file sistematis demi melenyapkan jejak digital.',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+        sourceText: 'Sumber: Bareskrim Polri'
+      },
+      {
+        number: 4,
+        title: 'BARANG BUKTI & ANCAMAN HUKUMAN BERAT',
+        body: 'Penyidik menyita 11 unit ponsel, iPad, dan 4 flashdisk rekaman. Dijerat pasal akses ilegal dan perusakan informasi elektronik. Kasus ini jadi skandal pengawasan intelijen paling menghebohkan dalam sejarah hukum Konoha.',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+        sourceText: 'Sumber: Kompas TV / Detikcom'
+      },
+      {
+        number: 5,
+        title: 'BAGAIMANA PENDAPAT WARGA KONOHA?',
+        body: 'Kalau telepon presiden dan pejabat saja bisa disadap sembunyi-sembunyi oleh aparatnya sendiri, apa kabar privasi kita yang cuma rakyat jelata? Bakal diusut sampai akar atau cuma jadi angin lalu? Tulis di komentar! 👇',
+        hasPhoto: true,
+        photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1080&auto=format&fit=crop&q=85',
+        photoAttribution: 'Foto: Unsplash (Free Commercial Use)',
+        sourceText: 'Sumber: Konoha Insight Redaksi'
+      }
+    ],
+    caption: 'Skandal intelijen dan hukum paling mengguncang Konoha tahun ini! Bareskrim Polri resmi menetapkan tiga tersangka (inisial LSP, ASN, EH) atas dugaan tindak pidana penyadapan ilegal (illegal tapping) dan penghapusan data elektronik.\n\nYang bikin bulu kuduk merinding: target sadapan tanpa izin ini menyasar nomor ponsel Presiden RI, pejabat negara, petinggi partai, aktivis LSM, hingga wartawan. Data sadapan sempat dikumpulkan di server khusus sebelum diduga diperintahkan dihapus untuk menghilangkan barang bukti.\n\nSimak rincian fakta dan kronologinya di 5 slide di atas 👆\n\n📌 Sumber Laporan: Bareskrim Polri / Kompas TV / Detikcom\n📷 Lisensi Foto: Unsplash (Free Commercial Use)\n⚖️ Ringkasan sesuai UU Hak Cipta No. 28/2014 Pasal 42 untuk edukasi publik.\n\nKalo menurut lo, ini murni kelalaian oknum atau ada agenda yang jauh lebih besar? Tumpahkan opinimu di kolom komentar! 👇\n\n#KonohaInsight #WargaKonoha #HukumKonoha #Polri #PenyadapanIlegal #BreakingNews #KasusPolisi #SkandalHukum'
+  },
+  {
     id: 'post-1',
     category: 'AI',
     title: 'ALEXA PLUS MENDADAK NYANYI "LALALA" SELAMA BEBERAPA MENIT',
